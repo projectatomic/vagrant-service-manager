@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'vagrant-adbinfo'
-  spec.version       = '0.1.0.cdk'
-  spec.homepage      = 'https://github.com/bexelbie/vagrant-adbinfo'
-  spec.summary       = 'Vagrant plugin that provides the IP address:port and TLS certificate file location for a docker daemon'
+  spec.name          = 'vagrant-svcmgr'
+  spec.version       = '0.0.1'
+  spec.homepage      = 'https://github.com/bexelbie/vagrant-svcmgr'
+  spec.summary       = "To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment."
 
   spec.authors       = ['Brian Exelbierd', 'Navid Shaikh']
   spec.email         = ['bex@pobox.com', 'nshaikh@redhat.com']
