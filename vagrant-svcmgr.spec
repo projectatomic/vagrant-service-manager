@@ -1,13 +1,13 @@
-# Generated from vagrant-adbinfo-0.0.4.gem by gem2rpm -*- rpm-spec -*-
-%global vagrant_plugin_name vagrant-adbinfo
+# Generated from vagrant-svcmgr-0.0.4.gem by gem2rpm -*- rpm-spec -*-
+%global vagrant_plugin_name vagrant-svcmgr
 
 Name: %{vagrant_plugin_name}
-Version: 0.1.0
+Version: 0.0.1
 Release: 1%{?dist}
-Summary: Vagrant plugin that provides the IP address:port and TLS certificate file location for a Docker daemon
+Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
 License: GPLv2 
-URL: https://github.com/bexelbie/vagrant-adbinfo
+URL: https://github.com/bexelbie/vagrant-svcmgr
 Source0: https://rubygems.org/gems/%{vagrant_plugin_name}-%{version}.gem
 Requires(posttrans): vagrant
 Requires(preun): vagrant
@@ -20,8 +20,7 @@ BuildArch: noarch
 Provides: vagrant(%{vagrant_plugin_name}) = %{version}
 
 %description
-Vagrant plugin that provides the IP address:port and TLS certificate file
-location for a Docker daemon.
+To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 
 %package doc
 Summary: Documentation for %{name}
@@ -80,45 +79,10 @@ popd
 %{vagrant_plugin_instdir}/CONTRIBUTING.md
 %{vagrant_plugin_instdir}/LICENSE
 %{vagrant_plugin_instdir}/MAINTAINERS
-%{vagrant_plugin_instdir}/vagrant-adbinfo.gemspec
-%{vagrant_plugin_instdir}/vagrant-adbinfo.spec
+%{vagrant_plugin_instdir}/vagrant-svcmgr.gemspec
+%{vagrant_plugin_instdir}/vagrant-svcmgr.spec
 %{vagrant_plugin_instdir}/CHANGELOG.md
 
 %changelog
-* Tue Jan 19 2016 Navid Shaikh - 0.1.0-1
-- Bump version to 0.1.0
-- Fix#66: Added CHANGELOG.md to repository
-- Added gemspec in Gemfile to enable bundler packaging
-- Fix#67: OS is not a module (TypeError) on Windows
-- Update ADB box Atlas namespace to projectatomic/adb     
-- Update README to reflect latest code and project goals
-- Update Vagrantfile for QuickStart guide
-
-* Wed Nov 25 2015 Brian Exelbierd - 0.0.9-1
-- Fixes cert-generation script existence check, a bug was found where the cert
-  was regenerated to often
-- Bumps the plugin version to 0.0.9
-
-* Tue Nov 24 2015 Navid Shaikh - 0.0.8-1
-- Fixes cert-generation script existence check
-- Bumps the plugin version to 0.0.8
-
-* Tue Nov 24 2015 Navid Shaikh - 0.0.7-1
-- Fixes adbinfo#40: Handle private networking in ADB for different providers
-- Bumps the plugin version to 0.0.7
-
-* Fri Nov 20 2015 Navid Shaikh - 0.0.6-1
-- Finds IP address of the guest provisioned via private networking
-- Fixes typo in eval command of adbinfo output
-- Adds License, Contributing and Maintainers files
-- Adds Quick Start and Contact us sections
-
-* Thu Nov 19 2015 Navid Shaikh - 0.0.5-2
-- Removes shadow-utils from Requires
-
-* Tue Nov 17 2015 Navid Shaikh - 0.0.5-1
-- vagrant-adbinfo#17: adbinfo format should be windows compatible 
-- vagrant-adbinfo#18: adbinfo should be possible to evaluate in shell
-
-* Thu Nov 12 2015 Navid Shaikh - 0.0.4-1
+* Fri Jan 22 2016 Navid Shaikh - 0.0.1-1
 - Initial package
