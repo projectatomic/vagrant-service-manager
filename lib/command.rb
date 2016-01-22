@@ -81,7 +81,7 @@ export DOCKER_CERT_PATH=#{secrets_path}
 export DOCKER_TLS_VERIFY=1
 export DOCKER_MACHINE_NAME=#{machine_uuid[0..6]}
 # run following command to configure your shell:
-# eval "$(vagrant adbinfo)"
+# eval "$(vagrant svcmgr)"
 
     eos
     @env.ui.info(message)
