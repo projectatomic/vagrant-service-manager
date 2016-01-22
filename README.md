@@ -1,4 +1,4 @@
-# vagrant-adbinfo Vagrant Plugin
+# vagrant-svcmgr Vagrant Plugin
 
 Provide setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
@@ -8,18 +8,18 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 1. Install and start the Atomic Developer Bundle (ADB), as [documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) in the ADB project.
 
-2. Install the vagrant-adbinfo plugin
+2. Install the vagrant-svcmgr plugin
 
-        vagrant plugin install vagrant-adbinfo
+        vagrant plugin install vagrant-svcmgr
 
 3. Run the plugin to get environment variables and certificates
 
-        $ vagrant adbinfo
+        $ vagrant svcmgr
         Set the following environment variables to enable access to the
         docker daemon running inside of the vagrant virtual machine:
 
         export DOCKER_HOST=tcp://172.13.14.1:5555
-        export DOCKER_CERT_PATH=/home/bexelbie/Repositories/vagrant-adbinfo/.vagrant/machines/default/virtualbox/.docker
+        export DOCKER_CERT_PATH=/home/bexelbie/Repositories/vagrant-svcmgr/.vagrant/machines/default/virtualbox/.docker
         export DOCKER_TLS_VERIFY=1
         export DOCKER_MACHINE_NAME="90d3e96"
 
@@ -38,7 +38,7 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 3. Start the box with `bundle exec vagrant up`
 
-4. Develop.  You can test the command by running `bundle exec vagrant adbinfo`
+4. Develop.  You can test the command by running `bundle exec vagrant svcmgr`
 
 5. When you are ready to build the release, get a maintainer to:
 
