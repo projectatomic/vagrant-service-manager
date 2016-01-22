@@ -9,5 +9,5 @@ group :development do
 end
 
 group :plugins do
-  gem 'vagrant-adbinfo', path: '.'
+  gem 'vagrant-svcmgr', path: '.'
 end
