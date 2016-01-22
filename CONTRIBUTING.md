@@ -1,6 +1,6 @@
 # Contributing to ADB
 
-The following is a set of guidelines for contributing to the vagrant-adbinfo plugin, which is hosted in the `Project Atomic Organization <https://github.com/projectatomic>`_ on GitHub.
+The following is a set of guidelines for contributing to the vagrant-svcmgr plugin, which is hosted in the `Project Atomic Organization <https://github.com/projectatomic>`_ on GitHub.
 
 These are just guidelines, please use your best judgment and feel free to
 propose changes to this document in a pull request.
