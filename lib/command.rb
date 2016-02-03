@@ -11,6 +11,23 @@ module VagrantPlugins
       end
 
       def execute
+	plugin_name, command, subcommand = ARGV
+          if command == "env" and subcommand == "docker" then
+	    self.execute_docker_info
+	  else
+	    self.print_help
+	  end
+      end
+
+      def print_help
+	help_text = <<-help
+this is help text!
+help
+	@env.ui.info(help_text)
+      end
+
+      def execute_docker_info
+
         with_target_vms(nil, {:single_target=>true}) do |machine|
           # Path to the private_key and where we will store the TLS Certificates
           secrets_path = machine.data_dir
