@@ -14,7 +14,7 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 3. Run the plugin to get environment variables and certificates
 
-        $ vagrant svcmgr
+        $ vagrant svcmgr env docker
         Set the following environment variables to enable access to the
         docker daemon running inside of the vagrant virtual machine:
 
