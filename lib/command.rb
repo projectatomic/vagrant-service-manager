@@ -1,5 +1,8 @@
 require_relative 'os'
 
+require 'net/scp'
+require 'net/ssh'
+
 module VagrantPlugins
   module DockerInfo
     class Command < Vagrant.plugin(2, :command)
@@ -35,6 +38,18 @@ $vagrant service-manager env docker
 help
 	@env.ui.info(help_text)
       end
+      
+      def copy_from_box(hIP, hport, husername, hprivate_key_path, source, destination)
+	# This method should be extended to take an option 'if recursive'
+	
+	fp = File.open(hprivate_key_path)
+	pk_data = [fp.read]
+	fp.close
+
+	Net::SSH.start(hIP, husername, :port => hport, :key_data => pk_data, :keys_only => TRUE) do |ssh|
+	  ssh.scp.download(source, destination, :recursive => TRUE)
+	end                                                                                                            	
+      end
 
       def execute_docker_info
 
@@ -69,19 +84,14 @@ help
 
 	    # Regenerate the certs and restart docker daemon in case of the new ADB box and for VirtualBox provider
             if machine.provider_name == :virtualbox then
+              hprivate_key_path = machine.ssh_info[:private_key_path][0]
               # `test` checks if the file exists, and then regenerates the certs and restart the docker daemon, else do nothing.
               command2 = "test ! -f /opt/adb/cert-gen.sh || (sudo rm /etc/docker/ca.pem && sudo systemctl restart docker)"
               machine.communicate.execute(command2)
             end
 
-	    if !OS.windows? then
-              hprivate_key_path = machine.ssh_info[:private_key_path][0]
-              # scp over the client side certs from guest to host machine
-              `scp -r -P #{hport} -o LogLevel=FATAL -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{hprivate_key_path} #{husername}@#{hIP}:/home/vagrant/.docker #{secrets_path}`
-
-            else
-              `pscp -r -P #{hport} -pw #@@vagrant_box_password -p #{husername}@#{hIP}:/home/vagrant/.docker #{secrets_path}`
-            end
+	    # copy the required client side certs from inside the box to host machine
+	    self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker", "#{secrets_path}")
           end
          
          # display the information, irrespective of the copy operation
