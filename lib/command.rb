@@ -1,4 +1,5 @@
 require_relative 'os'
+
 module VagrantPlugins
   module DockerInfo
     class Command < Vagrant.plugin(2, :command)
@@ -21,7 +22,16 @@ module VagrantPlugins
 
       def print_help
 	help_text = <<-help
-this is help text!
+Service manager for services inside vagrant box.
+
+vagrant service-manager <verb> <option>
+
+Verb:
+  env
+    Configures and prints the required environment variables for Docker daemon
+  
+Example:
+$vagrant service-manager env docker
 help
 	@env.ui.info(help_text)
       end
@@ -59,7 +69,7 @@ help
 
 	    # Regenerate the certs and restart docker daemon in case of the new ADB box and for VirtualBox provider
             if machine.provider_name == :virtualbox then
-            # `test` checks if the file exists, and then regenerates the certs and restart the docker daemon, else do nothing.
+              # `test` checks if the file exists, and then regenerates the certs and restart the docker daemon, else do nothing.
               command2 = "test ! -f /opt/adb/cert-gen.sh || (sudo rm /etc/docker/ca.pem && sudo systemctl restart docker)"
               machine.communicate.execute(command2)
             end
@@ -68,6 +78,7 @@ help
               hprivate_key_path = machine.ssh_info[:private_key_path][0]
               # scp over the client side certs from guest to host machine
               `scp -r -P #{hport} -o LogLevel=FATAL -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{hprivate_key_path} #{husername}@#{hIP}:/home/vagrant/.docker #{secrets_path}`
+
             else
               `pscp -r -P #{hport} -pw #@@vagrant_box_password -p #{husername}@#{hIP}:/home/vagrant/.docker #{secrets_path}`
             end
@@ -98,7 +109,7 @@ export DOCKER_CERT_PATH=#{secrets_path}
 export DOCKER_TLS_VERIFY=1
 export DOCKER_MACHINE_NAME=#{machine_uuid[0..6]}
 # run following command to configure your shell:
-# eval "$(vagrant svcmgr)"
+# eval "$(vagrant service-manager env docker)"
 
     eos
     @env.ui.info(message)
