@@ -9,5 +9,5 @@ group :development do
 end
 
 group :plugins do
-  gem 'vagrant-svcmgr', path: '.'
+  gem 'vagrant-service-manager', path: '.'
 end
