@@ -1,5 +1,5 @@
-# Generated from vagrant-svcmgr-0.0.4.gem by gem2rpm -*- rpm-spec -*-
-%global vagrant_plugin_name vagrant-svcmgr
+# Generated from vagrant-service-manager-0.0.4.gem by gem2rpm -*- rpm-spec -*-
+%global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
 Version: 0.0.1
@@ -7,7 +7,7 @@ Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
 License: GPLv2 
-URL: https://github.com/bexelbie/vagrant-svcmgr
+URL: https://github.com/bexelbie/vagrant-service-manager
 Source0: https://rubygems.org/gems/%{vagrant_plugin_name}-%{version}.gem
 Requires(posttrans): vagrant
 Requires(preun): vagrant
@@ -79,10 +79,10 @@ popd
 %{vagrant_plugin_instdir}/CONTRIBUTING.md
 %{vagrant_plugin_instdir}/LICENSE
 %{vagrant_plugin_instdir}/MAINTAINERS
-%{vagrant_plugin_instdir}/vagrant-svcmgr.gemspec
-%{vagrant_plugin_instdir}/vagrant-svcmgr.spec
+%{vagrant_plugin_instdir}/vagrant-service-manager.gemspec
+%{vagrant_plugin_instdir}/vagrant-service-manager.spec
 %{vagrant_plugin_instdir}/CHANGELOG.md
 
 %changelog
 * Fri Jan 22 2016 Navid Shaikh - 0.0.1-1
-- Initial package
+- Initial build
