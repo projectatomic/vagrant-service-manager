@@ -1,9 +1,9 @@
 module VagrantPlugins
   module DockerInfo
     class Plugin < Vagrant.plugin(2)
-      name 'svcmgr'
+      name 'service-manager'
 
-      command('svcmgr', primary: false) do
+      command('service-manager', primary: false) do
         require_relative 'command'
         Command
       end
