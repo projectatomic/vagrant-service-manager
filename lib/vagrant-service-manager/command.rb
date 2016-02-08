@@ -4,7 +4,7 @@ require 'net/scp'
 require 'net/ssh'
 
 module Vagrant
-  module DockerInfo
+  module ServiceManager
     class Command < Vagrant.plugin(2, :command)
 
       def self.synopsis

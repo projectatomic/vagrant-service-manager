@@ -1,5 +1,5 @@
 module Vagrant
-  module DockerInfo
+  module ServiceManager
     class Plugin < Vagrant.plugin('2')
       name "service-manager"
       description "Service manager for services inside vagrant box."
