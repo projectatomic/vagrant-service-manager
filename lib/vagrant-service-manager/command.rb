@@ -3,7 +3,7 @@ require_relative 'os'
 require 'net/scp'
 require 'net/ssh'
 
-module VagrantPlugins
+module Vagrant
   module DockerInfo
     class Command < Vagrant.plugin(2, :command)
 
