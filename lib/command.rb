@@ -32,23 +32,23 @@ vagrant service-manager <verb> <option>
 Verb:
   env
     Configures and prints the required environment variables for Docker daemon
-  
+
 Example:
 $vagrant service-manager env docker
 help
 	@env.ui.info(help_text)
       end
-      
+
       def copy_from_box(hIP, hport, husername, hprivate_key_path, source, destination)
 	# This method should be extended to take an option 'if recursive'
-	
+
 	fp = File.open(hprivate_key_path)
 	pk_data = [fp.read]
 	fp.close
 
 	Net::SSH.start(hIP, husername, :port => hport, :key_data => pk_data, :keys_only => TRUE) do |ssh|
 	  ssh.scp.download(source, destination, :recursive => TRUE)
-	end                                                                                                            	
+	end
       end
 
       def execute_docker_info
@@ -74,11 +74,11 @@ help
           machine.communicate.execute(command) do |type, data|
             guest_ip << data.chomp if type == :stdout
           end
-	  
+
           # Hard Code the Docker port because it is fixed on the VM
           # This also makes it easier for the plugin to be cross-provider
           port = 2376
-          
+
           # First, get the TLS Certificates, if needed
           if !File.directory?(File.expand_path(".docker", secrets_path)) then
 
@@ -93,25 +93,21 @@ help
 	    # copy the required client side certs from inside the box to host machine
 	    self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker", "#{secrets_path}")
           end
-         
+
          # display the information, irrespective of the copy operation
-         print_info(guest_ip, port, secrets_path, machine.index_uuid)
+         self.print_info(guest_ip, port, secrets_path, machine.index_uuid)
         end
       end
-    end
-  end
-end
 
+      def print_info(guest_ip, port, secrets_path, machine_uuid)
+        # Print configuration information for accesing the docker daemon
 
-def print_info(guest_ip, port, secrets_path, machine_uuid)
-  # Print configuration information for accesing the docker daemon
-  
-  # extending the .docker path to include         
-  secrets_path = File.expand_path(".docker", secrets_path)
+        # extending the .docker path to include
+        secrets_path = File.expand_path(".docker", secrets_path)
 
-  if !OS.windows? then
-    message =
-    <<-eos
+        if !OS.windows? then
+          message =
+          <<-eos
 # Set the following environment variables to enable access to the
 # docker daemon running inside of the vagrant virtual machine:
 export DOCKER_HOST=tcp://#{guest_ip}:#{port}
@@ -121,21 +117,24 @@ export DOCKER_MACHINE_NAME=#{machine_uuid[0..6]}
 # run following command to configure your shell:
 # eval "$(vagrant service-manager env docker)"
 
-    eos
-    @env.ui.info(message)
-  else
-    # replace / with \ for path in Windows
-    secrets_path = secrets_path.split('/').join('\\') + '\\'
-    message =
-    <<-eos
+          eos
+          @env.ui.info(message)
+        else
+          # replace / with \ for path in Windows
+          secrets_path = secrets_path.split('/').join('\\') + '\\'
+          message =
+          <<-eos
 # Set the following environment variables to enable access to the
 # docker daemon running inside of the vagrant virtual machine:
 setx DOCKER_HOST tcp://#{guest_ip}:#{port}
 setx DOCKER_CERT_PATH #{secrets_path}
 setx DOCKER_TLS_VERIFY 1
 setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
-    eos
-    # puts is used here to escape and render the back slashes in Windows path
-    @env.ui.info(puts(message))
-  end 
+          eos
+          # puts is used here to escape and render the back slashes in Windows path
+          @env.ui.info(puts(message))
+        end
+      end
+    end
+  end
 end
