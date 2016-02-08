@@ -1,7 +1,11 @@
 # OS Module
 module OS
   def self.windows?
-    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    (/mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def self.windows_cygwin?
+    (/cygwin/ =~ RUBY_PLATFORM) != nil
   end
 
   def self.mac?
