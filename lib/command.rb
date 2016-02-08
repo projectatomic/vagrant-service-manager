@@ -6,9 +6,6 @@ require 'net/ssh'
 module VagrantPlugins
   module DockerInfo
     class Command < Vagrant.plugin(2, :command)
-      # Vagrant box password as defined in the Kickstart for the box <https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/build_tools/kickstarts/centos-7-adb-vagrant.ks>
-      # On Windows, pscp utility is used to copy the client side certs to the host, password is used in the pscp command because the ssh keys can not be used. Refer issue #14 for details
-      @@vagrant_box_password = "vagrant"
 
       def self.synopsis
         'provides the IP address:port and tls certificate file location for a docker daemon'
