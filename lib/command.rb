@@ -12,16 +12,16 @@ module VagrantPlugins
       end
 
       def execute
-	plugin_name, command, subcommand = ARGV
-          if command == "env" and subcommand == "docker" then
-	    self.execute_docker_info
-	  else
-	    self.print_help
-	  end
+        plugin_name, command, subcommand = ARGV
+        if command == "env" and subcommand == "docker" then
+	        self.execute_docker_info
+    	  else
+	        self.print_help
+    	  end
       end
 
       def print_help
-	help_text = <<-help
+        help_text = <<-help
 Service manager for services inside vagrant box.
 
 vagrant service-manager <verb> <option>
@@ -32,24 +32,26 @@ Verb:
 
 Example:
 $vagrant service-manager env docker
-help
-	@env.ui.info(help_text)
+        help
+        @env.ui.info(help_text)
       end
 
       def copy_from_box(hIP, hport, husername, hprivate_key_path, source, destination)
-	# This method should be extended to take an option 'if recursive'
+        # This method should be extended to take an option 'if recursive'
 
-	fp = File.open(hprivate_key_path)
-	pk_data = [fp.read]
-	fp.close
+        # read the private key
+        fp = File.open(hprivate_key_path)
+        pk_data = [fp.read]
+        fp.close
 
-	Net::SSH.start(hIP, husername, :port => hport, :key_data => pk_data, :keys_only => TRUE) do |ssh|
-	  ssh.scp.download(source, destination, :recursive => TRUE)
-	end
+        # create the ssh session
+        Net::SSH.start(hIP, husername, :port => hport, :key_data => pk_data, :keys_only => TRUE) do |ssh|
+          ssh.scp.download(source, destination, :recursive => TRUE)
+        end
       end
 
       def execute_docker_info
-
+        # this execute the operations needed to print the docker env info
         with_target_vms(nil, {:single_target=>true}) do |machine|
           # Path to the private_key and where we will store the TLS Certificates
           secrets_path = machine.data_dir
@@ -79,7 +81,7 @@ help
           # First, get the TLS Certificates, if needed
           if !File.directory?(File.expand_path(".docker", secrets_path)) then
 
-	    # Regenerate the certs and restart docker daemon in case of the new ADB box and for VirtualBox provider
+            # Regenerate the certs and restart docker daemon in case of the new ADB box and for VirtualBox provider
             if machine.provider_name == :virtualbox then
               hprivate_key_path = machine.ssh_info[:private_key_path][0]
               # `test` checks if the file exists, and then regenerates the certs and restart the docker daemon, else do nothing.
@@ -87,12 +89,12 @@ help
               machine.communicate.execute(command2)
             end
 
-	    # copy the required client side certs from inside the box to host machine
-	    self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker", "#{secrets_path}")
+            # copy the required client side certs from inside the box to host machine
+            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker", "#{secrets_path}")
           end
 
-         # display the information, irrespective of the copy operation
-         self.print_info(guest_ip, port, secrets_path, machine.index_uuid)
+          # display the information, irrespective of the copy operation
+          self.print_info(guest_ip, port, secrets_path, machine.index_uuid)
         end
       end
 
