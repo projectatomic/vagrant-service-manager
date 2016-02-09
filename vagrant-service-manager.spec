@@ -6,7 +6,7 @@ Version: 0.0.1
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
-License: GPLv2 
+License: GPLv2
 URL: https://github.com/bexelbie/vagrant-service-manager
 Source0: https://rubygems.org/gems/%{vagrant_plugin_name}-%{version}.gem
 Requires(posttrans): vagrant
@@ -14,7 +14,7 @@ Requires(preun): vagrant
 Requires: vagrant
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel >= 1.3.6
-BuildRequires: ruby 
+BuildRequires: ruby
 BuildRequires: vagrant
 BuildArch: noarch
 Provides: vagrant(%{vagrant_plugin_name}) = %{version}
@@ -82,7 +82,8 @@ popd
 %{vagrant_plugin_instdir}/vagrant-service-manager.gemspec
 %{vagrant_plugin_instdir}/vagrant-service-manager.spec
 %{vagrant_plugin_instdir}/CHANGELOG.md
+%{vagrant_plugin_instdir}/TODO
 
 %changelog
-* Fri Jan 22 2016 Navid Shaikh - 0.0.1-1
+* Thu Feb 09 2016 Navid Shaikh - 0.0.1-1
 - Initial build
