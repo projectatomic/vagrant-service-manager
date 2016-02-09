@@ -51,3 +51,9 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
   4. Tag the release commit with a vX.Y.Z tag
 
   5. Create a Github release
+
+## Builds
+
+- Gemfile: https://rubygems.org/gems/vagrant-service-manager
+
+- copr build: https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/
