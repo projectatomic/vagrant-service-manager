@@ -1,7 +1,24 @@
-TODO:
+TODO for provisioner:
 
- - Fork the repo - done!
- - Rebuild with new name
- - Add a few subcommands
- - Update the docs
- - Send email saying - (cccccceinrfbbdgufdlbbjibbuhhnbghlkuudefguvtj) ;-)
+Vagrantfile should look like
+
+
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "projectatomic/adb"
+
+  config.vm.network "private_network", type: "dhcp"
+
+  config.service-manager.enable = "docker"
+  config.service-manager.enable = "openshift"
+
+end
+```
+
+
+Aim of above Vagrantfile:
+  - Enable the docker service in provisioning step : "systemctl restart docker"
+  - Enable the openshift service in provisioning step: "systemctl restart openshift"
