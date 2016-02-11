@@ -1,6 +1,12 @@
-# vagrant-service-manager Vagrant Plugin
+# vagrant-service-manager
 
-Provide setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+Provides setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+
+##Objective
+
+* To provide the user a CLI to configure the [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) for different use cases and to provide glue between ADB and the user's development environment.
+
+*  Provide users a tool to control and configure the ADB from the developer's workstation without having to `ssh` into it.
 
 The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-developer-bundle) is  Vagrant box that provides a ready-to-use development environment for container applications. With ADB, developers can dive right into producing complex, multi-container applications.
 
