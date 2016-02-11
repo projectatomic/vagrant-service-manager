@@ -77,7 +77,7 @@ $vagrant service-manager env docker
         # this execute the operations needed to print the docker env info
         with_target_vms(nil, {:single_target=>true}) do |machine|
           # Path to the private_key and where we will store the TLS Certificates
-          secrets_path = machine.data_dir
+          secrets_path = File.expand_path("docker", machine.data_dir)
 
           hIP = machine.ssh_info[:host]
           hport = machine.ssh_info[:port]
@@ -102,7 +102,7 @@ $vagrant service-manager env docker
           port = 2376
 
           # First, get the TLS Certificates, if needed
-          if !File.directory?(File.expand_path(".docker", secrets_path)) then
+          if !File.directory?(secrets_path) then
 
             # Regenerate the certs and restart docker daemon in case of the new ADB box and for VirtualBox provider
             if machine.provider_name == :virtualbox then
@@ -113,7 +113,10 @@ $vagrant service-manager env docker
             end
 
             # copy the required client side certs from inside the box to host machine
-            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker", "#{secrets_path}")
+            @env.ui.info("# Copying TLS certificates to #{secrets_path}")
+            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/ca.pem", "#{secrets_path}")
+            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/cert.pem", "#{secrets_path}")
+            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/key.pem", "#{secrets_path}")
           end
 
           # display the information, irrespective of the copy operation
@@ -123,9 +126,6 @@ $vagrant service-manager env docker
 
       def print_info(guest_ip, port, secrets_path, machine_uuid)
         # Print configuration information for accesing the docker daemon
-
-        # extending the .docker path to include
-        secrets_path = File.expand_path(".docker", secrets_path)
 
         if !OS.windows? then
           message =
