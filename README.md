@@ -12,11 +12,11 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 ## Quick Start
 
-1. Install and start the Atomic Developer Bundle (ADB), as [documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) in the ADB project.
-
-2. Install the vagrant-service-manager plugin
+1. Install `vagrant-service-manager` plugin
 
         vagrant plugin install vagrant-service-manager
+
+2. Get the [Vagrantfile](Vagrantfile) and start the ADB using `vagrant up`. [More](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) documentation on setting up ADB.
 
 3. Run the plugin to get environment variables and certificates
 
