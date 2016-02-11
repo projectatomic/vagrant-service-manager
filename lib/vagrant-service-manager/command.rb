@@ -13,11 +13,21 @@ module Vagrant
 
       def execute
         plugin_name, command, subcommand = ARGV
-        if command == "env" and subcommand == "docker" then
-	        self.execute_docker_info
-    	  else
-	        self.print_help
-    	  end
+        case command
+        when "env"
+            case subcommand
+            when "docker"
+                self.execute_docker_info
+            when nil
+                self.execute_docker_info
+            else
+                self.print_help
+            end
+        when "help"
+            self.print_help
+        else
+            self.print_help
+        end
       end
 
       def print_help
