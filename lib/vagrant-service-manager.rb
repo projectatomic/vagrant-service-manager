@@ -7,6 +7,7 @@ end
 require 'vagrant-service-manager/plugin'
 require 'vagrant-service-manager/command'
 require 'vagrant-service-manager/os'
+require 'vagrant-service-manager/docker_provisioner'
 
 module Vagrant
   module DockerInfo
