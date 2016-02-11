@@ -12,6 +12,19 @@ module Vagrant
       end
 
       def execute
+        # Check for running machines
+        with_target_vms(nil, {:single_target=>true}) do |machine|
+            if machine.state.id != "running" then
+                message = <<-eos
+The virtual machine must be running before you execute this command.
+Try this in the directory with your Vagrantfile:
+    vagrant up
+                eos
+                @env.ui.info(message)
+                exit
+            end
+        end
+
         plugin_name, command, subcommand = ARGV
         if command == "env" and subcommand == "docker" then
 	        self.execute_docker_info
