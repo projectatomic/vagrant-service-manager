@@ -14,7 +14,7 @@ module Vagrant
       def execute
         # Check for running machines
         with_target_vms(nil, {:single_target=>true}) do |machine|
-            if machine.state.id != "running" then
+            if machine.state.id != :running then
                 message = <<-eos
 The virtual machine must be running before you execute this command.
 Try this in the directory with your Vagrantfile:
