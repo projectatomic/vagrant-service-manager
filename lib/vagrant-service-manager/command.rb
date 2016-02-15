@@ -58,10 +58,14 @@ vagrant service-manager <verb> <option>
 
 Verb:
   env
-    Configures and prints the required environment variables for Docker daemon
-
-Example:
-$vagrant service-manager env docker
+    Display connection information for providers in the box.
+    Example:
+    Display information for all active providers in the box:
+      $vagrant service-manager env
+    Display information for docker provider in the box:
+      $vagrant service-manager env docker
+    Display information for openshift provider in the box:
+      $vagrant service-manager env openshift
         help
         @env.ui.info(help_text)
       end
@@ -162,7 +166,7 @@ setx OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
           husername = machine.ssh_info[:username]
 
           # Find the guest IP
-          guest_ip = self.find_machine_ip(machine)
+          guest_ip = self.find_machine_ip
 
           # Hard Code the Docker port because it is fixed on the VM
           # This also makes it easier for the plugin to be cross-provider
