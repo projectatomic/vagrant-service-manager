@@ -1,4 +1,4 @@
-require_relative "action/restart_docker"
+require_relative "action/restart_service"
 
 module Vagrant
   module ServiceManager
