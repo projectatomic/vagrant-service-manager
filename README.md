@@ -1,13 +1,6 @@
 # vagrant-service-manager
 
-Provides setup information, including environment
-variables and certificates, required to access
-services provided by an [Atomic Developer Bundle
-(ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).
-This plugin makes it easier to use the ADB with host-based tools
-such as Eclipse and the docker and kubernetes CLI commands.
-Details on this usage pattern can be found in the [ADB
-Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+This plugin provides setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
 ##Objective
 
@@ -27,16 +20,28 @@ producing complex, multi-container applications.
 
 ## Quick Start
 
-1. Install `vagrant-service-manager` plugin
+1. Install `vagrant-service-manager` plugin:
 
         vagrant plugin install vagrant-service-manager
 
-2. Get the [Vagrantfile](Vagrantfile)
-and start the ADB using `vagrant up`.
-[More](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
-documentation on setting up ADB.
+2. Get a Vagrantfile for your box. Users of the
+[Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle) should download a [Vagrantfile from the repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components).
 
-3. Run the plugin to get environment variables and certificates
+3. Enable your desired service(s) in [Vagrantfile](Vagrantfile) as:
+
+        config.servicemanager.services = 'openshift'
+
+   *Note*
+
+   * `docker` is default service and does not require above configuration.
+   * Enable multiple services as comma separated list. Eg: 'docker, openshift'
+
+5. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
+[Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
+
+6. Run the plugin to get environment variables and certificates:
+
+        $ vagrant service-manager env docker
 
         # Copying TLS certificates to /home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
         # Set the following environment variables to enable access to the
@@ -48,7 +53,7 @@ documentation on setting up ADB.
         # run following command to configure your shell:
         # eval "$(vagrant service-manager env docker)"
 
-4. Begin using your host-based tools.
+7. Begin using your host-based tools.
 
 ## Exit codes
 
