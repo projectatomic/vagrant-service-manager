@@ -11,23 +11,26 @@ module Vagrant
         'provides the IP address:port and tls certificate file location for a docker daemon'
       end
 
-      def execute
-        # Check for running machines
+      def exit_if_machine_not_running
+        # Exit from plugin with status 1 if machine is not running
         with_target_vms(nil, {:single_target=>true}) do |machine|
-            if machine.state.id != :running then
-                message = <<-eos
-The virtual machine must be running before you execute this command.
-Try this in the directory with your Vagrantfile:
-    vagrant up
-                eos
-                @env.ui.info(message)
-                exit
-            end
+          if machine.state.id != :running then
+            message = <<-eos
+  The virtual machine must be running before you execute this command.
+  Try this in the directory with your Vagrantfile:
+  vagrant up
+              eos
+            @env.ui.info(message)
+            exit 1
+          end
         end
+      end
 
+      def execute
         plugin_name, command, subcommand = ARGV
         case command
         when "env"
+            self.exit_if_machine_not_running
             case subcommand
             when "docker"
                 self.execute_docker_info
