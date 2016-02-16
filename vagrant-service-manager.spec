@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 0.0.1
+Version: 0.0.2
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -85,5 +85,21 @@ popd
 %{vagrant_plugin_instdir}/TODO
 
 %changelog
+* Tue Feb 17 2016 Navid Shaikh - 0.0.2-1
+- Bumps version to v0.0.2
+- Fixed prompting for bringing machine up for help command
+- Adds Lalatendu Mohanty as maintainer
+- Fixed check for finding vagrant box state
+- Adds version.rb to fetch the version of plugin
+- Adds steps to build the plugin using bundler
+- Updates README with quick start steps
+- Fixed issue for private key not being sourced for libvirt provider
+- Add notice when copying certificates
+- `vagrant service-manager env` returns all info
+- Adds running machine detection in plugin for better error reporting
+- Updates README with objective
+- Updates README with gemfile and copr builds
+- Added SPEC file to the git repository of plugin
+
 * Thu Feb 09 2016 Navid Shaikh - 0.0.1-1
 - Initial build
