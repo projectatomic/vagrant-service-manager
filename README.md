@@ -20,14 +20,15 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 3. Run the plugin to get environment variables and certificates
 
-        $ vagrant service-manager env docker
-        Set the following environment variables to enable access to the
-        docker daemon running inside of the vagrant virtual machine:
-
-        export DOCKER_HOST=tcp://172.13.14.1:2376
-        export DOCKER_CERT_PATH=/home/foo/adb/.vagrant/machines/default/virtualbox/.docker
+        # Copying TLS certificates to /home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
+        # Set the following environment variables to enable access to the
+        # docker daemon running inside of the vagrant virtual machine:
+        export DOCKER_HOST=tcp://172.28.128.4:2376
+        export DOCKER_CERT_PATH=/home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
         export DOCKER_TLS_VERIFY=1
-        export DOCKER_MACHINE_NAME="90d3e96"
+        export DOCKER_MACHINE_NAME=868622f
+        # run following command to configure your shell:
+        # eval "$(vagrant service-manager env docker)"
 
 4. Begin using your host-based tools.
 
