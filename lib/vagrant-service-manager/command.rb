@@ -32,10 +32,14 @@ module Vagrant
         when "env"
             self.exit_if_machine_not_running
             case subcommand
+
             when "docker"
                 self.execute_docker_info
+            when "openshift"
+                self.execute_openshift_info
             when nil
-                self.execute_docker_info
+                # display information about all the providers inside ADB/CDK
+                self.print_all_provider_info
             else
                 self.print_help
             end
@@ -54,10 +58,14 @@ vagrant service-manager <verb> <option>
 
 Verb:
   env
-    Configures and prints the required environment variables for Docker daemon
-
-Example:
-$vagrant service-manager env docker
+    Display connection information for providers in the box.
+    Example:
+    Display information for all active providers in the box:
+      $vagrant service-manager env
+    Display information for docker provider in the box:
+      $vagrant service-manager env docker
+    Display information for openshift provider in the box:
+      $vagrant service-manager env openshift
         help
         @env.ui.info(help_text)
       end
@@ -76,6 +84,64 @@ $vagrant service-manager env docker
         end
       end
 
+      def check_if_a_service_is_running?(service)
+        command = "systemctl status #{service}"
+        with_target_vms(nil, {:single_target=>true}) do |machine|
+          return machine.communicate.test(command)
+        end
+      end
+
+      def print_all_provider_info
+        message = <<-msg
+# Showing the status of providers in the vagrant box:
+        msg
+        @env.ui.info(message)
+        self.execute_docker_info
+        self.execute_openshift_info
+      end
+
+      def execute_openshift_info
+        @@OPENSHIFT_PORT = 8443
+        if self.check_if_a_service_is_running?("openshift") then
+          # Find the guest IP
+          guest_ip = self.find_machine_ip
+          openshift_url = "https://#{guest_ip}:#@@OPENSHIFT_PORT"
+          openshift_console_url = "#{openshift_url}/console"
+          self.print_openshift_info(openshift_url, openshift_console_url)
+        else
+          @env.ui.info("# OpenShift service is not running in the vagrant box.")
+          exit 1
+        end
+      end
+
+      def print_openshift_info(openshift_url, openshift_console_url)
+        message =
+        <<-eos
+# You can access the OpenShift console on: #{openshift_console_url}
+# To use OpenShift CLI, run: oc login #{openshift_url}
+           eos
+        @env.ui.info(message)
+      end
+
+      def find_machine_ip
+        with_target_vms(nil, {:single_target=>true}) do |machine|
+          # Find the guest IP
+          if machine.provider_name == :virtualbox then
+            # VirtualBox automatically provisions an eth0 interface that is a NAT interface
+            # We need a routeable IP address, which will therefore be found on eth1
+            command = "ip addr show eth1 | awk 'NR==3 {print $2}' | cut -f1 -d\/"
+          else
+            # For all other provisions, find the default route
+            command = "ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'"
+          end
+          guest_ip = ""
+          machine.communicate.execute(command) do |type, data|
+            guest_ip << data.chomp if type == :stdout
+          end
+          return guest_ip
+        end
+      end
+
       def execute_docker_info
         # this execute the operations needed to print the docker env info
         with_target_vms(nil, {:single_target=>true}) do |machine|
@@ -87,18 +153,7 @@ $vagrant service-manager env docker
           husername = machine.ssh_info[:username]
 
           # Find the guest IP
-          if machine.provider_name == :virtualbox then
-              # VirtualBox automatically provisions an eth0 interface that is a NAT interface
-              # We need a routeable IP address, which will therefore be found on eth1
-              command = "ip addr show eth1 | awk 'NR==3 {print $2}' | cut -f1 -d\/"
-          else
-              # For all other provisions, find the default route
-              command = "ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'"
-          end
-          guest_ip = ""
-          machine.communicate.execute(command) do |type, data|
-            guest_ip << data.chomp if type == :stdout
-          end
+          guest_ip = self.find_machine_ip
 
           # Hard Code the Docker port because it is fixed on the VM
           # This also makes it easier for the plugin to be cross-provider
@@ -125,11 +180,11 @@ $vagrant service-manager env docker
           end
 
           # display the information, irrespective of the copy operation
-          self.print_info(guest_ip, port, secrets_path, machine.index_uuid)
+          self.print_docker_env_info(guest_ip, port, secrets_path, machine.index_uuid)
         end
       end
 
-      def print_info(guest_ip, port, secrets_path, machine_uuid)
+      def print_docker_env_info(guest_ip, port, secrets_path, machine_uuid)
         # Print configuration information for accesing the docker daemon
 
         if !OS.windows? then
