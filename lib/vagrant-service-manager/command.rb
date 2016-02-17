@@ -115,25 +115,12 @@ Verb:
       end
 
       def print_openshift_info(openshift_url, openshift_console_url)
-        if !OS.windows? then
-          message =
-          <<-eos
-# Set the following environment variables to access the OpenShift
-export OPENSHIFT_URL=#{openshift_url}
-export OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
-# run following command to configure your shell:
-# eval "$(vagrant service-manager env openshift)"
-          eos
-          @env.ui.info(message)
-        else
-          message =
-          <<-eos
-# Set the following environment variables to access the OpenShift
-setx OPENSHIFT_URL=#{openshift_url}
-setx OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
-          eos
-          @env.ui.info(message)
-        end
+        message =
+        <<-eos
+# You can access the OpenShift console on: #{openshift_console_url}
+# To use OpenShift CLI, run: oc login #{openshift_url}
+           eos
+        @env.ui.info(message)
       end
 
       def find_machine_ip
