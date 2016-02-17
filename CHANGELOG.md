@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.2 Feb 17, 2016
+- Fixes #53: Prep for version v0.0.2
+- Fixes #41: Plugin reports to bring up machine for even help command @navidshaikh
 - Updates CHANGELOG.md @navidshaikh
 - Fix #41: Fixes the check for finding vagrant box state @navidshaikh
 - Adding a version.rb @lalatendumohanty
