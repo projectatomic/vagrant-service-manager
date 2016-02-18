@@ -6,7 +6,7 @@ require 'net/ssh'
 module Vagrant
   module ServiceManager
     class Command < Vagrant.plugin(2, :command)
-
+      OS_RELEASE_FILE = "/etc/os-release"
       def self.synopsis
         'provides the IP address:port and tls certificate file location for a docker daemon'
       end
@@ -32,7 +32,6 @@ module Vagrant
         when "env"
             self.exit_if_machine_not_running
             case subcommand
-
             when "docker"
                 self.execute_docker_info
             when "openshift"
@@ -43,17 +42,14 @@ module Vagrant
             else
                 self.print_help
             end
-
         when "box"
           self.exit_if_machine_not_running
           case subcommand
-
           when "version"
             self.print_vagrant_box_version
           else
             self.print_help
           end
-
         when "help"
             self.print_help
         else
@@ -231,10 +227,9 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
 
       def print_vagrant_box_version
         # Prints the version of the vagrant box, parses /etc/os-release for version
-        @@OS_RELEASE = "/etc/os-release"
         os_release = ""
         with_target_vms(nil, {:single_target=>true}) do |machine|
-          command = "cat #{@@OS_RELEASE} | grep VARIANT"
+          command = "cat #{OS_RELEASE_FILE} | grep VARIANT"
           machine.communicate.execute(command) do |type, data|
             if type == :stderr
               @env.ui.error(data)
