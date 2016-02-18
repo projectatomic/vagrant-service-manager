@@ -32,6 +32,18 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 4. Begin using your host-based tools.
 
+## Exit codes
+
+The following table lists the plugin's exit codes and their meaning:
+
+Exit Code Number | Meaning
+---------------  |-------------------------------------------------------------------------
+0                | No error
+1                | Catch all for general errors / Wrong sub-command or option given
+3                | Vagrant box is not running and must be before this command can succeed
+126              | A service inside the box is not running / Command invoked cannot execute
+
+
 ## Get Involved/Contact Us
 
   * IRC: #atomic and #nulecule on freenode
