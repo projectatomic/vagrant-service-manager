@@ -20,7 +20,7 @@ module Vagrant
   Try this in the directory with your Vagrantfile:
   vagrant up
               eos
-            @env.ui.info(message)
+            @env.ui.error(message)
             exit 1
           end
         end
