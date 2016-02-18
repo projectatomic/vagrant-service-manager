@@ -43,6 +43,17 @@ module Vagrant
             else
                 self.print_help
             end
+
+        when "box"
+          self.exit_if_machine_not_running
+          case subcommand
+
+          when "version"
+            self.print_vagrant_box_version
+          else
+            self.print_help
+          end
+
         when "help"
             self.print_help
         else
@@ -215,6 +226,28 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
           eos
           # puts is used here to escape and render the back slashes in Windows path
           @env.ui.info(puts(message))
+        end
+      end
+
+      def print_vagrant_box_version
+        # Prints the version of the vagrant box, parses /etc/os-release for version
+        @@OS_RELEASE = "/etc/os-release"
+        os_release = ""
+        with_target_vms(nil, {:single_target=>true}) do |machine|
+          command = "cat #{@@OS_RELEASE} | grep VARIANT"
+          machine.communicate.execute(command) do |type, data|
+            if type == :stderr
+              @env.ui.error(data)
+              exit 1
+            end
+            os_release << data.chomp if type == :stdout
+            os_release = os_release.gsub('"', '').split("\n")
+            version = ""
+            os_release.each do |line|
+              version = version + " " + line.split("=")[-1] if not line.split("=")[0] == "VARIANT_ID"
+            end
+            @env.ui.info(version.strip!)
+          end
         end
       end
     end
