@@ -247,26 +247,23 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
         end
       end
 
-      def print_vagrant_box_version(machine_readable=false)
+      def print_vagrant_box_version(script_readable = false)
         # Prints the version of the vagrant box, parses /etc/os-release for version
-        os_release = ""
-        with_target_vms(nil, {:single_target=>true}) do |machine|
+        with_target_vms(nil, { single_target: true}) do |machine|
           command = "cat #{OS_RELEASE_FILE} | grep VARIANT"
+
           machine.communicate.execute(command) do |type, data|
             if type == :stderr
               @env.ui.error(data)
               exit 2
             end
-            os_release << data.chomp if type == :stdout
-            os_release = os_release.gsub('"', '').split("\n")
-            version = ""
-            if not machine_readable
-              os_release.each do |line|
-                version = version + " " + line.split("=")[-1] if not line.split("=")[0] == "VARIANT_ID"
-              end
-              @env.ui.info(version.strip!)
+
+            if !script_readable
+              info = Hash[data.gsub('"', '').split("\n").map {|e| e.split("=") }]
+              version = "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
+              @env.ui.info(version)
             else
-              @env.ui.info(os_release.join("\n"))
+              @env.ui.info(data.chomp)
             end
           end
         end
