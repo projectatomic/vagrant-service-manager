@@ -27,7 +27,7 @@ module Vagrant
       end
 
       def execute
-        plugin_name, command, subcommand, option = ARGV
+        command, subcommand, option = ARGV[1..ARGV.length]
         case command
         when "env"
           self.exit_if_machine_not_running
@@ -59,8 +59,8 @@ module Vagrant
             case option
             when nil
               self.print_vagrant_box_version
-            when "--machine-readable"
-              self.print_vagrant_box_version(machine_readable=true)
+            when "--script-readable"
+              self.print_vagrant_box_version(true)
             else
                 self.print_help
             end
@@ -78,7 +78,7 @@ module Vagrant
         help_text = <<-help
 Service manager for services inside vagrant box.
 
-vagrant service-manager <verb> <option>
+vagrant service-manager <verb> <object> [options]
 
 Verb:
   env
@@ -90,6 +90,11 @@ Verb:
       $vagrant service-manager env docker
     Display information for openshift provider in the box:
       $vagrant service-manager env openshift
+  box
+    object
+      version : Display version and release of the running vagrant box (from /etc/os-release)
+        option
+          --script-readable : Display the version and release in script readable (key=value) form
         help
         @env.ui.info(help_text)
       end
@@ -253,15 +258,15 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
               exit 2
             end
             os_release << data.chomp if type == :stdout
+            os_release = os_release.gsub('"', '').split("\n")
+            version = ""
             if not machine_readable
-              os_release = os_release.gsub('"', '').split("\n")
-              version = ""
               os_release.each do |line|
                 version = version + " " + line.split("=")[-1] if not line.split("=")[0] == "VARIANT_ID"
               end
               @env.ui.info(version.strip!)
             else
-              @env.ui.info(puts(os_release))
+              @env.ui.info(os_release.join("\n"))
             end
           end
         end
