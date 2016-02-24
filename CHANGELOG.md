@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Enhanced the developer instructions for developing the plugin in README
+
 ## v0.0.2 Feb 17, 2016
 - Fixes #53: Prep for version v0.0.2
 - Fixes #41: Plugin reports to bring up machine for even help command @navidshaikh

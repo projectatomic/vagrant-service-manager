@@ -41,13 +41,19 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 1. Install the Atomic Developer Bundle (ADB), as [documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) in the ADB project.  Do not start the box yet.
 
-2. Run `bundle install`
+2. Git clone repo
 
-3. Start the box with `bundle exec vagrant up`
+        git clone https://github.com/projectatomic/vagrant-service-manager
 
-4. Develop.  You can test the command by running `bundle exec vagrant service-manager`
+3. `cd vagrant-service-manager`
 
-5. When you are ready to build the release, get a maintainer to:
+4. Run `bundle install`
+
+5. Start the box with `bundle exec vagrant up`
+
+6. Develop the plugin and test by running `bundle exec vagrant service-manager`
+
+7. When you are ready to build the release, get a repo maintainer to:
 
   1. Put the gemfile in pkg/ with `rake build`
 
@@ -59,18 +65,21 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
   5. Create a Github release
 
-###How to build the Vagrant plugin using Bundler
+### How to build the Vagrant plugin using Bundler
 
 You can also use Bundler to build the plugin and install it manually in your Vagrant environment
 
+Run the commands below inside of the repository:
+
 ```
-git clone this repository and run below commands inside the repository
-
-1. bundle install
-2. bundle exec rake build
-
-You can install the plugin using `vagrant install pkg/<gem name>` command.
+$ bundle install
+$ bundle exec rake build
 ````
+
+Install the plugin using:
+
+    vagrant install pkg/<gem name>
+
 
 ## Builds
 
