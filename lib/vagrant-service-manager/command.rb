@@ -27,26 +27,43 @@ module Vagrant
       end
 
       def execute
-        plugin_name, command, subcommand = ARGV
+        command, subcommand, option = ARGV[1..ARGV.length]
         case command
         when "env"
-            self.exit_if_machine_not_running
-            case subcommand
-            when "docker"
-                self.execute_docker_info
-            when "openshift"
-                self.execute_openshift_info
+          self.exit_if_machine_not_running
+          case subcommand
+          when "docker"
+            case option
             when nil
-                # display information about all the providers inside ADB/CDK
-                self.print_all_provider_info
+              self.execute_docker_info
             else
-                self.print_help
+              self.print_help
             end
+          when "openshift"
+            case option
+            when nil
+              self.execute_openshift_info
+            else
+              self.print_help
+            end
+          when nil
+            # display information about all the providers inside ADB/CDK
+            self.print_all_provider_info
+          else
+            self.print_help
+          end
         when "box"
           self.exit_if_machine_not_running
           case subcommand
           when "version"
-            self.print_vagrant_box_version
+            case option
+            when nil
+              self.print_vagrant_box_version
+            when "--script-readable"
+              self.print_vagrant_box_version(true)
+            else
+                self.print_help
+            end
           else
             self.print_help
           end
@@ -61,7 +78,7 @@ module Vagrant
         help_text = <<-help
 Service manager for services inside vagrant box.
 
-vagrant service-manager <verb> <option>
+vagrant service-manager <verb> <object> [options]
 
 Verb:
   env
@@ -73,6 +90,11 @@ Verb:
       $vagrant service-manager env docker
     Display information for openshift provider in the box:
       $vagrant service-manager env openshift
+  box
+    object
+      version : Display version and release of the running vagrant box (from /etc/os-release)
+        option
+          --script-readable : Display the version and release in script readable (key=value) form
         help
         @env.ui.info(help_text)
       end
@@ -225,23 +247,24 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
         end
       end
 
-      def print_vagrant_box_version
+      def print_vagrant_box_version(script_readable = false)
         # Prints the version of the vagrant box, parses /etc/os-release for version
-        os_release = ""
-        with_target_vms(nil, {:single_target=>true}) do |machine|
+        with_target_vms(nil, { single_target: true}) do |machine|
           command = "cat #{OS_RELEASE_FILE} | grep VARIANT"
+
           machine.communicate.execute(command) do |type, data|
             if type == :stderr
               @env.ui.error(data)
-              exit 1
+              exit 2
             end
-            os_release << data.chomp if type == :stdout
-            os_release = os_release.gsub('"', '').split("\n")
-            version = ""
-            os_release.each do |line|
-              version = version + " " + line.split("=")[-1] if not line.split("=")[0] == "VARIANT_ID"
+
+            if !script_readable
+              info = Hash[data.gsub('"', '').split("\n").map {|e| e.split("=") }]
+              version = "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
+              @env.ui.info(version)
+            else
+              @env.ui.info(data.chomp)
             end
-            @env.ui.info(version.strip!)
           end
         end
       end
