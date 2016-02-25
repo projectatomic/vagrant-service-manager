@@ -1,9 +1,22 @@
 # Changelog
 
 ## v0.0.3 Feb 25, 2016
--
-- Enhanced the developer instructions for developing the plugin in README @budhrg
+- Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
 - Fix #45: Adds exit status for commands and invalid commands @navidshaikh
+- Enhanced the developer instructions for developing the plugin in README @budhrg
+- Updated box versioning info @budhrg
+- Fix #45: Adds exit status for commands and invalid commands @navidshaikh
+- Renames the option machine-readable to script-readable @navidshaikh
+- Fix #63: Adds --machine-readable option to box version command @navidshaikh
+- Fix #66: Fixing gem build warning @lalatendumohanty
+- Adds the filename as class constant @navidshaikh
+- Fix #8: Adds subcommand for printing box version
+- Fix #59: Prints the error message on stderr @navidshaikh
+- Updates openshift connection information output @navidshaikh
+- Extends help command with openshift example @navidshaikh
+- Adds method to find if a service is running @navidshaikh
+- Fix #23: Adds subcommand for displaying openshift information @navidshaikh
+- Updates output docker info in README @navidshaikh
 
 ## v0.0.2 Feb 17, 2016
 - Fixes #53: Prep for version v0.0.2

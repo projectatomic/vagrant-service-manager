@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 0.0.2
+Version: 0.0.3
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -85,6 +85,24 @@ popd
 %{vagrant_plugin_instdir}/TODO
 
 %changelog
+* Thu Feb 25 2016 Navid Shaikh - 0.0.3-1
+- Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
+- Fix #45: Adds exit status for commands and invalid commands @navidshaikh
+- Enhanced the developer instructions for developing the plugin in README @budhrg
+- Updated box versioning info @budhrg
+- Fix #45: Adds exit status for commands and invalid commands @navidshaikh
+- Renames the option machine-readable to script-readable @navidshaikh
+- Fix #63: Adds --machine-readable option to box version command @navidshaikh
+- Fix #66: Fixing gem build warning @lalatendumohanty
+- Adds the filename as class constant @navidshaikh
+- Fix #8: Adds subcommand for printing box version
+- Fix #59: Prints the error message on stderr @navidshaikh
+- Updates openshift connection information output @navidshaikh
+- Extends help command with openshift example @navidshaikh
+- Adds method to find if a service is running @navidshaikh
+- Fix #23: Adds subcommand for displaying openshift information @navidshaikh
+- Updates output docker info in README @navidshaikh
+
 * Tue Feb 17 2016 Navid Shaikh - 0.0.2-1
 - Bumps version to v0.0.2
 - Fixed prompting for bringing machine up for help command
