@@ -12,7 +12,7 @@ module Vagrant
       end
 
       def exit_if_machine_not_running
-        # Exit from plugin with status 1 if machine is not running
+        # Exit from plugin with status 3 if machine is not running
         with_target_vms(nil, {:single_target=>true}) do |machine|
           if machine.state.id != :running then
             message = <<-eos
@@ -21,7 +21,7 @@ module Vagrant
   vagrant up
               eos
             @env.ui.error(message)
-            exit 1
+            exit 3
           end
         end
       end
@@ -50,7 +50,7 @@ module Vagrant
             # display information about all the providers inside ADB/CDK
             self.print_all_provider_info
           else
-            self.print_help
+            self.print_help(1)
           end
         when "box"
           self.exit_if_machine_not_running
@@ -62,7 +62,7 @@ module Vagrant
             when "--script-readable"
               self.print_vagrant_box_version(true)
             else
-                self.print_help
+                self.print_help(1)
             end
           else
             self.print_help
@@ -70,11 +70,11 @@ module Vagrant
         when "help"
             self.print_help
         else
-            self.print_help
+            self.print_help(1)
         end
       end
 
-      def print_help
+      def print_help(exit_status=0)
         help_text = <<-help
 Service manager for services inside vagrant box.
 
@@ -97,6 +97,7 @@ Verb:
           --script-readable : Display the version and release in script readable (key=value) form
         help
         @env.ui.info(help_text)
+        exit exit_status
       end
 
       def copy_from_box(hIP, hport, husername, hprivate_key_path, source, destination)
@@ -138,8 +139,8 @@ Verb:
           openshift_console_url = "#{openshift_url}/console"
           self.print_openshift_info(openshift_url, openshift_console_url)
         else
-          @env.ui.info("# OpenShift service is not running in the vagrant box.")
-          exit 1
+          @env.ui.error("# OpenShift service is not running in the vagrant box.")
+          exit 126
         end
       end
 
@@ -255,7 +256,7 @@ setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
           machine.communicate.execute(command) do |type, data|
             if type == :stderr
               @env.ui.error(data)
-              exit 2
+              exit 126
             end
 
             if !script_readable
