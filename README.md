@@ -1,14 +1,29 @@
 # vagrant-service-manager
 
-Provides setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+Provides setup information, including environment
+variables and certificates, required to access
+services provided by an [Atomic Developer Bundle
+(ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).
+This plugin makes it easier to use the ADB with host-based tools
+such as Eclipse and the docker and kubernetes CLI commands.
+Details on this usage pattern can be found in the [ADB
+Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
 ##Objective
 
-* To provide the user a CLI to configure the [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) for different use cases and to provide glue between ADB and the user's development environment.
+* To provide the user a CLI to configure the
+[ADB](https://github.com/projectatomic/adb-atomic-developer-bundle)
+for different use cases and to provide glue between ADB and the user's
+development environment.
 
-*  Provide users a tool to control and configure the ADB from the developer's workstation without having to `ssh` into it.
+*  Provide users a tool to control and configure the ADB from the
+developer's workstation without having to `ssh` into it.
 
-The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-developer-bundle) is  Vagrant box that provides a ready-to-use development environment for container applications. With ADB, developers can dive right into producing complex, multi-container applications.
+The [Atomic Developer
+Bundle](https://github.com/projectatomic/adb-atomic-developer-bundle)
+is  Vagrant box that provides a ready-to-use development environment
+for container applications. With ADB, developers can dive right into
+producing complex, multi-container applications.
 
 ## Quick Start
 
@@ -16,7 +31,10 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
         vagrant plugin install vagrant-service-manager
 
-2. Get the [Vagrantfile](Vagrantfile) and start the ADB using `vagrant up`. [More](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) documentation on setting up ADB.
+2. Get the [Vagrantfile](Vagrantfile)
+and start the ADB using `vagrant up`.
+[More](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
+documentation on setting up ADB.
 
 3. Run the plugin to get environment variables and certificates
 
@@ -39,7 +57,9 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 ## How to Develop/Test
 
-1. Install the Atomic Developer Bundle (ADB), as [documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst) in the ADB project.  Do not start the box yet.
+1. Install the Atomic Developer Bundle (ADB), as
+[documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
+in the ADB project.  Do not start the box yet.
 
 2. Git clone repo
 
@@ -51,9 +71,11 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 5. Start the box with `bundle exec vagrant up`
 
-6. Develop the plugin and test by running `bundle exec vagrant service-manager`
+6. Review the [Contribution Guidelines](CONTRIBUTING.md).
 
-7. When you are ready to build the release, get a repo maintainer to:
+7. Develop the plugin and test by running `bundle exec vagrant service-manager`
+
+8. When you are ready to build the release, get a repo maintainer to:
 
   1. Put the gemfile in pkg/ with `rake build`
 
@@ -67,7 +89,8 @@ The [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-develo
 
 ### How to build the Vagrant plugin using Bundler
 
-You can also use Bundler to build the plugin and install it manually in your Vagrant environment
+You can also use Bundler to build the plugin and install it manually in
+your Vagrant environment
 
 Run the commands below inside of the repository:
 
