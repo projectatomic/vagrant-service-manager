@@ -85,8 +85,10 @@ popd
 %{vagrant_plugin_instdir}/TODO
 
 %changelog
-* Thu Feb 25 2016 Navid Shaikh - 0.0.3-1
+* Tue Mar 01 2016 Navid Shaikh - 0.0.3-1
 - Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
+- Fix #12 and #21: Restart docker service on 'vagrant up' @budhrg
+- Update CONTRIBUTING.md and README.md @bexelbie
 - Fix #45: Adds exit status for commands and invalid commands @navidshaikh
 - Enhanced the developer instructions for developing the plugin in README @budhrg
 - Updated box versioning info @budhrg
@@ -103,7 +105,7 @@ popd
 - Fix #23: Adds subcommand for displaying openshift information @navidshaikh
 - Updates output docker info in README @navidshaikh
 
-* Tue Feb 17 2016 Navid Shaikh - 0.0.2-1
+* Wed Feb 17 2016 Navid Shaikh - 0.0.2-1
 - Bumps version to v0.0.2
 - Fixed prompting for bringing machine up for help command
 - Adds Lalatendu Mohanty as maintainer
@@ -119,5 +121,5 @@ popd
 - Updates README with gemfile and copr builds
 - Added SPEC file to the git repository of plugin
 
-* Thu Feb 09 2016 Navid Shaikh - 0.0.1-1
+* Tue Feb 09 2016 Navid Shaikh - 0.0.1-1
 - Initial build
