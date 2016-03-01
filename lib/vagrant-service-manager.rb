@@ -9,10 +9,13 @@ require 'vagrant-service-manager/command'
 require 'vagrant-service-manager/os'
 
 module Vagrant
-  module DockerInfo
+  module ServiceManager
     # Returns the path to the source of this plugin
     def self.source_root
       @source_root ||= Pathname.new(File.expand_path('../../', __FILE__))
     end
+
+    # Temporally load the extra capabilities files for Red Hat
+    load(File.join(source_root, 'plugins/guests/redhat/plugin.rb'))
   end
 end

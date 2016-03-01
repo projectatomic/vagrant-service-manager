@@ -1,6 +1,7 @@
 # Changelog
 
 ## v0.0.3 Feb 25, 2016
+- Fix #12 and #21: Restart docker service on 'vagrant up' @budhrg
 - Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
 - Fix #45: Adds exit status for commands and invalid commands @navidshaikh
 - Enhanced the developer instructions for developing the plugin in README @budhrg
