@@ -1,6 +1,6 @@
-# Loads all services and actions
-Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
+# Loads all actions
 Dir["#{File.dirname(__FILE__)}/action/*.rb"].each { |f| require_relative f }
+require_relative 'service'
 
 module Vagrant
   module ServiceManager
