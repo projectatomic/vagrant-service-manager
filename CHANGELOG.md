@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Fix links, typos, formatting in CONTRIBUTING.md @budhrg
+- Fix #16 and #72: Enable private networking for VirtualBox if not set @budhrg
 
 ## v0.0.3 Mar 01, 2016
 - Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
