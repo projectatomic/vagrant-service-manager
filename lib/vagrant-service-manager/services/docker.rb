@@ -11,7 +11,7 @@ module Vagrant
         end
 
         def call(env)
-          if SUPPORTED_BOXES.include? @machine.guest.capability(:flavor)
+          if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
             command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
             @machine.communicate.execute(command) do |type, data|
               if type == :stderr
