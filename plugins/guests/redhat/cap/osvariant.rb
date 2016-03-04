@@ -1,8 +1,8 @@
 module VagrantPlugins
   module GuestRedHat
     module Cap
-      class Flavor
-        def self.flavor(machine)
+      class OsVariant
+        def self.os_variant(machine)
           machine.communicate.sudo("grep VARIANT_ID /etc/os-release") do |type, data|
             if type == :stderr
               @env.ui.error(data)
