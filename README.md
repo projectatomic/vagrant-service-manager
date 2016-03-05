@@ -118,7 +118,7 @@ $ bundle exec rake build
 
 Install the plugin using:
 
-    vagrant install pkg/<gem name>
+    vagrant plugin install pkg/<gem name>
 
 
 ## Builds
