@@ -1,9 +1,12 @@
 require_relative 'os'
+require 'digest'
 
 module Vagrant
   module ServiceManager
     class Command < Vagrant.plugin(2, :command)
-      OS_RELEASE_FILE = "/etc/os-release"
+      OS_RELEASE_FILE = '/etc/os-release'
+      DOCKER_PATH = '/home/vagrant/.docker'
+
       def self.synopsis
         'provides the IP address:port and tls certificate file location for a docker daemon'
       end
@@ -155,34 +158,42 @@ Verb:
         end
       end
 
+      def sha_id(file_data)
+        Digest::SHA256.hexdigest file_data
+      end
+
+      def certs_present_and_valid?(path, machine)
+        return false if Dir["#{path}/*"].empty?
+
+        # check validity of certs
+        Dir[path + "/*"].each do |f|
+          guest_file_path = "#{DOCKER_PATH}/#{File.basename(f)}"
+          guest_sha = machine.guest.capability(:sha_id, guest_file_path)
+          return false if sha_id(File.read(f)) != guest_sha
+        end
+
+        true
+      end
+
       def execute_docker_info
         # this execute the operations needed to print the docker env info
         with_target_vms(nil, {:single_target=>true}) do |machine|
           # Path to the private_key and where we will store the TLS Certificates
           secrets_path = File.expand_path("docker", machine.data_dir)
 
-          hIP = machine.ssh_info[:host]
-          hport = machine.ssh_info[:port]
-          husername = machine.ssh_info[:username]
-
-          # Find the guest IP
-          guest_ip = self.find_machine_ip
-
           # Hard Code the Docker port because it is fixed on the VM
           # This also makes it easier for the plugin to be cross-provider
           port = 2376
 
-          # First, get the TLS Certificates, if needed
-          if !File.directory?(secrets_path) then
+          # Get the TLS certificates if needed
+          unless certs_present_and_valid?(secrets_path, machine)
+            Dir.mkdir(secrets_path) unless Dir.exists?(secrets_path)
 
-            # Create the directory
-            Dir.mkdir(secrets_path)
-
-            # copy the required client side certs from inside the box to host machine
+            # Copy the required client side certs from inside the box to host machine
             @env.ui.info("# Copying TLS certificates to #{secrets_path}")
-            machine.communicate.download("/home/vagrant/.docker/ca.pem", "#{secrets_path}")
-            machine.communicate.download("/home/vagrant/.docker/cert.pem", "#{secrets_path}")
-            machine.communicate.download("/home/vagrant/.docker/key.pem", "#{secrets_path}")
+            machine.communicate.download("#{DOCKER_PATH}/ca.pem", "#{secrets_path}")
+            machine.communicate.download("#{DOCKER_PATH}/cert.pem", "#{secrets_path}")
+            machine.communicate.download("#{DOCKER_PATH}/key.pem", "#{secrets_path}")
           end
 
           api_version = ""
@@ -192,7 +203,7 @@ Verb:
           end
 
           # display the information, irrespective of the copy operation
-          self.print_docker_env_info(guest_ip, port, secrets_path, machine.index_uuid, api_version)
+          self.print_docker_env_info(find_machine_ip, port, secrets_path, machine.index_uuid, api_version)
         end
       end
 
