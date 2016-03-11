@@ -210,7 +210,11 @@ Verb:
       def print_docker_env_info(guest_ip, port, secrets_path, machine_uuid)
         # Print configuration information for accesing the docker daemon
 
-        if !OS.windows? then
+        if !OS.windows? || OS.windows_cygwin? then
+          if OS.windows? then
+            secrets_path = secrets_path.split('/').join('\\') + '\\'
+          end
+
           message =
           <<-eos
 # Set the following environment variables to enable access to the
