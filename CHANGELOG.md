@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #94: Do not exit if box is not supported @navidshaikh
 - Fixed missing word for plugin installation in README @budhrg
 - Fix links, typos, formatting in CONTRIBUTING.md @budhrg
 - Fix #16 and #72: Enable private networking for VirtualBox if not set @budhrg
