@@ -11,6 +11,8 @@ module Vagrant
         end
 
         def call(env)
+          @app.call(env)
+
           if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
             command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
             @machine.communicate.execute(command) do |type, data|
@@ -20,8 +22,6 @@ module Vagrant
               end
             end
           end
-
-          @app.call(env)
         end
       end
     end
