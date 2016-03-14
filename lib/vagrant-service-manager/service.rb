@@ -1,4 +1,4 @@
-# Loads all actions
+# Loads all services
 Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
 
 module Vagrant
@@ -16,8 +16,9 @@ module Vagrant
       end
 
       def call(env)
+        @app.call(env)
+
         if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
-          @app.call(env)
           @docker_hook.execute
 
           if @machine.guest.capability(:os_variant) == "cdk"

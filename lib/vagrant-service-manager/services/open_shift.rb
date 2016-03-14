@@ -1,13 +1,13 @@
 module Vagrant
   module ServiceManager
-    class Docker
+    class OpenShift
       def initialize(machine, ui)
         @machine = machine
         @ui = ui
       end
 
       def execute
-        command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
+        command = "sudo sccli openshift"
         @machine.communicate.execute(command) do |type, data|
           if type == :stderr
             @ui.error(data)

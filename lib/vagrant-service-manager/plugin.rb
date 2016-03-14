@@ -20,7 +20,7 @@ module Vagrant
 
       action_hook(:servicemanager, :machine_action_up) do |hook|
         hook.before(VagrantPlugins::ProviderVirtualBox::Action::Network, setup_network)
-        hook.after(Vagrant::Action::Builtin::SyncedFolders, Service::Docker)
+        hook.after(Vagrant::Action::Builtin::SyncedFolders, Service)
       end
 
       def self.setup_network
