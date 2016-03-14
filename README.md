@@ -42,9 +42,9 @@ producing complex, multi-container applications.
 
         Specific versions can be specified using the following variables:
 
-        `config.servicemanager.openshift.docker_registry = "docker.io"` - What registry should be pulled from
-        `config.servicemanager.openshift.image_name = "openshift/origin"` - What image should be used
-        `config.servicemanager.openshift.image_tag = "v1.1.1"` - What image version should be used
+        `config.servicemanager.openshift_docker_registry = "docker.io"` - What registry should be pulled from
+        `config.servicemanager.openshift_image_name = "openshift/origin"` - What image should be used
+        `config.servicemanager.openshift_image_tag = "v1.1.1"` - What image version should be used
 
 
 5. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
