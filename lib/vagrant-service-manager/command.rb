@@ -1,8 +1,5 @@
 require_relative 'os'
 
-require 'net/scp'
-require 'net/ssh'
-
 module Vagrant
   module ServiceManager
     class Command < Vagrant.plugin(2, :command)
@@ -100,20 +97,6 @@ Verb:
         exit exit_status
       end
 
-      def copy_from_box(hIP, hport, husername, hprivate_key_path, source, destination)
-        # This method should be extended to take an option 'if recursive'
-
-        # read the private key
-        fp = File.open(hprivate_key_path)
-        pk_data = [fp.read]
-        fp.close
-
-        # create the ssh session
-        Net::SSH.start(hIP, husername, :port => hport, :key_data => pk_data, :keys_only => TRUE) do |ssh|
-          ssh.scp.download(source, destination, :recursive => TRUE)
-        end
-      end
-
       def check_if_a_service_is_running?(service)
         command = "systemctl status #{service}"
         with_target_vms(nil, {:single_target=>true}) do |machine|
@@ -192,14 +175,14 @@ Verb:
           # First, get the TLS Certificates, if needed
           if !File.directory?(secrets_path) then
 
-            # Get the private key
-            hprivate_key_path = machine.ssh_info[:private_key_path][0]
+            # Create the directory
+            Dir.mkdir(secrets_path)
 
             # copy the required client side certs from inside the box to host machine
             @env.ui.info("# Copying TLS certificates to #{secrets_path}")
-            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/ca.pem", "#{secrets_path}")
-            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/cert.pem", "#{secrets_path}")
-            self.copy_from_box(hIP, hport, husername, hprivate_key_path, "/home/vagrant/.docker/key.pem", "#{secrets_path}")
+            machine.communicate.download("/home/vagrant/.docker/ca.pem", "#{secrets_path}")
+            machine.communicate.download("/home/vagrant/.docker/cert.pem", "#{secrets_path}")
+            machine.communicate.download("/home/vagrant/.docker/key.pem", "#{secrets_path}")
           end
 
           # display the information, irrespective of the copy operation
