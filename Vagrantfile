@@ -13,6 +13,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "projectatomic/adb"
 
-  # enable service-manager plugin
-  config.vm.provision :servicemanager
+  # This is the default setup
+  # config.servicemanager.services = 'docker'
+
+  # Enable multiple services as comma separated list.
+  # config.servicemanager.services = 'docker, openshift'
 end
