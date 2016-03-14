@@ -1,4 +1,5 @@
-# Loads all actions
+# Loads all services and actions
+Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
 Dir["#{File.dirname(__FILE__)}/action/*.rb"].each { |f| require_relative f }
 
 module Vagrant
@@ -12,18 +13,14 @@ module Vagrant
         Command
       end
 
-      config(:servicemanager, :provisioner) do
+      config 'servicemanager' do
         require_relative 'config'
         Config
       end
 
-      provisioner :servicemanager do
-        require_relative 'provisioners/base'
-        Provisioner::Base
-      end
-
       action_hook(:servicemanager, :machine_action_up) do |hook|
         hook.before(VagrantPlugins::ProviderVirtualBox::Action::Network, setup_network)
+        hook.append(Service::Docker)
       end
 
       def self.setup_network

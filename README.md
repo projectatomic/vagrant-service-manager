@@ -27,14 +27,19 @@ producing complex, multi-container applications.
 2. Get a Vagrantfile for your box. Users of the
 [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle) should download a [Vagrantfile from the repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components).
 
-3. Enable the plugin as:
+3. Enable your desired service(s) in [Vagrantfile](Vagrantfile) as:
 
-        config.vm.provision = 'servicemanager'
+        config.servicemanager.services = 'openshift'
 
-4. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
+   *Note*
+
+   * `docker` is default service and does not require above configuration.
+   * Enable multiple services as comma separated list. Eg: 'docker, openshift'
+
+5. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
 [Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
 
-5. Run the plugin to get environment variables and certificates:
+6. Run the plugin to get environment variables and certificates:
 
         $ vagrant service-manager env docker
 
@@ -48,7 +53,7 @@ producing complex, multi-container applications.
         # run following command to configure your shell:
         # eval "$(vagrant service-manager env docker)"
 
-6. Begin using your host-based tools.
+7. Begin using your host-based tools.
 
 ## Exit codes
 
