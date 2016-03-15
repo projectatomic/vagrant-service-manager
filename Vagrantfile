@@ -18,4 +18,9 @@ Vagrant.configure(2) do |config|
 
   # Enable multiple services as comma separated list.
   # config.servicemanager.services = 'docker, openshift'
+
+  # Specific versions can be specified using the following variables for OpenShift service:
+  # config.servicemanager.openshift_docker_registry = "docker.io"
+  # config.servicemanager.openshift_image_name = "openshift/origin"
+  # config.servicemanager.openshift_image_tag = "v1.1.1"
 end
