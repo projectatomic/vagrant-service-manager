@@ -10,7 +10,7 @@ module Vagrant
         @app = app
         @machine = env[:machine]
         @ui = env[:ui]
-        @services = @machine.config.servicemanager.services.split(',').map(&:chomp)
+        @services = @machine.config.servicemanager.services.split(',').map(&:strip)
         @docker_hook = Docker.new(@machine, @ui)
         @openshift_hook = OpenShift.new(@machine, @ui)
       end
