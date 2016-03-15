@@ -3,9 +3,13 @@ require 'set'
 module Vagrant
   module ServiceManager
     SERVICES = ['docker', 'openshift']
+    CONFIG_KEYS  = [
+      :services, :openshift_docker_registry,
+      :openshift_image_name, :openshift_image_tag
+    ]
 
     class Config < Vagrant.plugin('2', :config)
-      attr_accessor :services
+      attr_accessor(*CONFIG_KEYS)
 
       DEFAULTS = {
         services: 'docker'

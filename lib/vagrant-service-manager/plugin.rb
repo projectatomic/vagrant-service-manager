@@ -1,6 +1,6 @@
-# Loads all services and actions
-Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
+# Loads all actions
 Dir["#{File.dirname(__FILE__)}/action/*.rb"].each { |f| require_relative f }
+require_relative 'service'
 
 module Vagrant
   module ServiceManager
@@ -20,7 +20,7 @@ module Vagrant
 
       action_hook(:servicemanager, :machine_action_up) do |hook|
         hook.before(VagrantPlugins::ProviderVirtualBox::Action::Network, setup_network)
-        hook.after(Vagrant::Action::Builtin::SyncedFolders, Service::Docker)
+        hook.after(Vagrant::Action::Builtin::SyncedFolders, Service)
       end
 
       def self.setup_network

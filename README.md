@@ -36,6 +36,17 @@ producing complex, multi-container applications.
    * `docker` is default service and does not require above configuration.
    * Enable multiple services as comma separated list. Eg: 'docker, openshift'
 
+4. Enable any specific options for the services you have selected:
+
+    * OpenShift
+
+        Specific versions can be specified using the following variables:
+
+        `config.servicemanager.openshift_docker_registry = "docker.io"` - What registry should be pulled from
+        `config.servicemanager.openshift_image_name = "openshift/origin"` - What image should be used
+        `config.servicemanager.openshift_image_tag = "v1.1.1"` - What image version should be used
+
+
 5. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
 [Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
 

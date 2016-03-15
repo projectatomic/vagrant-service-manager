@@ -1,26 +1,17 @@
 module Vagrant
   module ServiceManager
-    SUPPORTED_BOXES = ['adb', 'cdk']
+    class Docker
+      def initialize(machine, ui)
+        @machine = machine
+        @ui = ui
+      end
 
-    module Service
-      class Docker
-        def initialize(app, env)
-          @app = app
-          @machine = env[:machine]
-          @ui = env[:ui]
-        end
-
-        def call(env)
-          @app.call(env)
-
-          if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
-            command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
-            @machine.communicate.execute(command) do |type, data|
-              if type == :stderr
-                @ui.error(data)
-                exit 126
-              end
-            end
+      def execute
+        command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
+        @machine.communicate.execute(command) do |type, data|
+          if type == :stderr
+            @ui.error(data)
+            exit 126
           end
         end
       end
