@@ -21,11 +21,12 @@ module Vagrant
         if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
           @docker_hook.execute
 
-          if @machine.guest.capability(:os_variant) == "cdk"
+          if @machine.guest.capability(:os_variant) == "cdk" and @services.length == 0
             # openshift to be started by default for CDK
             @openshift_hook.execute
-          elsif @services.include? "openshift"
-            # Its ADB and start openshift service if it is configured in Vagrantfile
+          end
+          if @services.include? "openshift"
+            # Start OpenShift service if it is configured in Vagrantfile
             @openshift_hook.execute
           end
         end
