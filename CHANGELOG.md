@@ -1,11 +1,15 @@
 # Changelog
 
-## Unreleased
+## v0.0.4 Mar 14, 2016
+- Fix #101: vagrant-service-manager version 0.0.4 release @navidshaikh
+- Remove manually scp for TLS keys and use machine.communicate.download @bexelbie
+- Fix #87 #83: Supports starting OpenShift service as part of config @budhrg @bexelbie @navidshaikh
+- Fix #95: Update hook code to call other middleware first @bexelbie
 - Fix #94: Do not exit if box is not supported @navidshaikh
 - Fixed missing word for plugin installation in README @budhrg
+- Fix #91: Renaming the method name flavor to os_variant @lalatendumohanty
 - Fix links, typos, formatting in CONTRIBUTING.md @budhrg
 - Fix #16 and #72: Enable private networking for VirtualBox if not set @budhrg
-- Remove manually scp for TLS keys and use machine.communicate.download @bexelbie
 
 ## v0.0.3 Mar 01, 2016
 - Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
