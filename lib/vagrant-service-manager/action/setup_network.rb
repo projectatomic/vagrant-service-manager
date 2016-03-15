@@ -10,7 +10,7 @@ module Vagrant
         end
 
         def call(env)
-          add_private_network if virtualbox? && default_network_exists?
+          add_private_network if virtualbox? && !private_network_exists?
           @app.call(env)
         end
 
@@ -20,8 +20,8 @@ module Vagrant
           @machine.provider.instance_of?(VagrantPlugins::ProviderVirtualBox::Provider)
         end
 
-        def default_network_exists?
-          @machine.config.vm.networks.length == 1
+        def private_network_exists?
+          @machine.config.vm.networks.any? { |type, _| type == :private_network }
         end
 
         def add_private_network
