@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Fix #113: Adds DOCKER_API_VERSION in env docker output @navidshaikh
+
 ## v0.0.4 Mar 14, 2016
 - Fix #101: vagrant-service-manager version 0.0.4 release @navidshaikh
 - Remove manually scp for TLS keys and use machine.communicate.download @bexelbie
