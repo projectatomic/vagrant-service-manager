@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 0.0.3
+Version: 0.0.4
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -69,6 +69,7 @@ popd
 %{vagrant_plugin_libdir}
 %exclude %{vagrant_plugin_cache}
 %{vagrant_plugin_spec}
+%{vagrant_plugin_instdir}/plugins/guests/
 
 %files doc
 %doc %{vagrant_plugin_docdir}
@@ -85,6 +86,16 @@ popd
 %{vagrant_plugin_instdir}/TODO
 
 %changelog
+* Tue Mar 15 2016 Navid Shaikh - 0.0.4-1
+- Fix #101: vagrant-service-manager version 0.0.4 release @navidshaikh
+- Remove manually scp for TLS keys and use machine.communicate.download @bexelbie
+- Fix #87 #83: Supports starting OpenShift service as part of config @budhrg @bexelbie @navidshaikh
+- Fix #95: Update hook code to call other middleware first @bexelbie
+- Fix #94: Do not exit if box is not supported @navidshaikh
+- Fixed missing word for plugin installation in README @budhrg
+- Fix links, typos, formatting in CONTRIBUTING.md @budhrg
+- Fix #16 and #72: Enable private networking for VirtualBox if not set @budhrg
+
 * Tue Mar 01 2016 Navid Shaikh - 0.0.3-1
 - Fix #74: vagrant-service-manager plugin version 0.0.3 release @navidshaikh
 - Fix #12 and #21: Restart docker service on 'vagrant up' @budhrg
