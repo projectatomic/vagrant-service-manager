@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix-72: Add a private networking for VirtualBox @budhrg
 - Fix #113: Adds DOCKER_API_VERSION in env docker output @navidshaikh
 
 ## v0.0.4 Mar 14, 2016
