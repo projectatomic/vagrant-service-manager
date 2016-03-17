@@ -185,12 +185,18 @@ Verb:
             machine.communicate.download("/home/vagrant/.docker/key.pem", "#{secrets_path}")
           end
 
+          api_version = ""
+          docker_apiversion = "docker version --format '{{.Server.ApiVersion}}'"
+          machine.communicate.execute(docker_apiversion) do |type, data|
+            api_version << data.chomp if type == :stdout
+          end
+
           # display the information, irrespective of the copy operation
-          self.print_docker_env_info(guest_ip, port, secrets_path, machine.index_uuid)
+          self.print_docker_env_info(guest_ip, port, secrets_path, machine.index_uuid, api_version)
         end
       end
 
-      def print_docker_env_info(guest_ip, port, secrets_path, machine_uuid)
+      def print_docker_env_info(guest_ip, port, secrets_path, machine_uuid, api_version)
         # Print configuration information for accesing the docker daemon
 
         if !OS.windows? then
@@ -202,6 +208,7 @@ export DOCKER_HOST=tcp://#{guest_ip}:#{port}
 export DOCKER_CERT_PATH=#{secrets_path}
 export DOCKER_TLS_VERIFY=1
 export DOCKER_MACHINE_NAME=#{machine_uuid[0..6]}
+export DOCKER_API_VERSION=#{api_version}
 # run following command to configure your shell:
 # eval "$(vagrant service-manager env docker)"
 
@@ -218,6 +225,7 @@ setx DOCKER_HOST tcp://#{guest_ip}:#{port}
 setx DOCKER_CERT_PATH #{secrets_path}
 setx DOCKER_TLS_VERIFY 1
 setx DOCKER_MACHINE_NAME #{machine_uuid[0..6]}
+setx DOCKER_API_VERSION=#{api_version}
           eos
           # puts is used here to escape and render the back slashes in Windows path
           @env.ui.info(puts(message))
