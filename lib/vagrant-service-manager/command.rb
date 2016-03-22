@@ -43,6 +43,8 @@ module Vagrant
             case option
             when nil
               self.execute_openshift_info
+            when "--script-readable"
+              self.execute_openshift_info(true)
             else
               self.print_help
             end
@@ -90,6 +92,9 @@ Verb:
       $vagrant service-manager env docker
     Display information for openshift provider in the box:
       $vagrant service-manager env openshift
+    Display information for openshift provider in script readable format:
+      $vagrant service-manager env openshift --script-readable
+
   box
     object
       version : Display version and release of the running vagrant box (from /etc/os-release)
@@ -116,26 +121,37 @@ Verb:
         self.execute_openshift_info
       end
 
-      def execute_openshift_info
+      def execute_openshift_info(script_readable = false)
         @@OPENSHIFT_PORT = 8443
         if self.check_if_a_service_is_running?("openshift") then
           # Find the guest IP
           guest_ip = self.find_machine_ip
           openshift_url = "https://#{guest_ip}:#@@OPENSHIFT_PORT"
           openshift_console_url = "#{openshift_url}/console"
-          self.print_openshift_info(openshift_url, openshift_console_url)
+          self.print_openshift_info(
+            openshift_url,
+            openshift_console_url,
+            script_readable)
         else
           @env.ui.error("# OpenShift service is not running in the vagrant box.")
           exit 126
         end
       end
 
-      def print_openshift_info(openshift_url, openshift_console_url)
-        message =
-        <<-eos
+      def print_openshift_info(openshift_url, openshift_console_url, script_readable = false)
+        if !script_readable
+          message =
+            <<-eos
 # You can access the OpenShift console on: #{openshift_console_url}
 # To use OpenShift CLI, run: oc login #{openshift_url}
-           eos
+            eos
+        else
+          message =
+            <<-eos
+OPENSHIFT_URL=#{openshift_url}
+OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
+            eos
+        end
         @env.ui.info(message)
       end
 
