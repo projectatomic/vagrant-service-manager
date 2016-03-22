@@ -7,6 +7,11 @@ module VagrantPlugins
         require_relative 'cap/osvariant'
         Cap::OsVariant
       end
+
+      guest_capability('redhat', 'sha_id') do
+        require_relative 'cap/sha_id'
+        Cap::ShaID
+      end
     end
   end
 end
