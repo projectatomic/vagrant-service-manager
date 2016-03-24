@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #122: Certs copied at the time of generation @budhrg
 - Fix #121: Removes DOCKER_MACHINE_NAME from `env docker` command output @navidshaikh
 - Fix #65: Adds --script-readable option for `env openshift` command @navidshaikh
 - Fix #80: Check for correct TLS certs pair @budhrg
