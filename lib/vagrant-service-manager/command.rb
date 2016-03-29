@@ -213,7 +213,7 @@ OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
           end
 
           # display the information, irrespective of the copy operation
-          self.print_docker_env_info(guest_ip, port, secrets_path, api_version)
+          self.print_docker_env_info(find_machine_ip, port, secrets_path, api_version)
         end
       end
 
