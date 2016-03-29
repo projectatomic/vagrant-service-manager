@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 0.0.4
+Version: 0.0.5
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -86,6 +86,15 @@ popd
 %{vagrant_plugin_instdir}/TODO
 
 %changelog
+* Tue Mar 29 2016 Navid Shaikh - 0.0.5-1
+- Fix #127: vagrant-service-manager 0.0.5 release @navidshaikh
+- Fix #122: Certs copied at the time of generation @budhrg
+- Fix #121: Removes DOCKER_MACHINE_NAME from `env docker` command output @navidshaikh
+- Fix #65: Adds --script-readable option for `env openshift` command @navidshaikh
+- Fix #80: Check for correct TLS certs pair @budhrg
+- Fix #113: Adds DOCKER_API_VERSION in env docker output @navidshaikh
+- Adds SPEC file version 0.0.4 of the plugin @navidshaikh
+
 * Tue Mar 15 2016 Navid Shaikh - 0.0.4-1
 - Fix #101: vagrant-service-manager version 0.0.4 release @navidshaikh
 - Remove manually scp for TLS keys and use machine.communicate.download @bexelbie
