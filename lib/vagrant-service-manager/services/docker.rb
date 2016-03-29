@@ -1,3 +1,5 @@
+require_relative '../plugin_util'
+
 module Vagrant
   module ServiceManager
     class Docker
@@ -8,12 +10,16 @@ module Vagrant
 
       def execute
         command = "sudo rm /etc/docker/ca.pem && sudo systemctl restart docker"
+
         @machine.communicate.execute(command) do |type, data|
           if type == :stderr
             @ui.error(data)
             exit 126
           end
         end
+
+        secrets_path = PluginUtil.host_docker_path(@machine)
+        PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
       end
     end
   end
