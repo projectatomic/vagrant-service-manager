@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+
+## v0.0.5 Mar 29, 2016
+- Fix #127: vagrant-service-manager 0.0.5 release @navidshaikh
 - Fix #122: Certs copied at the time of generation @budhrg
 - Fix #121: Removes DOCKER_MACHINE_NAME from `env docker` command output @navidshaikh
 - Fix #65: Adds --script-readable option for `env openshift` command @navidshaikh
