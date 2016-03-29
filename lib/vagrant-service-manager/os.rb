@@ -5,7 +5,7 @@ module OS
   end
 
   def self.windows_cygwin?
-    (/cygwin/ =~ RUBY_PLATFORM) != nil
+    (/cygwin/ =~ ENV["VAGRANT_DETECTED_OS"]) != nil
   end
 
   def self.mac?

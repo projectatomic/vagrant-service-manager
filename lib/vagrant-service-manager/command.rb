@@ -220,13 +220,17 @@ OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
       def print_docker_env_info(guest_ip, port, secrets_path, api_version)
         # Print configuration information for accesing the docker daemon
 
-        if !OS.windows? then
+        if !OS.windows? || OS.windows_cygwin? then
+          if OS.windows? then
+            secrets_path = secrets_path.split('/').join('\\')
+          end
+
           message =
           <<-eos
 # Set the following environment variables to enable access to the
 # docker daemon running inside of the vagrant virtual machine:
 export DOCKER_HOST=tcp://#{guest_ip}:#{port}
-export DOCKER_CERT_PATH=#{secrets_path}
+export DOCKER_CERT_PATH='#{secrets_path}'
 export DOCKER_TLS_VERIFY=1
 export DOCKER_API_VERSION=#{api_version}
 # run following command to configure your shell:
