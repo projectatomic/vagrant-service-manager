@@ -12,7 +12,7 @@ module Vagrant
       attr_accessor(*CONFIG_KEYS)
 
       DEFAULTS = {
-        services: 'docker'
+        services: ''
       }
 
       def initialize
