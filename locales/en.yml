@@ -1,0 +1,71 @@
+en:
+  servicemanager:
+    synopsis: |-
+      provides the IP address:port and tls certificate file location for a docker daemon
+    machine_should_running: |-
+      The virtual machine must be running before you execute this command.
+      Try this in the directory with your Vagrantfile:
+      vagrant up
+
+#-------------------------------------------------------------------------------
+# Translations for config validation errors
+#-------------------------------------------------------------------------------
+    config:
+      supported_devices: |-
+        services should be subset of %{services}.
+#-------------------------------------------------------------------------------
+# Translations for commands. e.g. `vagrant x`
+#-------------------------------------------------------------------------------
+    commands:
+      help: |-
+        Service manager for services inside vagrant box.
+
+        vagrant service-manager <verb> <object> [options]
+
+        Verb:
+          env
+            Display connection information for providers in the box.
+            Example:
+            Display information for all active providers in the box:
+              $vagrant service-manager env
+            Display information for docker provider in the box:
+              $vagrant service-manager env docker
+            Display information for openshift provider in the box:
+              $vagrant service-manager env openshift
+            Display information for openshift provider in script readable format:
+              $vagrant service-manager env openshift --script-readable
+
+          box
+            object
+              version : Display version and release of the running vagrant box (from /etc/os-release)
+                option
+                  --script-readable : Display the version and release in script readable (key=value) form
+      env:
+        docker:
+          windows: |-
+            # Set the following environment variables to enable access to the
+            # docker daemon running inside of the vagrant virtual machine:
+            setx DOCKER_HOST tcp://%{ip}:%{port}
+            setx DOCKER_CERT_PATH %{path}
+            setx DOCKER_TLS_VERIFY 1
+            setx DOCKER_API_VERSION=#{api_version}
+          non_windows: |-
+            # Set the following environment variables to enable access to the
+            # docker daemon running inside of the vagrant virtual machine:
+            export DOCKER_HOST=tcp://%{ip}:%{port}
+            export DOCKER_CERT_PATH=%{path}
+            export DOCKER_TLS_VERIFY=1
+            export DOCKER_API_VERSION=%{api_version}
+            # run following command to configure your shell:
+            # eval "$(vagrant service-manager env docker)"
+        openshift:
+          default: |-
+            # You can access the OpenShift console on: %{openshift_console_url}
+            # To use OpenShift CLI, run: oc login %{openshift_url}
+          script_readable: |-
+            OPENSHIFT_URL=%{openshift_url}
+            OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+        service_not_running: |-
+          # %{name} service is not running in the vagrant box.
+        nil: |-
+          # Showing the status of providers in the vagrant box:
