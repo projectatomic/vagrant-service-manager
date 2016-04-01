@@ -40,7 +40,8 @@ module Vagrant
         errors = []
 
         unless is_supported_services?
-          errors << "services should be subset of #{SERVICES.inspect}.}"
+          errors << I18n.t('servicemanager.config.supported_devices',
+                           services: SERVICES.inspect)
         end
 
         errors

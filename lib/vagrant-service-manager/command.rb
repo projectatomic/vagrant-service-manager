@@ -9,19 +9,14 @@ module Vagrant
       OS_RELEASE_FILE = '/etc/os-release'
 
       def self.synopsis
-        'provides the IP address:port and tls certificate file location for a docker daemon'
+        I18n.t('servicemanager.synopsis')
       end
 
       def exit_if_machine_not_running
         # Exit from plugin with status 3 if machine is not running
         with_target_vms(nil, {:single_target=>true}) do |machine|
           if machine.state.id != :running then
-            message = <<-eos
-  The virtual machine must be running before you execute this command.
-  Try this in the directory with your Vagrantfile:
-  vagrant up
-              eos
-            @env.ui.error(message)
+            @env.ui.error I18n.t('servicemanager.machine_should_running')
             exit 3
           end
         end
@@ -78,31 +73,7 @@ module Vagrant
       end
 
       def print_help(exit_status=0)
-        help_text = <<-help
-Service manager for services inside vagrant box.
-
-vagrant service-manager <verb> <object> [options]
-
-Verb:
-  env
-    Display connection information for providers in the box.
-    Example:
-    Display information for all active providers in the box:
-      $vagrant service-manager env
-    Display information for docker provider in the box:
-      $vagrant service-manager env docker
-    Display information for openshift provider in the box:
-      $vagrant service-manager env openshift
-    Display information for openshift provider in script readable format:
-      $vagrant service-manager env openshift --script-readable
-
-  box
-    object
-      version : Display version and release of the running vagrant box (from /etc/os-release)
-        option
-          --script-readable : Display the version and release in script readable (key=value) form
-        help
-        @env.ui.info(help_text)
+        @env.ui.info I18n.t('servicemanager.commands.help')
         exit exit_status
       end
 
@@ -114,10 +85,7 @@ Verb:
       end
 
       def print_all_provider_info
-        message = <<-msg
-# Showing the status of providers in the vagrant box:
-        msg
-        @env.ui.info(message)
+        @env.ui.info I18n.t('servicemanager.commands.env.nil')
         self.execute_docker_info
         self.execute_openshift_info
       end
@@ -134,25 +102,21 @@ Verb:
             openshift_console_url,
             script_readable)
         else
-          @env.ui.error("# OpenShift service is not running in the vagrant box.")
+          @env.ui.error I18n.t('servicemanager.commands.env.service_not_running',
+                               name: 'OpenShift')
           exit 126
         end
       end
 
-      def print_openshift_info(openshift_url, openshift_console_url, script_readable = false)
-        if !script_readable
-          message =
-            <<-eos
-# You can access the OpenShift console on: #{openshift_console_url}
-# To use OpenShift CLI, run: oc login #{openshift_url}
-            eos
+      def print_openshift_info(url, console_url, script_readable = false)
+        if script_readable
+          message = I18n.t('servicemanager.commands.env.openshift.script_readable',
+                           openshift_url: url, openshift_console_url: console_url)
         else
-          message =
-            <<-eos
-OPENSHIFT_URL=#{openshift_url}
-OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
-            eos
+          message = I18n.t('servicemanager.commands.env.openshift.default',
+                           openshift_url: url, openshift_console_url: console_url)
         end
+
         @env.ui.info(message)
       end
 
@@ -221,31 +185,16 @@ OPENSHIFT_WEB_CONSOLE=#{openshift_console_url}
         # Print configuration information for accesing the docker daemon
 
         if !OS.windows? then
-          message =
-          <<-eos
-# Set the following environment variables to enable access to the
-# docker daemon running inside of the vagrant virtual machine:
-export DOCKER_HOST=tcp://#{guest_ip}:#{port}
-export DOCKER_CERT_PATH=#{secrets_path}
-export DOCKER_TLS_VERIFY=1
-export DOCKER_API_VERSION=#{api_version}
-# run following command to configure your shell:
-# eval "$(vagrant service-manager env docker)"
-
-          eos
+          message = I18n.t('servicemanager.commands.env.docker.non_windows',
+                           ip: guest_ip, port: port, path: secrets_path,
+                           api_version: api_version)
           @env.ui.info(message)
         else
           # replace / with \ for path in Windows
           secrets_path = secrets_path.split('/').join('\\') + '\\'
-          message =
-          <<-eos
-# Set the following environment variables to enable access to the
-# docker daemon running inside of the vagrant virtual machine:
-setx DOCKER_HOST tcp://#{guest_ip}:#{port}
-setx DOCKER_CERT_PATH #{secrets_path}
-setx DOCKER_TLS_VERIFY 1
-setx DOCKER_API_VERSION=#{api_version}
-          eos
+          message = I18n.t('servicemanager.commands.env.docker.windows',
+                           ip: guest_ip, port: port, path: secrets_path,
+                           api_version: api_version)
           # puts is used here to escape and render the back slashes in Windows path
           @env.ui.info(puts(message))
         end
