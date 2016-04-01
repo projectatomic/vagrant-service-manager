@@ -24,6 +24,7 @@ en:
           Commands:
                env          displays connection information for services in the box
                box          displays version and release information for the box
+               restart      restarts the given systemd service in the box
 
           Options:
                -h, --help   print this help
@@ -52,6 +53,20 @@ en:
           Options:
                 --script-readable  display information in a script readable format
                 -h, --help         print this help
+
+        restart: |-
+          Restarts the service
+
+          Usage: vagrant service-manager restart <object> [options]
+
+          Object:
+              Object is a service provided via sccli or systemd. For example: docker, k8s, or openshift etc.
+
+          Options:
+                -h, --help         print this help
+
+          Examples:
+            vagrant service-manager restart docker
 
       env:
         docker:
