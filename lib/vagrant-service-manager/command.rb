@@ -4,6 +4,7 @@ require 'digest'
 module Vagrant
   module ServiceManager
     DOCKER_PATH = '/home/vagrant/.docker'
+    SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -98,8 +99,22 @@ module Vagrant
 
       def print_all_provider_info
         @env.ui.info I18n.t('servicemanager.commands.env.nil')
-        self.execute_docker_info
-        self.execute_openshift_info
+
+        running_services = []
+        SUPPORTED_SERVICES.each do |service|
+          status = if check_if_a_service_is_running?(service)
+                     running_services << service
+                     I18n.t('servicemanager.commands.env.status.running')
+                    else
+                     I18n.t('servicemanager.commands.env.status.stopped')
+                    end
+          @env.ui.info("#{service} - #{status}")
+        end
+
+        running_services.each do |e|
+          @env.ui.info("\n#{e} env:")
+          public_send("execute_#{e}_info")
+        end
       end
 
       def execute_openshift_info(script_readable = false)

@@ -81,4 +81,7 @@ en:
         service_not_running: |-
           # %{name} service is not running in the vagrant box.
         nil: |-
-          # Showing the status of providers in the vagrant box:
+          Configured services:
+        status:
+          running: running
+          stopped: stopped
