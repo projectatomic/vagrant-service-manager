@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
 - Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
 - Update IP detection routine and fix for libvirt @bexelbie
 - Fix #50: Add --help @budhrg
