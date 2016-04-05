@@ -176,7 +176,7 @@ module Vagrant
           end
 
           api_version = ""
-          docker_apiversion = "docker version --format '{{.Server.ApiVersion}}'"
+          docker_apiversion = "docker version --format '{{.Server.APIVersion}}'"
           machine.communicate.execute(docker_apiversion) do |type, data|
             api_version << data.chomp if type == :stdout
           end
