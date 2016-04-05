@@ -19,7 +19,8 @@ mailing list they will be added to this document.
 * All changes must include appropriate documentation updates.
 
 * All changes must include an entry in the `CHANGELOG.md` in the
-  *unreleased* section describing the change
+  *unreleased* section describing the change.  Your new entry should be
+  the first entry after *unreleased.*
 
 * All changes need at least 2 ACKs from maintainers before they will be merged. If
   the author of the PR is a maintainer, their submission is considered
