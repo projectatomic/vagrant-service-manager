@@ -189,6 +189,13 @@ module Vagrant
                            ip: guest_ip, port: port, path: secrets_path,
                            api_version: api_version)
           @env.ui.info(message)
+        elsif OS.windows_cygwin? then
+          # replace / with \ for path in Cygwin Windows - which uses export
+          secrets_path = secrets_path.split('/').join('\\') + '\\'
+          message = I18n.t('servicemanager.commands.env.docker.windows_cygwin',
+                           ip: guest_ip, port: port, path: secrets_path,
+                           api_version: api_version)
+          @env.ui.info(message)
         else
           # replace / with \ for path in Windows
           secrets_path = secrets_path.split('/').join('\\') + '\\'
