@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
 - Update IP detection routine and fix for libvirt @bexelbie
 - Fix #50: Add --help @budhrg
 - Fix #89: Improve help output for service-manager -h @budhrg
