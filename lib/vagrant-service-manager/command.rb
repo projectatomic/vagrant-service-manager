@@ -24,57 +24,69 @@ module Vagrant
 
       def execute
         command, subcommand, option = ARGV[1..ARGV.length]
+
         case command
-        when "env"
-          self.exit_if_machine_not_running
+        when 'env'
+          exit_if_machine_not_running
           case subcommand
-          when "docker"
+          when 'docker'
             case option
             when nil
-              self.execute_docker_info
+              execute_docker_info
+            when '--help', '-h'
+              print_help(type: command)
             else
-              self.print_help
+              print_help(type: command, exit_status: 1)
             end
-          when "openshift"
+          when 'openshift'
             case option
             when nil
-              self.execute_openshift_info
-            when "--script-readable"
-              self.execute_openshift_info(true)
+              execute_openshift_info
+            when '--script-readable'
+              execute_openshift_info(true)
+            when '--help', '-h'
+              print_help(type: command)
             else
-              self.print_help
+              print_help(type: command, exit_status: 1)
             end
           when nil
             # display information about all the providers inside ADB/CDK
-            self.print_all_provider_info
+            print_all_provider_info
+          when '--help', '-h'
+            print_help(type: command)
           else
-            self.print_help(1)
+            print_help(type: command, exit_status: 1)
           end
-        when "box"
-          self.exit_if_machine_not_running
+        when 'box'
+          exit_if_machine_not_running
           case subcommand
-          when "version"
+          when 'version'
             case option
             when nil
-              self.print_vagrant_box_version
-            when "--script-readable"
-              self.print_vagrant_box_version(true)
+              print_vagrant_box_version
+            when '--script-readable'
+              print_vagrant_box_version(true)
             else
-                self.print_help(1)
+              print_help(type: command, exit_status: 1)
             end
+          when '--help', '-h'
+            print_help(type: command)
           else
-            self.print_help
+            print_help(type: command, exit_status: 1)
           end
-        when "help"
-            self.print_help
+        when '--help', '-h'
+          print_help
         else
-            self.print_help(1)
+          print_help(exit_status: 1)
         end
       end
 
-      def print_help(exit_status=0)
-        @env.ui.info I18n.t('servicemanager.commands.help')
-        exit exit_status
+      def print_help(config = {})
+        config[:type] ||= 'default'
+        config[:exit_status] ||= 0
+
+        @env.ui.info(I18n.t("servicemanager.commands.help.#{config[:type]}"))
+        exit config[:exit_status]
       end
 
       def check_if_a_service_is_running?(service)

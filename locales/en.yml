@@ -17,29 +17,42 @@ en:
 # Translations for commands. e.g. `vagrant x`
 #-------------------------------------------------------------------------------
     commands:
-      help: |-
-        Service manager for services inside vagrant box.
+      help:
+        default: |-
+          Usage: vagrant service-manager <command> [options]
 
-        vagrant service-manager <verb> <object> [options]
+          Commands:
+               env          displays connection information for services in the box
+               box          displays version and release information for the box
 
-        Verb:
-          env
-            Display connection information for providers in the box.
-            Example:
-            Display information for all active providers in the box:
-              $vagrant service-manager env
-            Display information for docker provider in the box:
-              $vagrant service-manager env docker
-            Display information for openshift provider in the box:
-              $vagrant service-manager env openshift
-            Display information for openshift provider in script readable format:
-              $vagrant service-manager env openshift --script-readable
+          Options:
+               -h, --help   print this help
 
-          box
-            object
-              version : Display version and release of the running vagrant box (from /etc/os-release)
-                option
-                  --script-readable : Display the version and release in script readable (key=value) form
+          For help on any individual command run `vagrant service-manager COMMAND -h`
+        env: |-
+          Usage: vagrant service-manager env [object] [options]
+
+          Objects:
+                docker      display information and environment variables for docker
+                openshift   display information and environment variables for openshift
+
+          If OBJECT is ommitted, display the status of all services and information
+          for all active services
+
+          Options:
+                --script-readable  display information in a script readable format.
+                                   Only supported by the openshift object.
+                -h, --help         print this help
+        box: |-
+          Usage: vagrant service-manager box <sub-command> [options]
+
+          Sub-Command:
+                version    display version and release information about the running VM
+
+          Options:
+                --script-readable  display information in a script readable format
+                -h, --help         print this help
+
       env:
         docker:
           windows: |-
