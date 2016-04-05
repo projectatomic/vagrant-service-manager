@@ -135,14 +135,7 @@ module Vagrant
       def find_machine_ip
         with_target_vms(nil, {:single_target=>true}) do |machine|
           # Find the guest IP
-          if machine.provider_name == :virtualbox then
-            # VirtualBox automatically provisions an eth0 interface that is a NAT interface
-            # We need a routeable IP address, which will therefore be found on eth1
-            command = "ip addr show eth1 | awk 'NR==3 {print $2}' | cut -f1 -d\/"
-          else
-            # For all other provisions, find the default route
-            command = "ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'"
-          end
+          command = "ip -o -4 addr show up |egrep -v ': docker|: lo' |tail -1 | awk '{print $4}' |cut -f1 -d\/"
           guest_ip = ""
           machine.communicate.execute(command) do |type, data|
             guest_ip << data.chomp if type == :stdout

@@ -77,6 +77,12 @@ Exit Code Number | Meaning
 3                | Vagrant box is not running and must be before this command can succeed
 126              | A service inside the box is not running / Command invoked cannot execute
 
+## IP Address Detection
+
+There is no standarized way of detection Vagrant box IP addresses.
+This code uses the last IPv4 address available from the set of configured
+addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and
+have IPv4 addresses, the address on eth2 is used.
 
 ## Get Involved/Contact Us
 

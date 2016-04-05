@@ -13,6 +13,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "projectatomic/adb"
 
+  #config.vm.network "private_network", ip: "192.168.33.10"
+  #config.vm.network "private_network", type: "dhcp"
+
   # This is the default setup
   # config.servicemanager.services = 'docker'
 
