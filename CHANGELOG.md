@@ -7,6 +7,7 @@
 - Fix #50: Add --help @budhrg
 - Fix #89: Improve help output for service-manager -h @budhrg
 - Vagrant way of showing information using 'locale' @budhrg
+- cygwin eval hint now removes colors and env uses export @bexelbie
 
 ## v0.0.5 Mar 29, 2016
 - Fix #127: vagrant-service-manager 0.0.5 release @navidshaikh

@@ -71,6 +71,15 @@ en:
             export DOCKER_API_VERSION=%{api_version}
             # run following command to configure your shell:
             # eval "$(vagrant service-manager env docker)"
+          windows_cygwin: |-
+            # Set the following environment variables to enable access to the
+            # docker daemon running inside of the vagrant virtual machine:
+            export DOCKER_HOST=tcp://%{ip}:%{port}
+            export DOCKER_CERT_PATH='%{path}'
+            export DOCKER_TLS_VERIFY=1
+            export DOCKER_API_VERSION=%{api_version}
+            # run following command to configure your shell:
+            # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env docker | tr -d '\r')"
         openshift:
           default: |-
             # You can access the OpenShift console on: %{openshift_console_url}
