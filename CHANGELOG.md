@@ -1,12 +1,16 @@
 # Changelog
 
 ## Unreleased
+
+## v1.0.0 Apr 07, 2016
+- Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
 - Fix #133: Adds restart command for services @navidshaikh
 - Fix #152: Makes plugin backward compatible with docker 1.8.2 for docker version API @navidshaikh
 - Fix #150: Adds .gitattributes to fix the CHANGELOG.md merge conflicts @bexelbie
 - Fix #142: Removes # before human readable output of openshift env info @navidshaikh
 - Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
 - Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
+- Updating CONTRIBUTING with note about entry loc @bexelbie
 - Update IP detection routine and fix for libvirt @bexelbie
 - Fix #50: Add --help @budhrg
 - Fix #89: Improve help output for service-manager -h @budhrg
