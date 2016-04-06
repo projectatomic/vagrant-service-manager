@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 0.0.5
+Version: 1.0.0
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -70,6 +70,7 @@ popd
 %exclude %{vagrant_plugin_cache}
 %{vagrant_plugin_spec}
 %{vagrant_plugin_instdir}/plugins/guests/
+%{vagrant_plugin_instdir}/locales/
 
 %files doc
 %doc %{vagrant_plugin_docdir}
@@ -84,8 +85,26 @@ popd
 %{vagrant_plugin_instdir}/vagrant-service-manager.spec
 %{vagrant_plugin_instdir}/CHANGELOG.md
 %{vagrant_plugin_instdir}/TODO
+%{vagrant_plugin_instdir}/.gitattributes
 
 %changelog
+* Tue Mar 29 2016 Navid Shaikh - 1.0.0-1
+- Bumps the plugin version to 1.0.0
+- Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
+- Fix #133: Adds restart command for services @navidshaikh
+- Fix #152: Makes plugin backward compatible with docker 1.8.2 for docker version API @navidshaikh
+- Fix #150: Adds .gitattributes to fix the CHANGELOG.md merge conflicts @bexelbie
+- Fix #142: Removes # before human readable output of openshift env info @navidshaikh
+- Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
+- Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
+- Updating CONTRIBUTING with note about entry loc @bexelbie
+- Update IP detection routine and fix for libvirt @bexelbie
+- Fix #50: Add --help @budhrg
+- Fix #89: Improve help output for service-manager -h @budhrg
+- Vagrant way of showing information using 'locale' @budhrg
+- cygwin eval hint now removes colors and env uses export @bexelbie
+- Fix #131: Fixes starting OpenShift service by default for CDK box @navidshaikh
+
 * Tue Mar 29 2016 Navid Shaikh - 0.0.5-1
 - Fix #127: vagrant-service-manager 0.0.5 release @navidshaikh
 - Fix #122: Certs copied at the time of generation @budhrg
