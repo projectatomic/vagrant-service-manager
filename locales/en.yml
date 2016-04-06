@@ -82,8 +82,8 @@ en:
             # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env docker | tr -d '\r')"
         openshift:
           default: |-
-            # You can access the OpenShift console on: %{openshift_console_url}
-            # To use OpenShift CLI, run: oc login %{openshift_url}
+            You can access the OpenShift console on: %{openshift_console_url}
+            To use OpenShift CLI, run: oc login %{openshift_url}
           script_readable: |-
             OPENSHIFT_URL=%{openshift_url}
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
