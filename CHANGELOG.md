@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #142: Removes # before human readable output of openshift env info @navidshaikh
 - Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
 - Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
 - Update IP detection routine and fix for libvirt @bexelbie
