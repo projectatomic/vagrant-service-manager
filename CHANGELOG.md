@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #133: Adds restart command for services @navidshaikh
 - Fix #152: Makes plugin backward compatible with docker 1.8.2 for docker version API @navidshaikh
 - Fix #150: Adds .gitattributes to fix the CHANGELOG.md merge conflicts @bexelbie
 - Fix #142: Removes # before human readable output of openshift env info @navidshaikh
@@ -11,6 +12,7 @@
 - Fix #89: Improve help output for service-manager -h @budhrg
 - Vagrant way of showing information using 'locale' @budhrg
 - cygwin eval hint now removes colors and env uses export @bexelbie
+- Fix #131: Fixes starting OpenShift service by default for CDK box @navidshaikh
 
 ## v0.0.5 Mar 29, 2016
 - Fix #127: vagrant-service-manager 0.0.5 release @navidshaikh
