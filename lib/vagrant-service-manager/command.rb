@@ -191,9 +191,14 @@ module Vagrant
           end
 
           api_version = ""
-          docker_apiversion = "docker version --format '{{.Server.APIVersion}}'"
-          machine.communicate.execute(docker_apiversion) do |type, data|
-            api_version << data.chomp if type == :stdout
+          docker_api_version = "docker version --format '{{.Server.APIVersion}}'"
+          unless machine.communicate.test(docker_api_version)
+            # fix for issue #152: Fallback to older Docker version (< 1.9.1)
+            docker_api_version.gsub!(/APIVersion/, 'ApiVersion')
+          end
+
+          machine.communicate.execute(docker_api_version) do |type, data|
+            api_version << data.chomp if type ==:stdout
           end
 
           # display the information, irrespective of the copy operation

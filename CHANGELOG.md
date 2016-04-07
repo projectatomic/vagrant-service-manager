@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fix #152: Makes plugin backward compatible with docker 1.8.2 for docker version API @navidshaikh
 - Fix #150: Adds .gitattributes to fix the CHANGELOG.md merge conflicts @bexelbie
 - Fix #142: Removes # before human readable output of openshift env info @navidshaikh
 - Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
