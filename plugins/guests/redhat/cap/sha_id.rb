@@ -6,7 +6,7 @@ module VagrantPlugins
           command = "sha256sum #{path}"
 
           if machine.communicate.test(command)
-            machine.communicate.execute(command) do |type, data|
+            machine.communicate.execute(command) do |_, data|
               # sha256sum results in "sha_id path"
               return data.split.first
             end

@@ -1,6 +1,8 @@
 module Vagrant
   module ServiceManager
     class OpenShift
+      OPENSHIFT_PORT = 8443
+
       def initialize(machine, ui)
         @machine = machine
         @ui = ui
@@ -8,17 +10,37 @@ module Vagrant
       end
 
       def execute
-        errors = []
-        full_cmd = "#{@extra_cmd} sccli openshift"
+        command = "#{@extra_cmd} sccli openshift"
+        Plugin.execute_and_exit_on_fail(@machine, @ui, command)
+      end
 
-        exit_code = @machine.communicate.sudo(full_cmd) do |type, error|
-          errors << error if type == :stderr
+      def self.status(machine, ui, service)
+        PluginUtil.print_service_status(ui, machine, service)
+      end
+
+      def self.info(machine, ui, options = {})
+        options[:script_readable] ||= false
+
+        if PluginUtil.service_running?(machine, 'openshift')
+          url = "https://#{PluginUtil.machine_ip(machine)}:#{OPENSHIFT_PORT}"
+          print_info(ui, url, "#{url}/console", options[:script_readable])
+        else
+          ui.error I18n.t('servicemanager.commands.env.service_not_running',
+                          name: 'OpenShift')
+          exit 126
         end
-        unless exit_code.zero?
-          @env.ui.error errors.join("\n")
-          exit exit_code
-        end
-        exit_code
+      end
+
+      def self.print_info(ui, url, console_url, script_readable)
+        message = if script_readable
+                    I18n.t('servicemanager.commands.env.openshift.script_readable',
+                           openshift_url: url, openshift_console_url: console_url)
+                  else
+                    I18n.t('servicemanager.commands.env.openshift.default',
+                           openshift_url: url, openshift_console_url: console_url)
+                  end
+
+        ui.info(message)
       end
 
       private
