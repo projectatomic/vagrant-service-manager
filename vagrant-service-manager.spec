@@ -7,7 +7,7 @@ Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
 License: GPLv2
-URL: https://github.com/bexelbie/vagrant-service-manager
+URL: https://github.com/projectatomic/vagrant-service-manager
 Source0: https://rubygems.org/gems/%{vagrant_plugin_name}-%{version}.gem
 Requires(posttrans): vagrant
 Requires(preun): vagrant
@@ -39,7 +39,7 @@ gem unpack %{SOURCE0}
 gem spec %{SOURCE0} -l --ruby > %{vagrant_plugin_name}.gemspec
 
 %build
-# Create the gem as gem install only works on a gem file
+# Create the gem as "gem install" only works on a gem file
 gem build %{vagrant_plugin_name}.gemspec
 
 # %%vagrant_plugin_install compiles any C extensions and installs the gem into ./%%gem_dir
@@ -88,7 +88,7 @@ popd
 %{vagrant_plugin_instdir}/.gitattributes
 
 %changelog
-* Tue Mar 29 2016 Navid Shaikh - 1.0.0-1
+* Thu Apr 7 2016 Navid Shaikh - 1.0.0-1
 - Bumps the plugin version to 1.0.0
 - Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
 - Fix #133: Adds restart command for services @navidshaikh
@@ -96,7 +96,7 @@ popd
 - Fix #150: Adds .gitattributes to fix the CHANGELOG.md merge conflicts @bexelbie
 - Fix #142: Removes # before human readable output of openshift env info @navidshaikh
 - Fix #75 and #141: Improves `vagrant service-manager env` output @navidshaikh
-- Fix#146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
+- Fix #146: Updates docker 1.9.1 API call for `docker version` @navidshaikh
 - Updating CONTRIBUTING with note about entry loc @bexelbie
 - Update IP detection routine and fix for libvirt @bexelbie
 - Fix #50: Add --help @budhrg
