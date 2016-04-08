@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Updated SPEC (v1.0.0) for url, date and format @budhrg 
 
 ## v1.0.0 Apr 07, 2016
 - Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
