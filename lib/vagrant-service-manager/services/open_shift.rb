@@ -8,14 +8,17 @@ module Vagrant
       end
 
       def execute
+        errors = []
         full_cmd = "#{@extra_cmd} sccli openshift"
 
-        @machine.communicate.sudo(full_cmd) do |type, data|
-          if type == :stderr
-            @ui.error(data)
-            exit 126
-          end
+        exit_code = @machine.communicate.sudo(full_cmd) do |type, error|
+          errors << error if type == :stderr
         end
+        unless exit_code.zero?
+          @env.ui.error errors.join("\n")
+          exit exit_code
+        end
+        exit_code
       end
 
       private

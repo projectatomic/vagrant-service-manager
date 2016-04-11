@@ -5,7 +5,7 @@ module Vagrant
   module ServiceManager
     DOCKER_PATH = '/home/vagrant/.docker'
     SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
-    SCCLI_SERVICES = ["openshift", "k8s"]
+    SCCLI_SERVICES = ['openshift', 'k8s']
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -266,21 +266,24 @@ module Vagrant
       end
 
       def restart_service(service)
+        errors = []
+        command = if SCCLI_SERVICES.include? service
+                    # TODO : Handle the case where user wants to pass extra arguments
+                    # to OpenShift service
+                    "sccli #{service}"
+                  else
+                    "systemctl restart #{service}"
+                   end
 
-        if SCCLI_SERVICES.include? service
-          # TODO : Handle the case where user wants to pass extra arguments to OpenShift service
-          command = "sudo sccli #{service}"
-        else
-          command = "sudo systemctl restart #{service}"
-        end
-
-        with_target_vms(nil, { single_target: true}) do |machine|
-          machine.communicate.execute(command) do |type, error|
-            if type == :stderr
-              @env.ui.error(error)
-              exit 126
-            end
+        with_target_vms(nil, single_target: true) do |machine|
+          exit_code = machine.communicate.sudo(command) do |type, error|
+            errors << error if type == :stderr
           end
+          unless exit_code.zero?
+            @env.ui.error errors.join("\n")
+            exit exit_code
+          end
+          exit_code
         end
       end
 
