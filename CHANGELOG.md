@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- Updated SPEC (v1.0.0) for url, date and format @budhrg 
+- Updated SPEC (v1.0.0) for url, date and format @budhrg
+- Fix #160: "vagrant service-manager restart openshift" not working as expected @budhrg
 
 ## v1.0.0 Apr 07, 2016
 - Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
