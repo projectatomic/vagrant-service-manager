@@ -1,8 +1,17 @@
 # vagrant-service-manager
 
+* [Objective](#objective)
+* [Quick Start](#quick_start)
+* [Exit codes](#exit_codes)
+* [IP Address Detection](#ip_addr)
+* [Get Involved/Contact Us](#involved)
+* [How to Develop/Test](#develop)
+  * [How to build the Vagrant plugin using Bundler](#bundler)
+* [Builds](#builds)
+
 This plugin provides setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
-##Objective
+## Objective <a name="objective"></a>
 
 * To provide the user a CLI to configure the
 [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle)
@@ -18,7 +27,7 @@ is  Vagrant box that provides a ready-to-use development environment
 for container applications. With ADB, developers can dive right into
 producing complex, multi-container applications.
 
-## Quick Start
+## Quick Start <a name="quick_start"></a>
 
 1. Install `vagrant-service-manager` plugin:
 
@@ -66,7 +75,7 @@ producing complex, multi-container applications.
 
 7. Begin using your host-based tools.
 
-## Exit codes
+## Exit codes <a name="exit_codes"></a>
 
 The following table lists the plugin's exit codes and their meaning:
 
@@ -77,19 +86,19 @@ Exit Code Number | Meaning
 3                | Vagrant box is not running and must be before this command can succeed
 126              | A service inside the box is not running / Command invoked cannot execute
 
-## IP Address Detection
+## IP Address Detection <a name="ip_addr"></a>
 
 There is no standarized way of detection Vagrant box IP addresses.
 This code uses the last IPv4 address available from the set of configured
 addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and
 have IPv4 addresses, the address on eth2 is used.
 
-## Get Involved/Contact Us
+## Get Involved/Contact Us <a name="involved"></a>
 
   * IRC: #atomic and #nulecule on freenode
   * Mailing List: container-tools@redhat.com
 
-## How to Develop/Test
+## How to Develop/Test <a name="develop"></a>
 
 1. Install the Atomic Developer Bundle (ADB), as
 [documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
@@ -121,7 +130,7 @@ in the ADB project.  Do not start the box yet.
 
   5. Create a Github release
 
-### How to build the Vagrant plugin using Bundler
+### How to build the Vagrant plugin using Bundler <a name="bundler"></a>
 
 You can also use Bundler to build the plugin and install it manually in
 your Vagrant environment
@@ -138,7 +147,7 @@ Install the plugin using:
     vagrant plugin install pkg/<gem name>
 
 
-## Builds
+## Builds <a name="builds"></a>
 
 - Gemfile: https://rubygems.org/gems/vagrant-service-manager
 
