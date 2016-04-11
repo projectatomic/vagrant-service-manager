@@ -266,16 +266,16 @@ module Vagrant
       end
 
       def restart_service(service)
+        command = if SCCLI_SERVICES.include? service
+                    # TODO : Handle the case where user wants to pass extra
+                    # arguments to OpenShift service
+                    "sccli #{service}"
+                  else
+                    "systemctl restart #{service}"
+                  end
 
-        if SCCLI_SERVICES.include? service
-          # TODO : Handle the case where user wants to pass extra arguments to OpenShift service
-          command = "sudo sccli #{service}"
-        else
-          command = "sudo systemctl restart #{service}"
-        end
-
-        with_target_vms(nil, { single_target: true}) do |machine|
-          machine.communicate.execute(command) do |type, error|
+        with_target_vms(nil, single_target: true) do |machine|
+          machine.communicate.sudo(command) do |type, error|
             if type == :stderr
               @env.ui.error(error)
               exit 126
