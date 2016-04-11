@@ -2,14 +2,16 @@ Brian Exelbierd <bexelbie@redhat.com> @bexelbie
 Navid Shaikh <nshaikh@redhat.com> @navidshaikh
 Lalatendu Mohanty <lmohanty@redhat.com> @LalatenduMohanty
 
+
 ## How to release the vagrant-service-manager plugin
 
-1. Put the gemfile in pkg/ with `rake build`
+1. Create gemfile in `pkg` directory by running `rake build`
 
 2. Increment the Version Number.
 
-3. Release the plugin with `rake release`
+3. Release the plugin by running `rake release`
 
 4. Tag the release commit with a vX.Y.Z tag.
 
-5. Create a GitHub release.
+5. Create a Github release.
+

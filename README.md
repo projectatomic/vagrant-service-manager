@@ -1,12 +1,11 @@
 # vagrant-service-manager
 
 * [Objective](#objective)
-* [Quick Start](#quick_start)
+* [Example Execution of the Plugin](#example_execution)
+* [Available Commands](#commands)
 * [Exit codes](#exit_codes)
 * [IP Address Detection](#ip_addr)
-* [Get Involved/Contact Us](#involved)
-* [How to Develop/Test](#develop)
-  * [How to build the Vagrant plugin using Bundler](#bundler)
+* [Getting Involved with the Project](#Contributing)
 * [Builds](#builds)
 
 
@@ -26,38 +25,35 @@ The vagrant-service-manager provides the user with:
 developer's workstation without having to `ssh` directly into the ADB virtual machine.
 
 
-## Example execution of the plugin
+## Example Execution of the Plugin <a name="example_execution"></a>
 
 1. Install vagrant-service-manager plugin:
-
+ 
         vagrant plugin install vagrant-service-manager
 
-2. Get a Vagrantfile for your box of choice. Users of the
-[ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) should download the relevant [Vagrantfile from the repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos). For further details and to use custom vagrant files designed for specific use cases, refer to the [usage documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+2. Download the relevant Vagrantfile for your [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) vagrant box, from the [repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos). For further details on the usage of custom Vagrantfiles designed for specific use cases, refer to the [Usage Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
-3. Start the vagrant box or ADB using `vagrant up`. For detailed instructions consult the
+3. Start the ADB vagrant box using `vagrant up`. For detailed instructions consult the
 [Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
 
 	**Note:** When the vagrant-service-manager plugin is loaded and a box is started using the VirtualBox provider, the user needs to add a routable non NAT network interface declaration in the Vagrantfile. If the user does not provide a network declaration in the Vagrantfile, a private DHCP network is added by default and a warning is displayed.
 
 4. Run the plugin to get environment variables and certificates:
 
-        $ vagrant service-manager env docker
-
-        # Copying TLS certificates to /home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
+        $ vagrant service-manager env docker       
         # Set the following environment variables to enable access to the
         # docker daemon running inside of the vagrant virtual machine:
         export DOCKER_HOST=tcp://172.28.128.4:2376
-        export DOCKER_CERT_PATH=/home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
+        export DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker
         export DOCKER_TLS_VERIFY=1
-        export DOCKER_MACHINE_NAME=868622f
+        export DOCKER_API_VERSION=1.21
         # run following command to configure your shell:
         # eval "$(vagrant service-manager env docker)"
 
 	**Note:** The required TLS certificates are copied to the host machine at the time of `vagrant up` itself. Every run of `vagrant service-manager env docker` checks for the validity of the certificates on the host machine by matching the certificates inside the box. If the certificates on the host machine are invalid, this command will also re-download the certificates onto the host machine.
 
 
-## Available commands
+## Available Commands <a name="commands"></a>
 
 The following table lists the available commands for the plugin and their explanation:
 
@@ -83,15 +79,13 @@ Exit Code Number   | Meaning
 
 ## IP Address Detection <a name="ip_addr"></a>
 
-There is no standarized way of detection Vagrant box IP addresses.
-This code uses the last IPv4 address available from the set of configured
-addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and
-have IPv4 addresses, the address on eth2 is used.
+There is no standardized way of detecting Vagrant box IP addresses.
+This code uses the last IPv4 address available from the set of configured addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and have IPv4 addresses, the address on eth2 is used.
 
 
-## Getting involved with the project
+## Getting Involved with the Project <a name="Contributing"></a>
 
-We welcome your input. Refer to the [contributing guidelines](https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md) for information on how to contribute to this plugin.
+We welcome your input. You can submit issues or pull requests with respect to the vagrant-service-manager plugin. Refer to the [contributing guidelines](https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md) for detailed information on how to contribute to this plugin.
 
 You can contact us on:
   * IRC: #atomic and #nulecule on freenode

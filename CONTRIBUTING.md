@@ -15,7 +15,8 @@ mailing list they will be added to this document.
 ## Submitting Issues
 
 You can submit issues with respect to the vagrant-service-manager plugin [here](https://github.com/projectatomic/vagrant-service-manager/issues/new).Make sure you include all the relevant details pertaining the issue.
-Before submitting new issues, it is suggested to check [all existing issues](https://github.com/projectatomic/vagrant-service-manager/issues) in order to avoid duplication.
+
+Before submitting new issues, it is suggested to check [all existing issues](https://github.com/projectatomic/vagrant-service-manager/issues) in order to avoid duplication.The vagrant-service-manager plugin works closely with the [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle/issues) and the [adb-utils](https://github.com/projectatomic/adb-utils/issues) RPM. You may wish to review the issues in both the repositories as well.
 
 
 ## Submitting Pull Requests
@@ -25,9 +26,7 @@ Before submitting new issues, it is suggested to check [all existing issues](htt
 
 * All changes must include appropriate documentation updates.
 
-* All changes must include an entry in the [Changelog document](https://github.com/projectatomic/vagrant-service-manager/blob/master/CHANGELOG.md) in the
-  *Unreleased* section describing the change.Your new entry should be
-  the first entry after *Unreleased*.
+* All changes must include an entry in the [Changelog document](https://github.com/projectatomic/vagrant-service-manager/blob/master/CHANGELOG.md) in the *Unreleased* section describing the change. Your new entry should be the last entry in the *Unreleased* section and should include your GitHub userid.
 
 * All changes need at least 2 ACKs from maintainers before they will be merged. If
   the author of the PR is a maintainer, their submission is considered
