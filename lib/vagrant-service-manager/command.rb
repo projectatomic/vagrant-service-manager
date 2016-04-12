@@ -6,6 +6,16 @@ module Vagrant
     DOCKER_PATH = '/home/vagrant/.docker'
     SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
     SCCLI_SERVICES = ['openshift', 'k8s']
+    KUBE_NAMES = ['kubernetes', 'k8s']
+    KUBE_SERVICES = [
+      "etcd",
+      "kube-apiserver",
+      "kube-controller-manager",
+      "kube-scheduler",
+      "kubelet",
+      "kube-proxy",
+      "docker"
+    ]
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -115,6 +125,7 @@ module Vagrant
       end
 
       def service_running?(service)
+        return kube_running? if KUBE_NAMES.include? service
         command = "systemctl status #{service}"
         with_target_vms(nil, {:single_target=>true}) do |machine|
           return machine.communicate.test(command)
@@ -139,6 +150,13 @@ module Vagrant
         end
       end
 
+      def kube_running?
+        KUBE_SERVICES.each do |service|
+          return false unless service_running?(service)
+        end
+        true
+      end
+
       def running_services
         running_services = []
         SUPPORTED_SERVICES.each do |service|
@@ -150,9 +168,10 @@ module Vagrant
       def print_all_provider_info(script_readable = false)
         running_services.each do |e|
           unless  script_readable
-            @env.ui.info("\n#{e} env:")
+            # since we do not have feature to show the kube connection information
+            @env.ui.info("\n#{e} env:") unless KUBE_NAMES.include? e
           end
-          public_send("execute_#{e}_info", script_readable)
+          public_send("execute_#{e}_info", script_readable) unless KUBE_NAMES.include? e
         end
       end
 
