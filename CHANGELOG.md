@@ -1,10 +1,13 @@
 # Changelog
 
 ## Unreleased
+
+## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
 - Added Table of Contents for README @bexelbie
 - Fix #160: "vagrant service-manager restart openshift" not working as expected @budhrg
 - Fix #166: For CDK box, provisioners are not executed by default on Vagrant up @budhrg
+- Fix #170: vagrant-service-manager version 1.0.1 release @navidshaikh
 
 ## v1.0.0 Apr 07, 2016
 - Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
