@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -88,6 +88,13 @@ popd
 %{vagrant_plugin_instdir}/.gitattributes
 
 %changelog
+* Tue Apr 12 2016 Navid Shaikh - 1.0.1-1
+- Updated SPEC (v1.0.0) for url, date and format @budhrg
+- Added Table of Contents for README @bexelbie
+- Fix #160: "vagrant service-manager restart openshift" not working as expected @budhrg
+- Fix #166: For CDK box, provisioners are not executed by default on Vagrant up @budhrg
+- Fix #170: vagrant-service-manager version 1.0.1 release @navidshaikh
+
 * Thu Apr 7 2016 Navid Shaikh - 1.0.0-1
 - Bumps the plugin version to 1.0.0
 - Fix #132: vagrant-service-manager 1.0.0 release @navidshaikh
