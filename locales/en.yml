@@ -48,6 +48,7 @@ en:
 
           Sub-Command:
                 version    display version and release information about the running VM
+                ip         display routable IP address of the running VM
 
           Options:
                 --script-readable  display information in a script readable format
@@ -61,6 +62,11 @@ en:
 
           If a service is provided, only that service is reported.
           If no service is provided only supported orchestrators are reported.
+
+          Examples:
+                vagrant service-manager box version
+                vagrant service-manager box ip
+                vagrant service-manager box version --script-readable
 
         restart: |-
           Restarts the service
