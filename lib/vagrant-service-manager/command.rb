@@ -63,6 +63,15 @@ module Vagrant
           else
             print_help(type: command, exit_status: 1)
           end
+        when 'status'
+          case subcommand
+          when nil
+            execute_status_display
+          when '--help', '-h'
+            print_help(type: command)
+          else
+            execute_status_display(subcommand)
+          end
         when 'box'
           exit_if_machine_not_running
           case subcommand
@@ -105,31 +114,40 @@ module Vagrant
         exit config[:exit_status]
       end
 
-      def check_if_a_service_is_running?(service)
+      def service_running?(service)
         command = "systemctl status #{service}"
         with_target_vms(nil, {:single_target=>true}) do |machine|
           return machine.communicate.test(command)
         end
       end
 
-      def print_all_provider_info(script_readable = false)
-        unless script_readable
-          @env.ui.info I18n.t('servicemanager.commands.env.nil')
-        end
+      def service_status(service)
+        return I18n.t('servicemanager.commands.status.status.running') if service_running?(service)
+        I18n.t('servicemanager.commands.status.status.stopped')
+      end
 
-        running_services = []
-        SUPPORTED_SERVICES.each do |service|
-          status = if check_if_a_service_is_running?(service)
-                     running_services << service
-                     I18n.t('servicemanager.commands.env.status.running')
-                    else
-                     I18n.t('servicemanager.commands.env.status.stopped')
-                    end
-          unless script_readable
+      def execute_status_display(service = nil)
+        if service
+          status = service_status(service)
+          @env.ui.info("#{service} - #{status}")
+        else
+          @env.ui.info I18n.t('servicemanager.commands.status.nil')
+          SUPPORTED_SERVICES.each do |service|
+            status = service_status(service)
             @env.ui.info("#{service} - #{status}")
           end
         end
+      end
 
+      def running_services
+        running_services = []
+        SUPPORTED_SERVICES.each do |service|
+          running_services << service if service_running?(service)
+        end
+        running_services
+      end
+
+      def print_all_provider_info(script_readable = false)
         running_services.each do |e|
           unless  script_readable
             @env.ui.info("\n#{e} env:")
@@ -140,7 +158,7 @@ module Vagrant
 
       def execute_openshift_info(script_readable = false)
         @@OPENSHIFT_PORT = 8443
-        if self.check_if_a_service_is_running?("openshift")
+        if service_running?("openshift")
           # Find the guest IP
           guest_ip = self.find_machine_ip
           openshift_url = "https://#{guest_ip}:#@@OPENSHIFT_PORT"
