@@ -94,6 +94,15 @@ module Vagrant
             else
               print_help(type: command, exit_status: 1)
             end
+          when 'ip'
+            case option
+            when nil
+              display_box_ip
+            when '--help', '-h'
+              print_help(type: command)
+            else
+              print_help(type: command, exit_status: 1)
+            end
           when '--help', '-h'
             print_help(type: command)
           else
@@ -338,6 +347,10 @@ module Vagrant
           end
           exit_code
         end
+      end
+
+      def display_box_ip
+        @env.ui.info(find_machine_ip)
       end
 
     end
