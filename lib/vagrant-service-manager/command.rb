@@ -74,6 +74,7 @@ module Vagrant
             print_help(type: command, exit_status: 1)
           end
         when 'status'
+          exit_if_machine_not_running
           case subcommand
           when nil
             execute_status_display
