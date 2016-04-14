@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v1.0.2 May 09, 2016
 - Add --script-readable to env and env docker @bexelbie
 - Fix #178: Add status command and separate status from env @bexelbie
 - Fix#173: Shows if kubernetes services is running in the box @navidshaikh
@@ -13,6 +15,7 @@
 - Fixes #187, Updated commands in the Available Commands section @preeticp
 - Fix #200: Simplify the eval hint for `vagrant service-manager env` command @budhrg
 - Add environment variables for Openshift env output @bexelbie
+- Fix #181: vagrant-service-manager version 1.0.2 release @navidshaikh
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
