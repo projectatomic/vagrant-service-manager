@@ -42,7 +42,6 @@ en:
 
           Options:
                 --script-readable  display information in a script readable format.
-                                   Only supported by the openshift object.
                 -h, --help         print this help
         box: |-
           Usage: vagrant service-manager box <sub-command> [options]
@@ -95,6 +94,11 @@ en:
             export DOCKER_API_VERSION=%{api_version}
             # run following command to configure your shell:
             # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env docker | tr -d '\r')"
+          script_readable: |-
+            DOCKER_HOST=tcp://%{ip}:%{port}
+            DOCKER_CERT_PATH='%{path}'
+            DOCKER_TLS_VERIFY=1
+            DOCKER_API_VERSION=%{api_version}
         openshift:
           default: |-
             You can access the OpenShift console on: %{openshift_console_url}
