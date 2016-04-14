@@ -17,7 +17,7 @@ module Vagrant
       def exit_if_machine_not_running
         # Exit from plugin with status 3 if machine is not running
         with_target_vms(nil, {:single_target=>true}) do |machine|
-          if machine.state.id != :running then
+          if machine.state.id != :running
             @env.ui.error I18n.t('servicemanager.machine_should_running')
             exit 3
           end
@@ -35,6 +35,8 @@ module Vagrant
             case option
             when nil
               execute_docker_info
+            when '--script-readable'
+              execute_docker_info(true)
             when '--help', '-h'
               print_help(type: command)
             else
@@ -54,6 +56,8 @@ module Vagrant
           when nil
             # display information about all the providers inside ADB/CDK
             print_all_provider_info
+          when '--script-readable'
+            print_all_provider_info(true)
           when '--help', '-h'
             print_help(type: command)
           else
@@ -108,8 +112,10 @@ module Vagrant
         end
       end
 
-      def print_all_provider_info
-        @env.ui.info I18n.t('servicemanager.commands.env.nil')
+      def print_all_provider_info(script_readable = false)
+        unless script_readable
+          @env.ui.info I18n.t('servicemanager.commands.env.nil')
+        end
 
         running_services = []
         SUPPORTED_SERVICES.each do |service|
@@ -119,18 +125,22 @@ module Vagrant
                     else
                      I18n.t('servicemanager.commands.env.status.stopped')
                     end
-          @env.ui.info("#{service} - #{status}")
+          unless script_readable
+            @env.ui.info("#{service} - #{status}")
+          end
         end
 
         running_services.each do |e|
-          @env.ui.info("\n#{e} env:")
-          public_send("execute_#{e}_info")
+          unless  script_readable
+            @env.ui.info("\n#{e} env:")
+          end
+          public_send("execute_#{e}_info", script_readable)
         end
       end
 
       def execute_openshift_info(script_readable = false)
         @@OPENSHIFT_PORT = 8443
-        if self.check_if_a_service_is_running?("openshift") then
+        if self.check_if_a_service_is_running?("openshift")
           # Find the guest IP
           guest_ip = self.find_machine_ip
           openshift_url = "https://#{guest_ip}:#@@OPENSHIFT_PORT"
@@ -187,7 +197,7 @@ module Vagrant
         true
       end
 
-      def execute_docker_info
+      def execute_docker_info(script_readable = false)
         # this execute the operations needed to print the docker env info
         with_target_vms(nil, {:single_target=>true}) do |machine|
           secrets_path = PluginUtil.host_docker_path(machine)
@@ -213,33 +223,39 @@ module Vagrant
           end
 
           # display the information, irrespective of the copy operation
-          self.print_docker_env_info(find_machine_ip, port, secrets_path, api_version)
+          self.print_docker_env_info(find_machine_ip, port, secrets_path, api_version, script_readable)
         end
       end
 
-      def print_docker_env_info(guest_ip, port, secrets_path, api_version)
-        # Print configuration information for accesing the docker daemon
-
-        if !OS.windows? then
-          message = I18n.t('servicemanager.commands.env.docker.non_windows',
-                           ip: guest_ip, port: port, path: secrets_path,
-                           api_version: api_version)
-          @env.ui.info(message)
-        elsif OS.windows_cygwin? then
-          # replace / with \ for path in Cygwin Windows - which uses export
-          secrets_path = secrets_path.split('/').join('\\') + '\\'
-          message = I18n.t('servicemanager.commands.env.docker.windows_cygwin',
+      def print_docker_env_info(guest_ip, port, secrets_path, api_version, script_readable)
+        # Print configuration information for accessing the docker daemon
+        if script_readable
+          message = I18n.t('servicemanager.commands.env.docker.script_readable',
                            ip: guest_ip, port: port, path: secrets_path,
                            api_version: api_version)
           @env.ui.info(message)
         else
-          # replace / with \ for path in Windows
-          secrets_path = secrets_path.split('/').join('\\') + '\\'
-          message = I18n.t('servicemanager.commands.env.docker.windows',
-                           ip: guest_ip, port: port, path: secrets_path,
-                           api_version: api_version)
-          # puts is used here to escape and render the back slashes in Windows path
-          @env.ui.info(puts(message))
+          if !OS.windows?
+            message = I18n.t('servicemanager.commands.env.docker.non_windows',
+                             ip: guest_ip, port: port, path: secrets_path,
+                             api_version: api_version)
+            @env.ui.info(message)
+          elsif OS.windows_cygwin?
+            # replace / with \ for path in Cygwin Windows - which uses export
+            secrets_path = secrets_path.split('/').join('\\') + '\\'
+            message = I18n.t('servicemanager.commands.env.docker.windows_cygwin',
+                             ip: guest_ip, port: port, path: secrets_path,
+                             api_version: api_version)
+            @env.ui.info(message)
+          else
+            # replace / with \ for path in Windows
+            secrets_path = secrets_path.split('/').join('\\') + '\\'
+            message = I18n.t('servicemanager.commands.env.docker.windows',
+                             ip: guest_ip, port: port, path: secrets_path,
+                             api_version: api_version)
+            # puts is used here to escape and render the back slashes in Windows path
+            @env.ui.info(puts(message))
+          end
         end
       end
 
@@ -254,7 +270,7 @@ module Vagrant
               exit 126
             end
 
-            if !script_readable
+            unless script_readable
               info = Hash[data.gsub('"', '').split("\n").map {|e| e.split("=") }]
               version = "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
               @env.ui.info(version)

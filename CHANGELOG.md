@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Add --script-readable to env and env docker @bexelbie
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
