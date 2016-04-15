@@ -1,154 +1,99 @@
 # vagrant-service-manager
 
 * [Objective](#objective)
-* [Quick Start](#quick_start)
+* [Example Execution of the Plugin](#example_execution)
+* [Available Commands](#commands)
 * [Exit codes](#exit_codes)
 * [IP Address Detection](#ip_addr)
-* [Get Involved/Contact Us](#involved)
-* [How to Develop/Test](#develop)
-  * [How to build the Vagrant plugin using Bundler](#bundler)
+* [Getting Involved with the Project](#Contributing)
 * [Builds](#builds)
 
-This plugin provides setup information, including environment variables and certificates, required to access services provided by an [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle).  This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands.  Details on this usage pattern can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+
+The vagrant-service-manager plugin is designed to enable easier access to the features and services provided by the [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle). It provides setup information, including environment variables and certificates, required to access services provided by the ADB and is a must have for most ADB users.
+
+This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands. Details on how to use ADB with this plugin can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
+
 
 ## Objective <a name="objective"></a>
 
-* To provide the user a CLI to configure the
-[ADB](https://github.com/projectatomic/adb-atomic-developer-bundle)
-for different use cases and to provide glue between ADB and the user's
-development environment.
+The [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) provides a ready-to-use development environment for container applications. With ADB, developers can dive right into producing complex, multi-container applications.
 
-*  Provide users a tool to control and configure the ADB from the
-developer's workstation without having to `ssh` into it.
+The vagrant-service-manager provides the user with:
 
-The [Atomic Developer
-Bundle](https://github.com/projectatomic/adb-atomic-developer-bundle)
-is  Vagrant box that provides a ready-to-use development environment
-for container applications. With ADB, developers can dive right into
-producing complex, multi-container applications.
+* A CLI to configure the ADB for different use cases and to provide an interface between ADB and the user's development environment.
+* A tool to control and configure the ADB from the
+developer's workstation without having to `ssh` directly into the ADB virtual machine.
 
-## Quick Start <a name="quick_start"></a>
 
-1. Install `vagrant-service-manager` plugin:
+## Example Execution of the Plugin <a name="example_execution"></a>
 
+1. Install vagrant-service-manager plugin:
+ 
         vagrant plugin install vagrant-service-manager
 
-2. Get a Vagrantfile for your box. Users of the
-[Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle) should download a [Vagrantfile from the repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components).
+2. Download the relevant Vagrantfile for your [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) vagrant box, from the [repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos). For further details on the usage of custom Vagrantfiles designed for specific use cases, refer to the [Usage Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
-3. Enable your desired service(s) in [Vagrantfile](Vagrantfile) as:
-
-        config.servicemanager.services = 'openshift'
-
-   *Note*
-
-   * `docker` is default service and does not require above configuration.
-   * Enable multiple services as comma separated list. Eg: 'docker, openshift'
-
-4. Enable any specific options for the services you have selected:
-
-    * OpenShift
-
-        Specific versions can be specified using the following variables:
-
-        `config.servicemanager.openshift_docker_registry = "docker.io"` - What registry should be pulled from
-        `config.servicemanager.openshift_image_name = "openshift/origin"` - What image should be used
-        `config.servicemanager.openshift_image_tag = "v1.1.1"` - What image version should be used
-
-
-5. Start the ADB using `vagrant up`. Users of the ADB may wish to consult the
+3. Start the ADB vagrant box using `vagrant up`. For detailed instructions consult the
 [Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
 
-6. Run the plugin to get environment variables and certificates:
+	**Note:** When the vagrant-service-manager plugin is loaded and a box is started using the VirtualBox provider, the user needs to add a routable non NAT network interface declaration in the Vagrantfile. If the user does not provide a network declaration in the Vagrantfile, a private DHCP network is added by default and a warning is displayed.
 
-        $ vagrant service-manager env docker
+4. Run the plugin to get environment variables and certificates:
 
-        # Copying TLS certificates to /home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
+        $ vagrant service-manager env docker       
         # Set the following environment variables to enable access to the
         # docker daemon running inside of the vagrant virtual machine:
         export DOCKER_HOST=tcp://172.28.128.4:2376
-        export DOCKER_CERT_PATH=/home/nshaikh/vagrant/adb1.7/.vagrant/machines/default/virtualbox/docker
+        export DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker
         export DOCKER_TLS_VERIFY=1
-        export DOCKER_MACHINE_NAME=868622f
+        export DOCKER_API_VERSION=1.21
         # run following command to configure your shell:
         # eval "$(vagrant service-manager env docker)"
 
-7. Begin using your host-based tools.
+	**Note:** The required TLS certificates are copied to the host machine at the time of `vagrant up` itself. Every run of `vagrant service-manager env docker` checks for the validity of the certificates on the host machine by matching the certificates inside the box. If the certificates on the host machine are invalid, this command will also re-download the certificates onto the host machine.
+
+
+## Available Commands <a name="commands"></a>
+
+The following table lists the available commands for the plugin and their explanation:
+
+Commands                                                   | Explanations
+-----------------------------------------------------------|-----------------------------------------
+`vagrant service-manager env`                              | Displays connection information for all active providers in the box.
+`vagrant service-manager env docker`                       | Displays connection information for the Docker provider.
+`vagrant service-manager env openshift` [--script-readable]| Displays connection information for the OpenShift provider. This is optionally available in script readable format too.
+`vagrant service-manager box version` [--script-readable]  | Displays the version and release of the running Vagrant box. This is optionally available in script readable format too.
+
 
 ## Exit codes <a name="exit_codes"></a>
 
 The following table lists the plugin's exit codes and their meaning:
 
-Exit Code Number | Meaning
----------------  |-------------------------------------------------------------------------
-0                | No error
-1                | Catch all for general errors / Wrong sub-command or option given
-3                | Vagrant box is not running and must be before this command can succeed
-126              | A service inside the box is not running / Command invoked cannot execute
+Exit Code Number   | Meaning
+-------------------|-------------------------------------------------------------------------
+`0`                | No error
+`1`                | Catch all for general errors / Wrong sub-command or option given
+`3`                | Vagrant box is not running and should be running for this command to succeed
+`126`              | A service inside the box is not running / Command invoked cannot execute
+
 
 ## IP Address Detection <a name="ip_addr"></a>
 
-There is no standarized way of detection Vagrant box IP addresses.
-This code uses the last IPv4 address available from the set of configured
-addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and
-have IPv4 addresses, the address on eth2 is used.
+There is no standardized way of detecting Vagrant box IP addresses.
+This code uses the last IPv4 address available from the set of configured addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and have IPv4 addresses, the address on eth2 is used.
 
-## Get Involved/Contact Us <a name="involved"></a>
 
+## Getting Involved with the Project <a name="Contributing"></a>
+
+We welcome your input. You can submit issues or pull requests with respect to the vagrant-service-manager plugin. Refer to the [contributing guidelines](https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md) for detailed information on how to contribute to this plugin.
+
+You can contact us on:
   * IRC: #atomic and #nulecule on freenode
   * Mailing List: container-tools@redhat.com
-
-## How to Develop/Test <a name="develop"></a>
-
-1. Install the Atomic Developer Bundle (ADB), as
-[documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
-in the ADB project.  Do not start the box yet.
-
-2. Git clone repo
-
-        git clone https://github.com/projectatomic/vagrant-service-manager
-
-3. `cd vagrant-service-manager`
-
-4. Run `bundle install`
-
-5. Start the box with `bundle exec vagrant up`
-
-6. Review the [Contribution Guidelines](CONTRIBUTING.md).
-
-7. Develop the plugin and test by running `bundle exec vagrant service-manager`
-
-8. When you are ready to build the release, get a repo maintainer to:
-
-  1. Put the gemfile in pkg/ with `rake build`
-
-  2. Increment the Version Number
-
-  3. Release the plugin with `rake release`
-
-  4. Tag the release commit with a vX.Y.Z tag
-
-  5. Create a Github release
-
-### How to build the Vagrant plugin using Bundler <a name="bundler"></a>
-
-You can also use Bundler to build the plugin and install it manually in
-your Vagrant environment
-
-Run the commands below inside of the repository:
-
-```
-$ bundle install
-$ bundle exec rake build
-````
-
-Install the plugin using:
-
-    vagrant plugin install pkg/<gem name>
 
 
 ## Builds <a name="builds"></a>
 
-- Gemfile: https://rubygems.org/gems/vagrant-service-manager
+- Gem: https://rubygems.org/gems/vagrant-service-manager
 
-- copr build: https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/
+- Copr build: https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/
