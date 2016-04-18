@@ -6,8 +6,7 @@ module Vagrant
   module ServiceManager
     DOCKER_PATH = '/home/vagrant/.docker'
     SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
-    SCCLI_SERVICES = ['openshift', 'k8s']
-    KUBE_NAMES = ['kubernetes', 'k8s']
+    SCCLI_SERVICES = ['openshift', 'kubernetes']
     KUBE_SERVICES = [
       'etcd', 'kube-apiserver', 'kube-controller-manager', 'kube-scheduler',
       'kubelet', 'kube-proxy', 'docker'
