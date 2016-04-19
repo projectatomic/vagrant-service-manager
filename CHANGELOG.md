@@ -5,6 +5,7 @@
 - Fix #178: Add status command and separate status from env @bexelbie
 - Fix#173: Shows if kubernetes services is running in the box @navidshaikh
 - Fix #169: Adds command for displaying box routable IP address @navidshaikh
+- Fix message for box command on default help @budhrg
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
