@@ -23,7 +23,7 @@ en:
 
           Commands:
                env          displays connection information for services in the box
-               box          displays version and release information for the box
+               box          displays box related information like version, release, IP etc
                restart      restarts the given systemd service in the box
                status       list services and their running state
 
