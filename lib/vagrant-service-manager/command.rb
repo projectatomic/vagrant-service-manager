@@ -179,7 +179,7 @@ module Vagrant
         running_services.each do |e|
           unless  script_readable
             # since we do not have feature to show the kube connection information
-            @env.ui.info("\n#{e} env:") unless KUBE_NAMES.include? e
+            @env.ui.info("\n# #{e} env:") unless KUBE_NAMES.include? e
           end
           public_send("execute_#{e}_info", script_readable) unless KUBE_NAMES.include? e
         end
