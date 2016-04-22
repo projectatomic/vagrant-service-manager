@@ -22,8 +22,9 @@ module Vagrant
         options[:script_readable] ||= false
 
         if PluginUtil.service_running?(machine, 'openshift')
-          url = "https://#{PluginUtil.machine_ip(machine)}:#{OPENSHIFT_PORT}"
-          print_info(ui, url, "#{url}/console", options[:script_readable])
+          options[:url] = "https://#{PluginUtil.machine_ip(machine)}:#{OPENSHIFT_PORT}"
+          options[:console_url] = "#{options[:url]}/console"
+          print_info(ui, options)
         else
           ui.error I18n.t('servicemanager.commands.env.service_not_running',
                           name: 'OpenShift')
@@ -31,16 +32,16 @@ module Vagrant
         end
       end
 
-      def self.print_info(ui, url, console_url, script_readable)
-        message = if script_readable
-                    I18n.t('servicemanager.commands.env.openshift.script_readable',
-                           openshift_url: url, openshift_console_url: console_url)
-                  else
-                    I18n.t('servicemanager.commands.env.openshift.default',
-                           openshift_url: url, openshift_console_url: console_url)
-                  end
-
+      def self.print_info(ui, options)
+        label = 'default'
+        label = 'script_readable' if options[:script_readable]
+        message = I18n.t("servicemanager.commands.env.openshift.#{label}",
+                         openshift_url: options[:url],
+                         openshift_console_url: options[:console_url])
         ui.info(message)
+        unless options[:script_readable] || options[:all]
+          PluginUtil.print_shell_configure_info(ui, ' openshift')
+        end
       end
 
       private

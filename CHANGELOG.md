@@ -11,6 +11,7 @@
 - Adds @budhrg as co-maintainer for the plugin @navidshaikh
 - Fix #191: 'vagrant service-manager restart' not handled correctly @budhrg
 - Fixes #187, Updated commands in the Available Commands section @preeticp
+- Fix #200: Simplify the eval hint for `vagrant service-manager env` command @budhrg
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
