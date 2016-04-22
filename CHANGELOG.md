@@ -10,6 +10,7 @@
 - Fix #135: Refactor command.rb to make commands easier to add/maintain @budhrg
 - Adds @budhrg as co-maintainer for the plugin @navidshaikh
 - Fix #191: 'vagrant service-manager restart' not handled correctly @budhrg
+- Fixes #187, Updated commands in the Available Commands section @preeticp
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
