@@ -7,6 +7,7 @@
 - Fix #169: Adds command for displaying box routable IP address @navidshaikh
 - Fix message for box command on default help @budhrg
 - Fix #184: Make env headers comments for vagrant service-manager env @bexelbie
+- Fix #135: Refactor command.rb to make commands easier to add/maintain @budhrg
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg

@@ -1,5 +1,6 @@
 require_relative 'os'
 require 'digest'
+require_relative 'plugin_util'
 
 module Vagrant
   module ServiceManager
@@ -8,14 +9,15 @@ module Vagrant
     SCCLI_SERVICES = ['openshift', 'k8s']
     KUBE_NAMES = ['kubernetes', 'k8s']
     KUBE_SERVICES = [
-      "etcd",
-      "kube-apiserver",
-      "kube-controller-manager",
-      "kube-scheduler",
-      "kubelet",
-      "kube-proxy",
-      "docker"
+      'etcd', 'kube-apiserver', 'kube-controller-manager', 'kube-scheduler',
+      'kubelet', 'kube-proxy', 'docker'
     ]
+    # NOTE: SERVICES_MAP[<service>] will give fully-qualified service class name
+    # Eg: SERVICES_MAP['docker'] gives Vagrant::ServiceManager::Docker
+    SERVICES_MAP = {
+      'docker' => Docker, 'openshift' => OpenShift,
+      'kubernetes' => Kubernetes
+    }
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -26,7 +28,7 @@ module Vagrant
 
       def exit_if_machine_not_running
         # Exit from plugin with status 3 if machine is not running
-        with_target_vms(nil, {:single_target=>true}) do |machine|
+        with_target_vms(nil, single_target: true) do |machine|
           if machine.state.id != :running
             @env.ui.error I18n.t('servicemanager.machine_should_running')
             exit 3
@@ -41,23 +43,12 @@ module Vagrant
         when 'env'
           exit_if_machine_not_running
           case subcommand
-          when 'docker'
+          when 'docker', 'openshift'
             case option
             when nil
-              execute_docker_info
+              execute_service(subcommand)
             when '--script-readable'
-              execute_docker_info(true)
-            when '--help', '-h'
-              print_help(type: command)
-            else
-              print_help(type: command, exit_status: 1)
-            end
-          when 'openshift'
-            case option
-            when nil
-              execute_openshift_info
-            when '--script-readable'
-              execute_openshift_info(true)
+              execute_service(subcommand, script_readable: true)
             when '--help', '-h'
               print_help(type: command)
             else
@@ -67,7 +58,7 @@ module Vagrant
             # display information about all the providers inside ADB/CDK
             print_all_provider_info
           when '--script-readable'
-            print_all_provider_info(true)
+            print_all_provider_info(script_readable: true)
           when '--help', '-h'
             print_help(type: command)
           else
@@ -92,6 +83,8 @@ module Vagrant
               print_vagrant_box_version
             when '--script-readable'
               print_vagrant_box_version(true)
+            when '--help', '-h'
+              print_help(type: command)
             else
               print_help(type: command, exit_status: 1)
             end
@@ -109,20 +102,26 @@ module Vagrant
           else
             print_help(type: command, exit_status: 1)
           end
-        when '--help', '-h'
-          print_help
-        when "restart"
-          self.exit_if_machine_not_running
+        when 'restart'
+          exit_if_machine_not_running
           case subcommand
           when '--help', '-h'
             print_help(type: command)
+          when nil
+            print_help(type: command, exit_status: 1)
           else
             restart_service(subcommand)
           end
-        when "help"
-            self.print_help
+        when '--help', '-h', 'help'
+          print_help
         else
           print_help(exit_status: 1)
+        end
+      end
+
+      def execute_service(name, options = {})
+        with_target_vms(nil, single_target: true) do |machine|
+          PluginUtil.service_class(name).info(machine, @env.ui, options)
         end
       end
 
@@ -134,226 +133,61 @@ module Vagrant
         exit config[:exit_status]
       end
 
-      def service_running?(service)
-        return kube_running? if KUBE_NAMES.include? service
-        command = "systemctl status #{service}"
-        with_target_vms(nil, {:single_target=>true}) do |machine|
-          return machine.communicate.test(command)
-        end
-      end
-
-      def service_status(service)
-        return I18n.t('servicemanager.commands.status.status.running') if service_running?(service)
-        I18n.t('servicemanager.commands.status.status.stopped')
-      end
-
       def execute_status_display(service = nil)
-        if service
-          status = service_status(service)
-          @env.ui.info("#{service} - #{status}")
-        else
-          @env.ui.info I18n.t('servicemanager.commands.status.nil')
-          SUPPORTED_SERVICES.each do |service|
-            status = service_status(service)
-            @env.ui.info("#{service} - #{status}")
-          end
-        end
-      end
-
-      def kube_running?
-        KUBE_SERVICES.each do |service|
-          return false unless service_running?(service)
-        end
-        true
-      end
-
-      def running_services
-        running_services = []
-        SUPPORTED_SERVICES.each do |service|
-          running_services << service if service_running?(service)
-        end
-        running_services
-      end
-
-      def print_all_provider_info(script_readable = false)
-        running_services.each do |e|
-          unless  script_readable
-            # since we do not have feature to show the kube connection information
-            @env.ui.info("\n# #{e} env:") unless KUBE_NAMES.include? e
-          end
-          public_send("execute_#{e}_info", script_readable) unless KUBE_NAMES.include? e
-        end
-      end
-
-      def execute_openshift_info(script_readable = false)
-        @@OPENSHIFT_PORT = 8443
-        if service_running?("openshift")
-          # Find the guest IP
-          guest_ip = self.find_machine_ip
-          openshift_url = "https://#{guest_ip}:#@@OPENSHIFT_PORT"
-          openshift_console_url = "#{openshift_url}/console"
-          self.print_openshift_info(
-            openshift_url,
-            openshift_console_url,
-            script_readable)
-        else
-          @env.ui.error I18n.t('servicemanager.commands.env.service_not_running',
-                               name: 'OpenShift')
-          exit 126
-        end
-      end
-
-      def print_openshift_info(url, console_url, script_readable = false)
-        if script_readable
-          message = I18n.t('servicemanager.commands.env.openshift.script_readable',
-                           openshift_url: url, openshift_console_url: console_url)
-        else
-          message = I18n.t('servicemanager.commands.env.openshift.default',
-                           openshift_url: url, openshift_console_url: console_url)
-        end
-
-        @env.ui.info(message)
-      end
-
-      def find_machine_ip
-        with_target_vms(nil, {:single_target=>true}) do |machine|
-          # Find the guest IP
-          command = "ip -o -4 addr show up |egrep -v ': docker|: lo' |tail -1 | awk '{print $4}' |cut -f1 -d\/"
-          guest_ip = ""
-          machine.communicate.execute(command) do |type, data|
-            guest_ip << data.chomp if type == :stdout
-          end
-          return guest_ip
-        end
-      end
-
-      def sha_id(file_data)
-        Digest::SHA256.hexdigest file_data
-      end
-
-      def certs_present_and_valid?(path, machine)
-        return false if Dir["#{path}/*"].empty?
-
-        # check validity of certs
-        Dir[path + "/*"].each do |f|
-          guest_file_path = "#{DOCKER_PATH}/#{File.basename(f)}"
-          guest_sha = machine.guest.capability(:sha_id, guest_file_path)
-          return false if sha_id(File.read(f)) != guest_sha
-        end
-
-        true
-      end
-
-      def execute_docker_info(script_readable = false)
-        # this execute the operations needed to print the docker env info
-        with_target_vms(nil, {:single_target=>true}) do |machine|
-          secrets_path = PluginUtil.host_docker_path(machine)
-          # Hard Code the Docker port because it is fixed on the VM
-          # This also makes it easier for the plugin to be cross-provider
-          port = 2376
-
-          # Verify valid certs and copy if invalid
-          unless certs_present_and_valid?(secrets_path, machine)
-            # Log the message prefixed by #
-            PluginUtil.copy_certs_to_host(machine, secrets_path, @env.ui, true)
-          end
-
-          api_version = ""
-          docker_api_version = "docker version --format '{{.Server.APIVersion}}'"
-          unless machine.communicate.test(docker_api_version)
-            # fix for issue #152: Fallback to older Docker version (< 1.9.1)
-            docker_api_version.gsub!(/APIVersion/, 'ApiVersion')
-          end
-
-          machine.communicate.execute(docker_api_version) do |type, data|
-            api_version << data.chomp if type ==:stdout
-          end
-
-          # display the information, irrespective of the copy operation
-          self.print_docker_env_info(find_machine_ip, port, secrets_path, api_version, script_readable)
-        end
-      end
-
-      def print_docker_env_info(guest_ip, port, secrets_path, api_version, script_readable)
-        # Print configuration information for accessing the docker daemon
-        if script_readable
-          message = I18n.t('servicemanager.commands.env.docker.script_readable',
-                           ip: guest_ip, port: port, path: secrets_path,
-                           api_version: api_version)
-          @env.ui.info(message)
-        else
-          if !OS.windows?
-            message = I18n.t('servicemanager.commands.env.docker.non_windows',
-                             ip: guest_ip, port: port, path: secrets_path,
-                             api_version: api_version)
-            @env.ui.info(message)
-          elsif OS.windows_cygwin?
-            # replace / with \ for path in Cygwin Windows - which uses export
-            secrets_path = secrets_path.split('/').join('\\') + '\\'
-            message = I18n.t('servicemanager.commands.env.docker.windows_cygwin',
-                             ip: guest_ip, port: port, path: secrets_path,
-                             api_version: api_version)
-            @env.ui.info(message)
+        with_target_vms(nil, single_target: true) do |machine|
+          if service
+            PluginUtil.service_class(service).status(machine, @env.ui, service)
           else
-            # replace / with \ for path in Windows
-            secrets_path = secrets_path.split('/').join('\\') + '\\'
-            message = I18n.t('servicemanager.commands.env.docker.windows',
-                             ip: guest_ip, port: port, path: secrets_path,
-                             api_version: api_version)
-            # puts is used here to escape and render the back slashes in Windows path
-            @env.ui.info(puts(message))
+            @env.ui.info I18n.t('servicemanager.commands.status.nil')
+            SUPPORTED_SERVICES.each do |s|
+              PluginUtil.service_class(s).status(machine, @env.ui, s)
+            end
+          end
+        end
+      end
+
+      def print_all_provider_info(options = {})
+        with_target_vms(nil, single_target: true) do |machine|
+          running_service_classes = PluginUtil.running_services(machine, class: true)
+
+          running_service_classes.each do |service_class|
+            service = service_class.to_s.split('::').last.downcase
+            unless options[:script_readable] || KUBE_NAMES.include?(service)
+              @env.ui.info("\n# #{service} env:")
+            end
+            # since we do not have feature to show the Kube connection information
+            unless KUBE_NAMES.include? service
+              service_class.info(machine, @env.ui, options)
+            end
           end
         end
       end
 
       def print_vagrant_box_version(script_readable = false)
-        # Prints the version of the vagrant box, parses /etc/os-release for version
-        with_target_vms(nil, { single_target: true}) do |machine|
-          command = "cat #{OS_RELEASE_FILE} | grep VARIANT"
-
-          machine.communicate.execute(command) do |type, data|
-            if type == :stderr
-              @env.ui.error(data)
-              exit 126
-            end
-
-            unless script_readable
-              info = Hash[data.gsub('"', '').split("\n").map {|e| e.split("=") }]
-              version = "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
-              @env.ui.info(version)
-            else
-              @env.ui.info(data.chomp)
-            end
-          end
+        with_target_vms(nil, single_target: true) do |machine|
+          @env.ui.info machine.guest.capability(:box_version, script_readable)
         end
       end
 
       def restart_service(service)
-        errors = []
         command = if SCCLI_SERVICES.include? service
                     # TODO : Handle the case where user wants to pass extra arguments
                     # to OpenShift service
                     "sccli #{service}"
                   else
                     "systemctl restart #{service}"
-                   end
+                  end
 
         with_target_vms(nil, single_target: true) do |machine|
-          exit_code = machine.communicate.sudo(command) do |type, error|
-            errors << error if type == :stderr
-          end
-          unless exit_code.zero?
-            @env.ui.error errors.join("\n")
-            exit exit_code
-          end
-          exit_code
+          PluginUtil.execute_and_exit_on_fail(machine, @env.ui, command)
         end
       end
 
       def display_box_ip
-        @env.ui.info(find_machine_ip)
+        with_target_vms(nil, single_target: true) do |machine|
+          @env.ui.info machine.guest.capability(:machine_ip)
+        end
       end
-
     end
   end
 end
