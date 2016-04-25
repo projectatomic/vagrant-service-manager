@@ -1,0 +1,12 @@
+require 'vagrant-service-manager'
+require 'vagrant-registration'
+require 'vagrant-libvirt'
+
+Vagrant.configure(2) do |config|
+  config.vm.box = 'box'
+
+  config.registration.skip = true
+  config.vm.network 'private_network', ip: '10.10.2.2'
+
+  config.servicemanager.services = 'docker'
+end

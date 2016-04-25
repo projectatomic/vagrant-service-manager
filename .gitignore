@@ -1,4 +1,7 @@
 Gemfile.lock
 .vagrant
 .bundle
+.ruby-version
+.ruby-gemset
+build
 pkg
