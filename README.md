@@ -3,39 +3,31 @@
 <!-- MarkdownTOC -->
 
 - [Objective](#objective)
-- [Example Execution of the Plugin](#example-execution-of-the-plugin)
-- [Available Commands](#available-commands)
-- [Exit codes](#exit-codes)
-- [IP Address Detection](#ip-address-detection)
-- [Getting Involved with the Project](#getting-involved-with-the-project)
-    - [Development](#development)
-        - [Vagrant Spec based tests](#vagrant-spec-based-tests)
+- [Usage](#usage)
+    - [Example execution of the plugin](#example-execution-of-the-plugin)
+    - [Available commands](#available-commands)
+    - [Exit codes](#exit-codes)
+    - [IP address detection](#ip-address-detection)
+- [Development](#development)
+    - [Setup](#setup)
+    - [Acceptance tests](#acceptance-tests)
     - [Builds](#builds)
+- [Getting involved](#getting-involved)
 
 <!-- /MarkdownTOC -->
 
-----
 
+<a name="objective"></a>
+# Objective
 The vagrant-service-manager plugin is designed to enable easier access to the features and services provided by the [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle). It provides setup information, including environment variables and certificates, required to access services provided by the ADB and is a must have for most ADB users.
 
 This plugin makes it easier to use the ADB with host-based tools such as Eclipse and the docker and kubernetes CLI commands. Details on how to use ADB with this plugin can be found in the [ADB Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
-----
-
-<a name="objective"></a>
-## Objective
-
-The [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) provides a ready-to-use development environment for container applications. With ADB, developers can dive right into producing complex, multi-container applications.
-
-The vagrant-service-manager provides the user with:
-
-* A CLI to configure the ADB for different use cases and to provide an interface between ADB and the user's development environment.
-* A tool to control and configure the ADB from the
-developer's workstation without having to `ssh` directly into the ADB virtual machine.
-
+<a name="usage"></a>
+# Usage
 
 <a name="example-execution-of-the-plugin"></a>
-## Example Execution of the Plugin
+## Example execution of the plugin
 
 1. Install vagrant-service-manager plugin:
 
@@ -64,7 +56,7 @@ developer's workstation without having to `ssh` directly into the ADB virtual ma
 
 
 <a name="available-commands"></a>
-## Available Commands
+## Available commands
 
 The following table lists the available commands for the plugin and their explanation:
 
@@ -90,25 +82,19 @@ Exit Code Number   | Meaning
 
 
 <a name="ip-address-detection"></a>
-## IP Address Detection
+## IP address detection
 
 There is no standardized way of detecting Vagrant box IP addresses.
 This code uses the last IPv4 address available from the set of configured addresses that are *up*.  i.e. if eth0, eth1, and eth2 are all up and have IPv4 addresses, the address on eth2 is used.
 
 
-<a name="getting-involved-with-the-project"></a>
-## Getting Involved with the Project
-
-We welcome your input. You can submit issues or pull requests with respect to the vagrant-service-manager plugin. Refer to the [contributing guidelines](https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md) for detailed information on how to contribute to this plugin.
-
-You can contact us on:
-  * IRC: #atomic and #nulecule on freenode
-  * Mailing List: container-tools@redhat.com
-
 <a name="development"></a>
-### Development
+# Development
 
-To setup your development environment install the [Bundler](http://bundler.io/) gem:
+<a name="setup"></a>
+## Setup
+
+After cloing the repository, install the [Bundler](http://bundler.io/) gem:
 
     $ gem install bundler
 
@@ -122,8 +108,8 @@ Rake tasks via:
 
     $ bundle exec rake -T
 
-<a name="vagrant-spec-based-tests"></a>
-#### Vagrant Spec based tests
+<a name="acceptance-tests"></a>
+## Acceptance tests
 
 The source contains also a set of [vagrant-spec](https://github.com/mitchellh/vagrant-spec) acceptance tests. They can be run via:
 
@@ -137,8 +123,19 @@ In order to for example use _libvirt_ run:
     $ bundle exec rake acceptance['libvirt']
 
 <a name="builds"></a>
-### Builds <a name="builds"></a>
+## Builds
 
 - Gem: https://rubygems.org/gems/vagrant-service-manager
-
 - Copr build: https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/
+
+<a name="getting-involved"></a>
+# Getting involved
+
+We welcome your input. You can submit issues or pull requests with respect to
+the vagrant-service-manager plugin. Refer to the
+[contributing guidelines](https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md)
+for detailed information on how to contribute to this plugin.
+
+You can contact us on:
+  * IRC: #atomic and #nulecule on freenode
+  * Mailing List: container-tools@redhat.com
