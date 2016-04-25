@@ -107,8 +107,6 @@ module Vagrant
           case subcommand
           when '--help', '-h'
             print_help(type: command)
-          when nil
-            print_help(type: command, exit_status: 1)
           else
             restart_service(subcommand)
           end
@@ -170,6 +168,13 @@ module Vagrant
       end
 
       def restart_service(service)
+        if service.nil?
+          help_msg = I18n.t('servicemanager.commands.help.restart')
+          service_missing_msg = I18n.t('servicemanager.commands.restart.service_missing')
+          @env.ui.error help_msg.gsub(/Restarts the service/, service_missing_msg)
+          exit 126
+        end
+
         command = if SCCLI_SERVICES.include? service
                     # TODO : Handle the case where user wants to pass extra arguments
                     # to OpenShift service

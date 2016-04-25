@@ -71,10 +71,10 @@ en:
         restart: |-
           Restarts the service
 
-          Usage: vagrant service-manager restart <object> [options]
+          Usage: vagrant service-manager restart <service> [options]
 
-          Object:
-              Object is a service provided via sccli or systemd. For example:
+          Service:
+              A service provided by sccli or systemd. For example:
                docker, k8s, or openshift etc.
 
           Options:
@@ -124,6 +124,8 @@ en:
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
         service_not_running: |-
           # %{name} service is not running in the vagrant box.
+      restart:
+        service_missing: 'Service name missing'
 
       status:
         nil: |-
