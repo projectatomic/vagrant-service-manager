@@ -33,8 +33,7 @@ developer's workstation without having to `ssh` directly into the ADB virtual ma
 
 2. Download the relevant Vagrantfile for your [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle) vagrant box, from the [repository](https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos). For further details on the usage of custom Vagrantfiles designed for specific use cases, refer to the [Usage Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst).
 
-3. Start the ADB vagrant box using `vagrant up`. For detailed instructions consult the
-[Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
+3. Start the ADB vagrant box using `vagrant up`. For detailed instructions consult the [Installation Documentation](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst).
 
 	**Note:** When the vagrant-service-manager plugin is loaded and a box is started using the VirtualBox provider, the user needs to add a routable non NAT network interface declaration in the Vagrantfile. If the user does not provide a network declaration in the Vagrantfile, a private DHCP network is added by default and a warning is displayed.
 
@@ -55,14 +54,36 @@ developer's workstation without having to `ssh` directly into the ADB virtual ma
 
 ## Available Commands <a name="commands"></a>
 
-The following table lists the available commands for the plugin and their explanation:
+The following section lists the available commands for the plugin and their explanation:
 
-Commands                                                   | Explanations
------------------------------------------------------------|-----------------------------------------
-`vagrant service-manager env`                              | Displays connection information for all active providers in the box.
-`vagrant service-manager env docker`                       | Displays connection information for the Docker provider.
-`vagrant service-manager env openshift` [--script-readable]| Displays connection information for the OpenShift provider. This is optionally available in script readable format too.
-`vagrant service-manager box version` [--script-readable]  | Displays the version and release of the running Vagrant box. This is optionally available in script readable format too.
+1. `vagrant service-manager env [service] [--script-readable]` 
+
+   Displays connection information for all active services in the box in a manner that can be evaluated in a shell. If a `service` is specified, only the information for that service is displayed. When `--script-readable` is specified the output is in `key=value` format. The supported services are: Docker; OpenShift.
+
+2. `vagrant service-manager box [command]`
+
+   Displays box related information like release version, IP etc. 
+
+3. `vagrant service-manager box version [--script-readable]`
+
+   Displays the version and release information of the running VM. When `--script-readable` is specified the output is in `key=value` format.
+
+4. `vagrant service-manager box ip` 
+
+   Displays the routable IP address of the running VM. 
+
+5. `vagrant service-manager status [service]` 
+
+   Lists services and their running state. If a `service` is specified only the status of that service is displayed. If no service is provided then only supported orchestrators are reported.
+
+6. `vagrant service-manager restart [service]` 
+
+   Restarts the given service in the box.
+
+7. `vagrant service-manager [command] [--help | -h]`
+
+   Displays the possible commands, options and other relevant information for the vagrant-service-manager plugin. If a `command` is specified, only the help relevant to that command is displayed.
+
 
 
 ## Exit codes <a name="exit_codes"></a>
