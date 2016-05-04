@@ -33,8 +33,7 @@ module Vagrant
       end
 
       def self.print_info(ui, options)
-        label = 'default'
-        label = 'script_readable' if options[:script_readable]
+        label = PluginUtil.env_label(options[:script_readable])
         message = I18n.t("servicemanager.commands.env.openshift.#{label}",
                          openshift_url: options[:url],
                          openshift_console_url: options[:console_url])

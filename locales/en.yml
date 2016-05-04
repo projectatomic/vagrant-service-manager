@@ -112,9 +112,21 @@ en:
             DOCKER_TLS_VERIFY=1
             DOCKER_API_VERSION=%{api_version}
         openshift:
-          default: |-
+          windows: |-
             # You can access the OpenShift console on: %{openshift_console_url}
             # To use OpenShift CLI, run: oc login %{openshift_url}
+            setx OPENSHIFT_URL %{openshift_url}
+            setx OPENSHIFT_WEB_CONSOLE %{openshift_console_url}
+          non_windows: |-
+            # You can access the OpenShift console on: %{openshift_console_url}
+            # To use OpenShift CLI, run: oc login %{openshift_url}
+            export OPENSHIFT_URL=%{openshift_url}
+            export OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+          windows_cygwin: |-
+            # You can access the OpenShift console on: %{openshift_console_url}
+            # To use OpenShift CLI, run: oc login %{openshift_url}
+            export OPENSHIFT_URL=%{openshift_url}
+            export OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
           script_readable: |-
             OPENSHIFT_URL=%{openshift_url}
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
