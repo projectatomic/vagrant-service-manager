@@ -90,6 +90,18 @@ module Vagrant
         end
         exit_code
       end
+
+      def self.print_shell_configure_info(ui, command = '')
+        label = if OS.unix?
+                  'unix_configure_info'
+                elsif OS.windows_cygwin?
+                  'windows_cygwin_configure_info'
+                end
+
+        unless label.nil?
+          ui.info "\n" + I18n.t("servicemanager.commands.env.#{label}", command: command)
+        end
+      end
     end
   end
 end

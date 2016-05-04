@@ -146,6 +146,7 @@ module Vagrant
 
       def print_all_provider_info(options = {})
         with_target_vms(nil, single_target: true) do |machine|
+          options[:all] = true # flag to mark all providers
           running_service_classes = PluginUtil.running_services(machine, class: true)
 
           running_service_classes.each do |service_class|
@@ -158,6 +159,8 @@ module Vagrant
               service_class.info(machine, @env.ui, options)
             end
           end
+
+          PluginUtil.print_shell_configure_info(@env.ui) unless options[:script_readable]
         end
       end
 

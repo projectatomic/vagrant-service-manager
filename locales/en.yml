@@ -99,8 +99,6 @@ en:
             export DOCKER_CERT_PATH=%{path}
             export DOCKER_TLS_VERIFY=1
             export DOCKER_API_VERSION=%{api_version}
-            # run following command to configure your shell:
-            # eval "$(vagrant service-manager env docker)"
           windows_cygwin: |-
             # Set the following environment variables to enable access to the
             # docker daemon running inside of the vagrant virtual machine:
@@ -108,8 +106,6 @@ en:
             export DOCKER_CERT_PATH='%{path}'
             export DOCKER_TLS_VERIFY=1
             export DOCKER_API_VERSION=%{api_version}
-            # run following command to configure your shell:
-            # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env docker | tr -d '\r')"
           script_readable: |-
             DOCKER_HOST=tcp://%{ip}:%{port}
             DOCKER_CERT_PATH='%{path}'
@@ -122,6 +118,12 @@ en:
           script_readable: |-
             OPENSHIFT_URL=%{openshift_url}
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+        windows_cygwin_configure_info: |-
+            # run following command to configure your shell:
+            # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env%{command} | tr -d '\r')"
+        unix_configure_info: |-
+          # run following command to configure your shell:
+          # eval "$(vagrant service-manager env%{command})"
         service_not_running: |-
           # %{name} service is not running in the vagrant box.
       restart:

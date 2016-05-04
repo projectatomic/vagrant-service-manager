@@ -27,28 +27,27 @@ module Vagrant
 
       def self.info(machine, ui, options = {})
         if PluginUtil.service_running?(machine, 'docker')
-          secrets_path = PluginUtil.host_docker_path(machine)
+          options[:secrets_path] = PluginUtil.host_docker_path(machine)
+          options[:guest_ip] = PluginUtil.machine_ip(machine)
 
           # Verify valid certs and copy if invalid
-          unless PluginUtil.certs_present_and_valid?(secrets_path, machine)
+          unless PluginUtil.certs_present_and_valid?(options[:secrets_path], machine)
             # Log the message prefixed by #
-            PluginUtil.copy_certs_to_host(machine, secrets_path, ui, true)
+            PluginUtil.copy_certs_to_host(machine, options[:secrets_path], ui, true)
           end
 
-          api_version = ''
-          docker_api_version = "docker version --format '{{.Server.APIVersion}}'"
-          unless machine.communicate.test(docker_api_version)
+          docker_api_version_cmd = "docker version --format '{{.Server.APIVersion}}'"
+          unless machine.communicate.test(docker_api_version_cmd)
             # fix for issue #152: Fallback to older Docker version (< 1.9.1)
-            docker_api_version.gsub!(/APIVersion/, 'ApiVersion')
+            docker_api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
           end
 
-          machine.communicate.execute(docker_api_version) do |type, data|
-            api_version << data.chomp if type == :stdout
+          machine.communicate.execute(docker_api_version_cmd) do |type, data|
+            options[:api_version] = data.chomp if type == :stdout
           end
 
           # Display the information, irrespective of the copy operation
-          print_env_info(ui, PluginUtil.machine_ip(machine), secrets_path,
-                         api_version, options[:script_readable])
+          print_env_info(ui, options)
         else
           ui.error I18n.t('servicemanager.commands.env.service_not_running',
                           name: 'Docker')
@@ -56,8 +55,8 @@ module Vagrant
         end
       end
 
-      def self.print_env_info(ui, guest_ip, secrets_path, api_version, script_readable)
-        label = if script_readable
+      def self.print_env_info(ui, options)
+        label = if options[:script_readable]
                   'script_readable'
                 elsif OS.unix?
                   'non_windows'
@@ -67,13 +66,16 @@ module Vagrant
                   'windows'
                 end
 
-        secrets_path = PluginUtil.windows_path(secrets_path) unless OS.unix?
+        options[:secrets_path] = PluginUtil.windows_path(options[:secrets_path]) unless OS.unix?
         message = I18n.t("servicemanager.commands.env.docker.#{label}",
-                         ip: guest_ip, port: PORT, path: secrets_path,
-                         api_version: api_version)
+                         ip: options[:guest_ip], port: PORT, path: options[:secrets_path],
+                         api_version: options[:api_version])
         # Puts is used to escape and render the back slashes in Windows path
         message = puts(message) if OS.windows?
         ui.info(message)
+        unless options[:script_readable] || options[:all]
+          PluginUtil.print_shell_configure_info(ui, ' docker')
+        end
       end
     end
   end
