@@ -102,6 +102,18 @@ module Vagrant
           ui.info "\n" + I18n.t("servicemanager.commands.env.#{label}", command: command)
         end
       end
+
+      def self.env_label(script_readable)
+        if script_readable
+          'script_readable'
+        elsif OS.unix?
+          'non_windows'
+        elsif OS.windows_cygwin?
+          'windows_cygwin'
+        else
+          'windows'
+        end
+      end
     end
   end
 end

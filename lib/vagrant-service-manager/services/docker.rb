@@ -56,16 +56,7 @@ module Vagrant
       end
 
       def self.print_env_info(ui, options)
-        label = if options[:script_readable]
-                  'script_readable'
-                elsif OS.unix?
-                  'non_windows'
-                elsif OS.windows_cygwin?
-                  'windows_cygwin'
-                else
-                  'windows'
-                end
-
+        label = PluginUtil.env_label(options[:script_readable])
         options[:secrets_path] = PluginUtil.windows_path(options[:secrets_path]) unless OS.unix?
         message = I18n.t("servicemanager.commands.env.docker.#{label}",
                          ip: options[:guest_ip], port: PORT, path: options[:secrets_path],
