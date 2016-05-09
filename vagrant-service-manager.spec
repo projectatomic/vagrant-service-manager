@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -88,6 +88,22 @@ popd
 %{vagrant_plugin_instdir}/.gitattributes
 
 %changelog
+* Mon May 09 2016 Navid Shaikh - 1.0.2-1
+- Add --script-readable to env and env docker @bexelbie
+- Fix #178: Add status command and separate status from env @bexelbie
+- Fix#173: Shows if kubernetes services is running in the box @navidshaikh
+- Fix #169: Adds command for displaying box routable IP address @navidshaikh
+- Fix message for box command on default help @budhrg
+- Fix #184: Make env headers comments for vagrant service-manager env @bexelbie
+- Fix #135: Refactor command.rb to make commands easier to add/maintain @budhrg
+- Adds @budhrg as co-maintainer for the plugin @navidshaikh
+- Fix #191: 'vagrant service-manager restart' not handled correctly @budhrg
+- Fixes #187, Updated commands in the Available Commands section @preeticp
+- Fix #200: Simplify the eval hint for `vagrant service-manager env` command @budhrg
+- Add environment variables for Openshift env output @bexelbie
+- Fix #181: vagrant-service-manager version 1.0.2 release @navidshaikh
+
+
 * Tue Apr 12 2016 Navid Shaikh - 1.0.1-1
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
 - Added Table of Contents for README @bexelbie
