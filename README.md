@@ -1,12 +1,12 @@
 # vagrant-service-manager
 
 * [Objective](#objective)
+* [How to Install the Plugin](#installation)
 * [Example Execution of the Plugin](#example_execution)
 * [Available Commands](#commands)
 * [Exit codes](#exit_codes)
 * [IP Address Detection](#ip_addr)
 * [Getting Involved with the Project](#Contributing)
-* [Builds](#builds)
 
 
 The vagrant-service-manager plugin is designed to enable easier access to the features and services provided by the [Atomic Developer Bundle (ADB)](https://github.com/projectatomic/adb-atomic-developer-bundle). It provides setup information, including environment variables and certificates, required to access services provided by the ADB and is a must have for most ADB users.
@@ -24,6 +24,26 @@ The vagrant-service-manager provides the user with:
 * A tool to control and configure the ADB from the
 developer's workstation without having to `ssh` directly into the ADB virtual machine.
 
+
+## How to Install the Plugin <a name="installation"></a>
+
+The plugin is distributed as both a Ruby Gem and via RPM using the Fedora COPR system.
+
+### Installing from a Ruby Gem
+
+The [Ruby Gem](https://rubygems.org/gems/vagrant-service-manager) is
+available via the standard vagrant installation method:
+
+    $ vagrant plugin install vagrant-service-manager
+
+### Installing from RPM
+
+The [Copr
+build](https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/)
+is accessible via the standard COPR access/install method:
+
+    $ dnf copr enable nshaikh/vagrant-service-manager
+    $ dnf --enablerepo=nshaikh-vagrant-service-manager install vagrant-service-manager
 
 ## Example Execution of the Plugin <a name="example_execution"></a>
 
@@ -111,10 +131,3 @@ We welcome your input. You can submit issues or pull requests with respect to th
 You can contact us on:
   * IRC: #atomic and #nulecule on freenode
   * Mailing List: container-tools@redhat.com
-
-
-## Builds <a name="builds"></a>
-
-- Gem: https://rubygems.org/gems/vagrant-service-manager
-
-- Copr build: https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/

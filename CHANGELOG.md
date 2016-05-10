@@ -16,6 +16,7 @@
 - Fix #200: Simplify the eval hint for `vagrant service-manager env` command @budhrg
 - Add environment variables for Openshift env output @bexelbie
 - Fix #181: vagrant-service-manager version 1.0.2 release @navidshaikh
+- Updated README to make Installation Instructions clearer @bexelbie
 
 ## v1.0.1 Apr 12, 2016
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
