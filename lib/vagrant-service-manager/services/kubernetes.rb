@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     class Kubernetes
       def initialize(machine, ui)

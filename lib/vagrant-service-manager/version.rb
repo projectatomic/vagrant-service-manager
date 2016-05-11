@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     VERSION = "1.0.2"
   end

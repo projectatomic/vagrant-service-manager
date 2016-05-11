@@ -2,7 +2,7 @@
 Dir["#{File.dirname(__FILE__)}/action/*.rb"].each { |f| require_relative f }
 require_relative 'service'
 
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     class Plugin < Vagrant.plugin('2')
       name "service-manager"

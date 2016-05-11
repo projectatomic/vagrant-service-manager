@@ -1,6 +1,7 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     module PluginUtil
+
       def self.service_class(service)
         SERVICES_MAP[service]
       end
@@ -72,6 +73,7 @@ module Vagrant
       def self.service_running?(machine, service)
         return kube_running?(machine) if service == 'kubernetes'
         command = "systemctl status #{service}"
+        PluginLogger.debug
         machine.communicate.test(command)
       end
 
@@ -81,13 +83,21 @@ module Vagrant
       end
 
       def self.execute_and_exit_on_fail(machine, ui, command)
-        exit_code = machine.communicate.sudo(command) do |type, error|
-          errors << error if type == :stderr
+        errors = []
+        logged = false # Log one time only
+
+        exit_code = machine.communicate.sudo(command) do |type, data|
+          PluginLogger.debug unless logged
+          errors << data if type == :stderr
+          logged = true
         end
+
         unless exit_code.zero?
           ui.error errors.join("\n")
+          PluginLogger.debug("#{command} exited with code #{exit_code}")
           exit exit_code
         end
+
         exit_code
       end
 

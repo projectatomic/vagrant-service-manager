@@ -1,4 +1,5 @@
 require 'vagrant'
+require File.expand_path('../../../../', __FILE__) + '/lib/vagrant-service-manager/plugin_logger'
 
 module VagrantPlugins
   OS_RELEASE_FILE = '/etc/os-release'

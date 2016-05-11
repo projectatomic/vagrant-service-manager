@@ -8,7 +8,7 @@ require 'vagrant-service-manager/plugin'
 require 'vagrant-service-manager/command'
 require 'vagrant-service-manager/os'
 
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     # Returns the path to the source of this plugin
     def self.source_root

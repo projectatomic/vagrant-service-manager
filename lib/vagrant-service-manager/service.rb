@@ -1,7 +1,7 @@
 # Loads all services
 Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
 
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     SUPPORTED_BOXES = ['adb', 'cdk']
 

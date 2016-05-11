@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     module Action
       class SetupNetwork

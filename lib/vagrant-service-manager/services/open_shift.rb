@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     class OpenShift
       OPENSHIFT_PORT = 8443
@@ -11,7 +11,7 @@ module Vagrant
 
       def execute
         command = "#{@extra_cmd} sccli openshift"
-        Plugin.execute_and_exit_on_fail(@machine, @ui, command)
+        PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
       end
 
       def self.status(machine, ui, service)
@@ -33,6 +33,8 @@ module Vagrant
       end
 
       def self.print_info(ui, options)
+        PluginLogger.debug("script_readable: #{options[:script_readable] || false}")
+
         label = PluginUtil.env_label(options[:script_readable])
         message = I18n.t("servicemanager.commands.env.openshift.#{label}",
                          openshift_url: options[:url],

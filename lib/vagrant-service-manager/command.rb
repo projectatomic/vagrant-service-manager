@@ -1,8 +1,9 @@
 require_relative 'os'
 require 'digest'
 require_relative 'plugin_util'
+require_relative 'plugin_logger'
 
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     DOCKER_PATH = '/home/vagrant/.docker'
     SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
@@ -28,6 +29,7 @@ module Vagrant
       def exit_if_machine_not_running
         # Exit from plugin with status 3 if machine is not running
         with_target_vms(nil, single_target: true) do |machine|
+          PluginLogger.debug("machine state - #{machine.state.id || 'nil'}")
           if machine.state.id != :running
             @env.ui.error I18n.t('servicemanager.machine_should_running')
             exit 3
@@ -36,8 +38,16 @@ module Vagrant
       end
 
       def execute
-        command, subcommand, option = ARGV[1..ARGV.length]
+        argv = ARGV.dup
+        # Don't propagate --debug argument to case operation
+        if ARGV.include? '--debug'
+          PluginLogger.enable_debug_mode
+          PluginLogger.set_logger(@logger)
+          argv.delete('--debug')
+        end
 
+        # Remove first argument i.e plugin name
+        command, subcommand, option = argv.drop(1)
         case command
         when 'env'
           exit_if_machine_not_running
@@ -164,8 +174,10 @@ module Vagrant
       end
 
       def print_vagrant_box_version(script_readable = false)
+        options = { script_readable: script_readable }
+
         with_target_vms(nil, single_target: true) do |machine|
-          @env.ui.info machine.guest.capability(:box_version, script_readable)
+          @env.ui.info machine.guest.capability(:box_version, options)
         end
       end
 

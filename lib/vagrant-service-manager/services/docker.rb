@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     class Docker
       # Hard Code the Docker port because it is fixed on the VM
@@ -42,6 +42,7 @@ module Vagrant
             docker_api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
           end
 
+          PluginLogger.debug
           machine.communicate.execute(docker_api_version_cmd) do |type, data|
             options[:api_version] = data.chomp if type == :stdout
           end
@@ -56,6 +57,8 @@ module Vagrant
       end
 
       def self.print_env_info(ui, options)
+        PluginLogger.debug("script_readable: #{options[:script_readable] || false}")
+
         label = PluginUtil.env_label(options[:script_readable])
         options[:secrets_path] = PluginUtil.windows_path(options[:secrets_path]) unless OS.unix?
         message = I18n.t("servicemanager.commands.env.docker.#{label}",

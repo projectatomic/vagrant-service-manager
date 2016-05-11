@@ -112,6 +112,14 @@ The following section lists the available commands for the plugin and their expl
 
    Displays the possible commands, options and other relevant information for the vagrant-service-manager plugin. If a `command` is specified, only the help relevant to that command is displayed.
 
+#### Debug Flag
+
+  Append `--debug` flag to enable debug mode.
+
+  *Note* : Debug output from `vagrant-service-manager` is prepended with the following string:
+  ```
+  DEBUG command: [ service-manager: <command name / log message> ]
+  ```
 <a name="exit-codes"></a>
 ## Exit codes
 

@@ -1,6 +1,6 @@
 require 'set'
 
-module Vagrant
+module VagrantPlugins
   module ServiceManager
     SERVICES = ['docker', 'openshift']
     CONFIG_KEYS  = [

@@ -79,5 +79,5 @@ Then(/^stdout from "([^"]*)" should be script readable$/) do |cmd|
 end
 
 Then(/^stdout from "([^"]*)" should match \/(.*)\/$/) do |cmd, regexp|
-  aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout)  =~ /#{regexp}/
+  aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout) =~ /#{regexp}/
 end
