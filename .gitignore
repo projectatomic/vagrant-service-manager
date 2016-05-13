@@ -1,4 +1,17 @@
+# Ruby, Bundler
 Gemfile.lock
-.vagrant
 .bundle
+.ruby-version
+.ruby-gemset
+
+# Vagrant
+.vagrant
+
+# Idea
+.idea
+*.iml
+
+# Build and tmp directories
+tmp
+build
 pkg

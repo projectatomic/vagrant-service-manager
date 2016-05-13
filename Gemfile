@@ -3,11 +3,16 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'vagrant', git: 'https://github.com/mitchellh/vagrant.git'
-  # added as the vagrant component wouldn't build without it
-  gem 'json'
+  gem 'vagrant',      git: 'https://github.com/mitchellh/vagrant.git'
   gem 'rake'
-  gem 'bundler', '~> 1.6'
+  gem 'vagrant-libvirt'
+  gem 'fog-libvirt', '0.0.3' # https://github.com/pradels/vagrant-libvirt/issues/568
+  gem 'mechanize'
+  gem 'json'
+  gem 'cucumber', '~> 2.1'
+  gem 'aruba', '~> 0.13'
+  gem 'komenda', '~> 0.1.6'
+  gem 'launchy'
 end
 
 group :plugins do
