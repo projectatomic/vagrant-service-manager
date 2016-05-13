@@ -155,9 +155,11 @@ Rake tasks via:
 <a name="acceptance-tests"></a>
 ## Acceptance tests
 
-The source contains also a set of [Cucumber](https://cucumber.io/) acceptance tests. They can be run via:
+The source also contains a set of [Cucumber](https://cucumber.io/) acceptance tests. They can be run via:
 
     $ bundle exec rake features
+
+_NOTE_: Only Linux OS is supported at present.
 
 The tests assume that the ADB and CDK box files are available under
 _build/boxes/adb-\<provider\>.box_ resp _build/boxes/cdk-\<provider\>.box_. You can
