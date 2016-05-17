@@ -63,17 +63,8 @@ module VagrantPlugins
         running_services
       end
 
-      def self.kube_running?(machine)
-        KUBE_SERVICES.each do |service|
-          return false unless service_running?(machine, service)
-        end
-        true
-      end
-
       def self.service_running?(machine, service)
-        return kube_running?(machine) if service == 'kubernetes'
-        command = "systemctl status #{service}"
-        PluginLogger.debug
+        command = "sudo sccli #{service} status"
         machine.communicate.test(command)
       end
 
@@ -99,6 +90,8 @@ module VagrantPlugins
         end
 
         exit_code
+      rescue StandardError => e
+        ui.error e.message.squeeze
       end
 
       def self.print_shell_configure_info(ui, command = '')

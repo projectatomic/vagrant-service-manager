@@ -27,7 +27,9 @@ Feature: Command output from help command
     Commands:
          env          displays connection information for services in the box
          box          displays box related information like version, release, IP etc
-         restart      restarts the given systemd service in the box
+         restart      restarts the given service in the box
+         start        starts the given service in the box
+         stop         stops the given service in the box
          status       list services and their running state
 
     Options:
@@ -44,7 +46,9 @@ Feature: Command output from help command
     Commands:
          env          displays connection information for services in the box
          box          displays box related information like version, release, IP etc
-         restart      restarts the given systemd service in the box
+         restart      restarts the given service in the box
+         start        starts the given service in the box
+         stop         stops the given service in the box
          status       list services and their running state
 
     Options:
@@ -62,7 +66,9 @@ Feature: Command output from help command
     Commands:
          env          displays connection information for services in the box
          box          displays box related information like version, release, IP etc
-         restart      restarts the given systemd service in the box
+         restart      restarts the given service in the box
+         start        starts the given service in the box
+         stop         stops the given service in the box
          status       list services and their running state
 
     Options:

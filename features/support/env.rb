@@ -49,6 +49,11 @@ def output_is_script_readable(raw_stdout)
   end
 end
 
+def extract_process_id(data)
+  tokens = data.scan(/Main PID: ([0-9]+) \(/)
+  tokens.last.first.to_i unless tokens.empty?
+end
+
 ###############################################################################
 # Some shared step definitions
 ##############################################################################
@@ -80,4 +85,54 @@ end
 
 Then(/^stdout from "([^"]*)" should match \/(.*)\/$/) do |cmd, regexp|
   aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout) =~ /#{regexp}/
+end
+
+# track service process ID
+@service_current_process_id = -1
+
+# Note: Only for services supported through systemctl. Not for 'kubernetes'.
+Then(/^the service "([^"]*)" should be ([^"]*)$/) do |service, operation|
+  run("vagrant ssh -c \"sudo systemctl status #{service}\"")
+
+  if ['running', 'restarted'].include? operation
+    exit_code = 0
+    regexp = /Active: active \(running\)/
+  elsif operation == 'stopped'
+    exit_code = 3
+    regexp = /Active: inactive\(dead\)/
+  end
+
+  expect(last_command_started).to have_exit_status(exit_code)
+  aruba.command_monitor.find(Aruba.platform.detect_ruby(last_command_started)).send(:stdout) =~ regexp
+end
+
+# Note: Only for services supported through systemctl. Not for 'kubernetes'.
+When(/^the "([^"]*)" service is( not)? running$/) do |service, negated|
+  run("vagrant ssh -c \"sudo systemctl status #{service}\"")
+
+  if negated
+    expect(last_command_started).to have_exit_status(3)
+  else
+    expect(last_command_started).to have_exit_status(0)
+    stdout = aruba.command_monitor.find(Aruba.platform.detect_ruby(last_command_started)).send(:stdout)
+    @service_current_process_id = extract_process_id(stdout)
+  end
+end
+
+# Note: Only for services supported through systemctl. Not for 'kubernetes'.
+When(/^the "([^"]*)" service is \*not\* running$/) do |service|
+  # Stop the service
+  run("vagrant ssh -c \"sudo systemctl stop #{service}\"")
+
+  expect(last_command_started).to have_exit_status(0)
+  step "the \"docker\" service is not running"
+end
+
+# Note: Only for services supported through systemctl. Not for 'kubernetes'.
+Then(/^have a new pid for "([^"]*)" service$/) do |service|
+  run("vagrant ssh -c \"sudo systemctl status #{service}\"")
+
+  expect(last_command_started).to have_exit_status(0)
+  stdout = aruba.command_monitor.find(Aruba.platform.detect_ruby(last_command_started)).send(:stdout)
+  expect(@service_current_process_id).not_to eq(extract_process_id(stdout))
 end
