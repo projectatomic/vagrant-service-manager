@@ -102,7 +102,7 @@ module Vagrant
           else
             print_help(type: command, exit_status: 1)
           end
-        when 'restart'
+        when 'restart', 'start'
           exit_if_machine_not_running
           case subcommand
           when '--help', '-h'
