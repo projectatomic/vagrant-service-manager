@@ -49,4 +49,3 @@ Feature: Command output from env command
       | adb   | virtualbox | 10.10.10.42 |
       | cdk   | libvirt    | 10.10.10.42 |
       | adb   | libvirt    | 10.10.10.42 |
-

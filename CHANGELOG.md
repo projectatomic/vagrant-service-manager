@@ -9,6 +9,7 @@
 - Fix #168: Extend --debug flag to show plugin activity @budhrg
 - Don't set private network for unsupported box @budhrg
 - Convert CONTRIBUTING and README docs to AsciiDoc @bexelbie
+- Fix #172: Implement "start/enable" service command @budhrg
 
 ## v1.0.2 May 09, 2016
 - Add --script-readable to env and env docker @bexelbie

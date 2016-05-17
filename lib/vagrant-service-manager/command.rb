@@ -7,7 +7,6 @@ module VagrantPlugins
   module ServiceManager
     DOCKER_PATH = '/home/vagrant/.docker'
     SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
-    SCCLI_SERVICES = ['openshift', 'kubernetes']
     KUBE_SERVICES = [
       'etcd', 'kube-apiserver', 'kube-controller-manager', 'kube-scheduler',
       'kubelet', 'kube-proxy', 'docker'
@@ -111,13 +110,13 @@ module VagrantPlugins
           else
             print_help(type: command, exit_status: 1)
           end
-        when 'restart'
+        when 'restart', 'start', 'stop'
           exit_if_machine_not_running
           case subcommand
           when '--help', '-h'
-            print_help(type: command)
+            print_help(type: 'operation', operation: command)
           else
-            restart_service(subcommand)
+            perform_service(command, subcommand)
           end
         when '--help', '-h', 'help'
           print_help
@@ -136,7 +135,7 @@ module VagrantPlugins
         config[:type] ||= 'default'
         config[:exit_status] ||= 0
 
-        @env.ui.info(I18n.t("servicemanager.commands.help.#{config[:type]}"))
+        @env.ui.info(I18n.t("servicemanager.commands.help.#{config[:type]}", operation: config[:operation]))
         exit config[:exit_status]
       end
 
@@ -181,20 +180,21 @@ module VagrantPlugins
         end
       end
 
-      def restart_service(service)
+      def perform_service(operation, service)
         if service.nil?
-          help_msg = I18n.t('servicemanager.commands.help.restart')
-          service_missing_msg = I18n.t('servicemanager.commands.restart.service_missing')
-          @env.ui.error help_msg.gsub(/Restarts the service/, service_missing_msg)
+          help_msg = I18n.t('servicemanager.commands.help.operation', operation: operation)
+          service_missing_msg = I18n.t('servicemanager.commands.operation.service_missing')
+          @env.ui.error help_msg.gsub(/#{operation}s the service/, service_missing_msg)
           exit 126
         end
 
-        command = if SCCLI_SERVICES.include? service
+        command = if SUPPORTED_SERVICES.include? service
                     # TODO : Handle the case where user wants to pass extra arguments
                     # to OpenShift service
-                    "sccli #{service}"
+                    "sccli #{service} #{operation}"
                   else
-                    "systemctl restart #{service}"
+                    @env.ui.error I18n.t('servicemanager.commands.operation.sccli_only_support')
+                    exit 126
                   end
 
         with_target_vms(nil, single_target: true) do |machine|

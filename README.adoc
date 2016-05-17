@@ -136,9 +136,15 @@ Lists services and their running state. If a `service` is specified only
 the status of that service is displayed. If no service is provided then
 only supported orchestrators are reported.
 
-1.  `vagrant service-manager restart [service]`
+1.  `vagrant service-manager [operation] [service]`
 +
-Restarts the given service in the box.
+where `operation` could be:
+
+  * `restart` : Restart the given service in the box.
+  * `start`   : Start the given service in the box.
+  * `stop`    : Stop the given service in the box.
++
+and `service` could be `docker`, `openshift`, `kubernetes` etc.
 
 1.  `vagrant service-manager [command] [--help | -h]`
 +
