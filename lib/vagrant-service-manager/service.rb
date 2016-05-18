@@ -30,6 +30,8 @@ module Vagrant
             @openshift_hook.execute
           end
         end
+      rescue Vagrant::Errors::GuestCapabilityNotFound
+        # Do nothing if supported box variant not found
       end
     end
   end
