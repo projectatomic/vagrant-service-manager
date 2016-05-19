@@ -1,77 +1,107 @@
-# Contributing to vagrant-service-manager Plugin
+# Contributing to vagrant-service-manager
+
+<!-- MarkdownTOC -->
+
+- [Submitting issues](#submitting-issues)
+- [Submitting pull requests](#submitting-pull-requests)
+  - [Get Started](#get-started)
+  - [Create a topic branch](#create-a-topic-branch)
+  - [Code](#code)
+  - [Commit](#commit)
+  - [Submit](#submit)
+- [Merging pull requests](#merging-pull-requests)
+
+<!-- /MarkdownTOC -->
 
 The following is a set of guidelines for contributing to the
-vagrant-service-manager plugin, which is hosted in the [Project Atomic
-Organization](https://github.com/projectatomic) on GitHub.
+vagrant-service-manager plugin.
 
-These are just guidelines, please use your best judgement and feel free
-to propose changes to this document in a pull request.
+These are guidelines, please use your best judgment and feel free to propose
+changes to this document.
 
-At this point, this document is not complete, but as decisions are made on the
-[container-tools@redhat.com](https://www.redhat.com/mailman/listinfo/container-tools)
-mailing list they will be added to this document.
+<a name="submitting-issues"></a>
+## Submitting issues
 
+You can submit issues with respect to the vagrant-service-manager plugin [here](https://github.com/projectatomic/vagrant-service-manager/issues/new).
+Make sure you include all the relevant details pertaining the issue.
 
-## Submitting Issues
+Before submitting a new issue, it is suggested to check the [existing issues](https://github.com/projectatomic/vagrant-service-manager/issues)
+in order to avoid duplication. The vagrant-service-manager plugin works closely
+with the [Atomic Developer Bundle](https://github.com/projectatomic/adb-atomic-developer-bundle/issues)
+and the [adb-utils](https://github.com/projectatomic/adb-utils/issues) RPM.
+You may wish to review the issues in both these repositories as well.
 
-You can submit issues with respect to the vagrant-service-manager plugin [here](https://github.com/projectatomic/vagrant-service-manager/issues/new).Make sure you include all the relevant details pertaining the issue.
+<a name="submitting-pull-requests"></a>
+## Submitting pull requests
 
-Before submitting new issues, it is suggested to check [all existing issues](https://github.com/projectatomic/vagrant-service-manager/issues) in order to avoid duplication.The vagrant-service-manager plugin works closely with the [ADB](https://github.com/projectatomic/adb-atomic-developer-bundle/issues) and the [adb-utils](https://github.com/projectatomic/adb-utils/issues) RPM. You may wish to review the issues in both the repositories as well.
+<a name="get-started"></a>
+### Get Started
 
+If you are just getting started with Git and GitHub there are a few prerequisite
+steps.
 
-## Submitting Pull Requests
+* Make sure you have a [GitHub account](https://github.com/signup/free).
+* [Fork](https://help.github.com/articles/fork-a-repo/) the
+   vagrant-service-manager repository. As discussed in the linked page, this also includes:
+    * [Setting up](https://help.github.com/articles/set-up-git) your local git install.
+    * Cloning your fork.
 
-* All changes will be made by pull request (PR), even from core
-  committers/maintainers.
+<a name="create-a-topic-branch"></a>
+### Create a topic branch
 
-* All changes must include appropriate documentation updates.
+Create a [topic branch](http://git-scm.com/book/en/Git-Branching-Branching-Workflows#Topic-Branches)
+on which you will work. The convention is to name the branch using the issue key
+you are working on. If there is not already an issue covering the work you want
+to do, create one (see [submitting issues](#submitting-issues)).
+Assuming for example you will be working from the master branch and working on
+the GitHub issue 123 : `git checkout -b issue-123 master`
 
-* All changes must include an entry in the [Changelog document](https://github.com/projectatomic/vagrant-service-manager/blob/master/CHANGELOG.md) in the *Unreleased* section describing the change. Your new entry should be the last entry in the *Unreleased* section and should include your GitHub userid.
+<a name="code"></a>
+### Code
 
-* All changes need at least 2 ACKs from maintainers before they will be merged. If
-  the author of the PR is a maintainer, their submission is considered
-  to be the first ACK.  Therefore, PRs from maintainers only need one
-  additional ACK.
+Do your work! Refer to the [development](README.md#development) section in the
+[README](README.md) to get started.
 
-  By "2 ACKs" we mean that two maintainers must acknowledge that the change
-  is a good one. The 2<sup>nd</sup> person to ACK the PR should merge the PR with
-  a comment including their agreement.
+<a name="commit"></a>
+### Commit
 
+* Make commits of logical units.
+* Be sure to use the GitHub issue key in the commit message, eg `Issue #123 ...`.
+* Make sure you have added the necessary tests for your changes.
+* Make sure you have added appropriate documentation updates.
+* Run _all_ the tests to assure nothing else was accidentally broken.
 
-## How to Develop/Test
+<a name="submit"></a>
+### Submit
 
-1. Install the Atomic Developer Bundle (ADB), as
-[documented](https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst)
-in the ADB project.  Do not start the box yet.
+* Push your changes to the topic branch in your fork of the repository.
+* Initiate a [pull request](https://help.github.com/articles/using-pull-requests/).
+* All changes need at least 2 ACKs from maintainers before they will be merged.
+  If the author of the PR is a maintainer, their submission is considered to be
+  the first ACK. Therefore, pull requests from maintainers only need one additional ACK. By "2 ACKs" we mean that two maintainers must acknowledge that the change is a good one.
 
-2. Fork and clone the vagrant-service-manager repository
+<a name="merging-pull-requests"></a>
+## Merging pull requests
 
-        git clone https://github.com/projectatomic/vagrant-service-manager
+A project maintainer will merge the pull request. He should avoid using the
+GitHub UI for the merge and prefer merges over the the command line to avoid
+merge commits and to keep a linear commit history. Here is an example work-flow
+assuming issue 123 from above:
 
-3. Change the directory to vagrant-service-manager `cd vagrant-service-manager`
+    # Create a local branch for the pull request
+    $ git checkout -b issue-123 master
 
-4. Run `bundle install`
+    # Pull the changes
+    $ git pull <remote of the pull request> issue-123
 
-5. Start the box with `bundle exec vagrant up
+    # If necessary rebase changes on master to ensure we have a fast forward.
+    $ git rebase -i master
 
-6. Develop the plugin and test by running `bundle exec vagrant service-manager`
+    # If required, update CHANGELOG.md in the unreleased section. Commit!
 
-7. When you are ready to build the release, get one of the [repository maintainers](https://github.com/projectatomic/vagrant-service-manager/blob/master/MAINTAINERS) to release the plugin.
+    # Merge changes into master
+    $ git checkout master
+    $ git merge issue-123
 
-
-### How to build the Vagrant plugin using Bundler
-
-You can also use Bundler to build the plugin and install it manually in
-your Vagrant environment
-
-1. Run the commands below inside of the repository:
-
-```
-$ bundle install
-$ bundle exec rake build
-````
-
-2. Install the plugin using:
-
-    vagrant plugin install pkg/<gem name>
-
+    # Push to origin
+    $ git push origin master
