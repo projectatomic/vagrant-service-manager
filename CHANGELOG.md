@@ -2,7 +2,7 @@
 
 ## Unreleased
 - Updated README to make Installation Instructions clearer @bexelbie
-- Fix #195 Adding Cucumber and Aruba based acceptance tests @hferentschik
+- Fix #195: Adding Cucumber and Aruba based acceptance tests @hferentschik
 - CHANGELOG fix and README update for OS support for tests @budhrg
 - Fix #188: Name of k8s service not consistent @budhrg
 - Fix #225: service-manager env throws NameError @budhrg
@@ -10,6 +10,9 @@
 - Don't set private network for unsupported box @budhrg
 - Convert CONTRIBUTING and README docs to AsciiDoc @bexelbie
 - Fix #172: Implement "start/enable" service command @budhrg
+- Fix #237: README and CONTRIBUTING should make use of Asciidoc's :toc: feature @hferentschik
+- Fix #230: Improve acceptance test run time @hferentschik
+- Fix #214: Update acceptance tests to support Mac OS without installing Libvirt @hferentschik
 
 ## v1.0.2 May 09, 2016
 - Add --script-readable to env and env docker @bexelbie

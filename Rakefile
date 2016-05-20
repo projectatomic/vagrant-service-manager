@@ -19,12 +19,15 @@ CLEAN.include('build')
 
 task :init do
   FileUtils.mkdir_p 'build'
-  puts ENV['FOO']
+end
+
+task :clean_for_testing do
+  FileUtils.rm_rf ['build/aruba', 'build/vagrant.d', 'build/features_report.html']
 end
 
 # Cucumber acceptance test tasks
 Cucumber::Rake::Task.new(:features)
-task :features => :init
+task :features => [:init, :clean_for_testing]
 
 namespace :features do
   desc 'Opens the HTML Cucumber test report'

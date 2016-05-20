@@ -11,6 +11,11 @@ Aruba.configure do |config|
   config.working_directory = 'build/aruba'
 end
 
+Before do |scenario|
+  @scenario_name = scenario.name
+  ENV['VAGRANT_HOME'] = File.join(File.dirname(__FILE__), '..', '..', 'build', 'vagrant.d')
+end
+
 After do |_scenario|
   if File.exist?(File.join(aruba.config.working_directory, 'Vagrantfile'))
     Komenda.run('bundle exec vagrant destroy -f', cwd: aruba.config.working_directory, fail_on_fail: true)
@@ -20,10 +25,6 @@ After do |_scenario|
       sleep 10
     end
   end
-end
-
-Before do |scenario|
-  @scenario_name = scenario.name
 end
 
 ###############################################################################

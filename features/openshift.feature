@@ -7,7 +7,11 @@ Feature: Command output from various OpenShift related commands
     And provider is <provider>
     And a file named "Vagrantfile" with:
     """
-    require 'vagrant-libvirt'
+    begin
+      require 'vagrant-libvirt'
+    rescue LoadError
+      # NOOP
+    end
 
     Vagrant.configure('2') do |config|
       config.vm.box = '<box>'

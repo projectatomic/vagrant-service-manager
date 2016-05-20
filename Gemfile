@@ -5,8 +5,8 @@ gemspec
 group :development do
   gem 'vagrant',      git: 'https://github.com/mitchellh/vagrant.git'
   gem 'rake'
-  gem 'vagrant-libvirt'
-  gem 'fog-libvirt', '0.0.3' # https://github.com/pradels/vagrant-libvirt/issues/568
+  gem 'vagrant-libvirt'  if RUBY_PLATFORM =~ /linux/i
+  gem 'fog-libvirt', '0.0.3'  if RUBY_PLATFORM =~ /linux/i # https://github.com/pradels/vagrant-libvirt/issues/568
   gem 'mechanize'
   gem 'json'
   gem 'cucumber', '~> 2.1'
