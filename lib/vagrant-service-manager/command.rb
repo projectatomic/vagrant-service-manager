@@ -150,11 +150,11 @@ module Vagrant
 
           running_service_classes.each do |service_class|
             service = service_class.to_s.split('::').last.downcase
-            unless options[:script_readable] || KUBE_NAMES.include?(service)
+            unless options[:script_readable] || service == 'kubernetes'
               @env.ui.info("\n# #{service} env:")
             end
             # since we do not have feature to show the Kube connection information
-            unless KUBE_NAMES.include? service
+            unless service == 'kubernetes'
               service_class.info(machine, @env.ui, options)
             end
           end
