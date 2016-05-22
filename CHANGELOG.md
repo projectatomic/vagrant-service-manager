@@ -7,6 +7,7 @@
 - Fix #188: Name of k8s service not consistent @budhrg
 - Fix #225: service-manager env throws NameError @budhrg
 - Fix #168: Extend --debug flag to show plugin activity @budhrg
+- Don't set private network for unsupported box @budhrg
 
 ## v1.0.2 May 09, 2016
 - Add --script-readable to env and env docker @bexelbie
