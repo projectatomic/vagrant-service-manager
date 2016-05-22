@@ -70,7 +70,7 @@ module Vagrant
       end
 
       def self.service_running?(machine, service)
-        return kube_running?(machine) if KUBE_NAMES.include? service
+        return kube_running?(machine) if service == 'kubernetes'
         command = "systemctl status #{service}"
         machine.communicate.test(command)
       end
