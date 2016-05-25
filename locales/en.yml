@@ -54,6 +54,10 @@ en:
                 --script-readable  display information in a script readable format
                 -h, --help         print this help
 
+          Examples:
+                vagrant service-manager box version
+                vagrant service-manager box ip
+                vagrant service-manager box version --script-readable
         status: |-
           Usage: vagrant service-manager status [service] [options]
 
@@ -63,11 +67,8 @@ en:
           If a service is provided, only that service is reported.
           If no service is provided only supported orchestrators are reported.
 
-          Examples:
-                vagrant service-manager box version
-                vagrant service-manager box ip
-                vagrant service-manager box version --script-readable
-
+          Example:
+                vagrant service-manager status openshift
         restart: |-
           Restarts the service
 
