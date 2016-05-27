@@ -24,7 +24,9 @@ en:
           Commands:
                env          displays connection information for services in the box
                box          displays box related information like version, release, IP etc
-               restart      restarts the given systemd service in the box
+               restart      restarts the given service in the box
+               start        starts the given service in the box
+               stop         stops the given service in the box
                status       list services and their running state
 
           Options:
@@ -69,20 +71,20 @@ en:
 
           Example:
                 vagrant service-manager status openshift
-        restart: |-
-          Restarts the service
+        operation: |-
+          %{operation}s the service
 
-          Usage: vagrant service-manager restart <service> [options]
+          Usage: vagrant service-manager %{operation} <service> [options]
 
           Service:
-              A service provided by sccli or systemd. For example:
-               docker, k8s, or openshift etc.
+              A service provided by sccli. For example:
+               docker, kubernetes, openshift etc
 
           Options:
                 -h, --help         print this help
 
           Examples:
-            vagrant service-manager restart docker
+            vagrant service-manager %{operation} docker
 
       env:
         docker:
@@ -139,8 +141,11 @@ en:
           # eval "$(vagrant service-manager env%{command})"
         service_not_running: |-
           # %{name} service is not running in the vagrant box.
-      restart:
+      operation:
         service_missing: 'Service name missing'
+        sccli_only_support: |-
+          Only sccli services are supported. For example:
+            docker, openshift and kubernetes
 
       status:
         nil: |-

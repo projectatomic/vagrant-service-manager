@@ -10,7 +10,7 @@ CDK_DOWNLOAD_URL='https://access.redhat.com/downloads/content/293/ver=2/rhel---7
 CDK_BOX_BASE_NAME='rhel-cdk-kubernetes-7.2-23.x86_64.vagrant'
 
 ADB_DOWNLOAD_URL='http://cloud.centos.org/centos/7/atomic/images'
-ADB_BOX_BASE_NAME='AtomicDeveloperBundle-2.0.0-CentOS7'
+ADB_BOX_BASE_NAME='AtomicDeveloperBundle-2.1.0-CentOS7'
 
 CLOBBER.include('pkg')
 CLEAN.include('build')
