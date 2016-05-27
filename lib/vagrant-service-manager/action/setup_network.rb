@@ -10,13 +10,8 @@ module VagrantPlugins
         end
 
         def call(env)
+          add_private_network if virtualbox? && default_network_exists?
           @app.call(env)
-
-          if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
-            add_private_network if virtualbox? && default_network_exists?
-          end
-        rescue Vagrant::Errors::GuestCapabilityNotFound
-          # Do nothing if supported box variant not found
         end
 
         private
