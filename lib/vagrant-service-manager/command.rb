@@ -1,4 +1,3 @@
-require_relative 'os'
 require 'digest'
 require_relative 'plugin_util'
 require_relative 'plugin_logger'
@@ -17,6 +16,8 @@ module VagrantPlugins
       'docker' => Docker, 'openshift' => OpenShift,
       'kubernetes' => Kubernetes
     }
+    # Download binary at current folder
+    BIN_FOLDER = './'
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -118,6 +119,16 @@ module VagrantPlugins
           else
             perform_service(command, subcommand)
           end
+        when 'install-cli'
+          exit_if_machine_not_running
+          # Transform hyphen into underscore which is valid char in method
+          command = command.tr('-', '_')
+          case subcommand
+          when '--help', '-h'
+            print_help(type: command)
+          else
+            execute_install_cli(subcommand)
+          end
         when '--help', '-h', 'help'
           print_help
         else
@@ -205,6 +216,19 @@ module VagrantPlugins
       def display_box_ip
         with_target_vms(nil, single_target: true) do |machine|
           @env.ui.info machine.guest.capability(:machine_ip)
+        end
+      end
+
+      def execute_install_cli(service)
+        if service.nil?
+          help_msg = I18n.t('servicemanager.commands.help.install_cli')
+          service_missing_msg = I18n.t('servicemanager.commands.operation.service_missing')
+          @env.ui.error help_msg.gsub(/Install the client side tool for the service/, service_missing_msg)
+          exit 126
+        end
+
+        with_target_vms(nil, single_target: true) do |machine|
+          PluginUtil.service_class(service).install_cli(machine, @env.ui)
         end
       end
     end

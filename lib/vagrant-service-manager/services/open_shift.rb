@@ -45,6 +45,10 @@ module VagrantPlugins
         end
       end
 
+      def self.install_cli
+        # TODO: Install oc client
+      end
+
       private
 
       def build_extra_command

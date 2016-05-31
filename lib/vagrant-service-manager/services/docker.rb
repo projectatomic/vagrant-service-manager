@@ -4,6 +4,8 @@ module VagrantPlugins
       # Hard Code the Docker port because it is fixed on the VM
       # This also makes it easier for the plugin to be cross-provider
       PORT = 2376
+      # Refer https://docs.docker.com/v1.10/engine/installation/binaries/
+      CLIENT_BINARY_BASE_URL = 'https://get.docker.com/builds/'
 
       def initialize(machine, ui)
         @machine = machine
@@ -36,17 +38,13 @@ module VagrantPlugins
             PluginUtil.copy_certs_to_host(machine, options[:secrets_path], ui, true)
           end
 
-          docker_api_version_cmd = "docker version --format '{{.Server.APIVersion}}'"
-          unless machine.communicate.test(docker_api_version_cmd)
+          api_version_cmd = "docker version --format '{{.Server.APIVersion}}'"
+          unless machine.communicate.test(api_version_cmd)
             # fix for issue #152: Fallback to older Docker version (< 1.9.1)
-            docker_api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
+            api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
           end
 
-          PluginLogger.debug
-          machine.communicate.execute(docker_api_version_cmd) do |type, data|
-            options[:api_version] = data.chomp if type == :stdout
-          end
-
+          options[:api_version] = PluginUtil.execute_once(machine, ui, api_version_cmd)
           # Display the information, irrespective of the copy operation
           print_env_info(ui, options)
         else
@@ -70,6 +68,24 @@ module VagrantPlugins
         unless options[:script_readable] || options[:all]
           PluginUtil.print_shell_configure_info(ui, ' docker')
         end
+      end
+
+      def self.install_cli(machine, ui)
+        label = 'servicemanager.commands.install_cli.message'
+        action = 'downloaded'
+        version_cmd = "docker version --format '{{.Server.Version}}'"
+        version = PluginUtil.execute_once(machine, ui, version_cmd)
+
+        if PluginUtil.binary_downloaded?(version)
+          path = "#{BIN_FOLDER}docker-#{version}"
+          action = 'already available'
+        else
+          url = PluginUtil.download_url(machine, CLIENT_BINARY_BASE_URL, version)
+          path = PluginUtil.download_binary(ui, url)
+        end
+
+        message = I18n.t(label, path: path, action: action)
+        ui.info message
       end
     end
   end
