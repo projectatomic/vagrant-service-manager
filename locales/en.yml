@@ -85,6 +85,20 @@ en:
 
           Examples:
             vagrant service-manager %{operation} docker
+        install_cli: |-
+          Install the client side tool for the service
+
+          Usage: vagrant service-manager install-cli [service] [options]
+
+          Service:
+              A service provided by sccli. For example:
+               docker, kubernetes, openshift etc
+
+          Options:
+                -h, --help         print this help
+
+          Example:
+                vagrant service-manager install-cli docker
 
       env:
         docker:
@@ -146,6 +160,13 @@ en:
         sccli_only_support: |-
           Only sccli services are supported. For example:
             docker, openshift and kubernetes
+
+      install_cli:
+        message: |-
+          Binary %{action} at '%{path}'
+
+          Run binary as:
+              $ %{path} -h
 
       status:
         nil: |-
