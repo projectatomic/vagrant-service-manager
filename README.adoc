@@ -1,21 +1,8 @@
-[[vagrant-service-manager]]
-== vagrant-service-manager
+= vagrant-service-manager
+:toc:
+:toc-placement!:
 
-* link:#objective[Objective]
-* link:#installation[Installation]
-** link:#installing-from-a-rubygems[Installing from a RubyGems]
-** link:#installing-from-rpm[Installing from RPM]
-* link:#usage[Usage]
-** link:#example-execution-of-the-plugin[Example execution of the plugin]
-** link:#available-commands[Available commands]
-** link:#exit-codes[Exit codes]
-** link:#ip-address-detection[IP address detection]
-* link:#development[Development]
-** link:#setup[Setup]
-** link:#acceptance-tests[Acceptance tests]
-* link:#getting-involved[Getting involved]
-
-== Objective The vagrant-service-manager plugin is designed to enable
+The vagrant-service-manager plugin is designed to enable
 easier access to the features and services provided by the
 https://github.com/projectatomic/adb-atomic-developer-bundle[Atomic
 Developer Bundle (ADB)]. It provides setup information, including
@@ -27,6 +14,10 @@ Eclipse and the docker and kubernetes CLI commands. Details on how to
 use ADB with this plugin can be found in the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst[ADB
 Documentation].
+
+'''
+toc::[]
+'''
 
 == Installation
 
