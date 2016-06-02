@@ -43,6 +43,9 @@ Feature: Command output from env command
     # OpenShift service is not running in the vagrant box.
     """
 
+    When I successfully run `bundle exec vagrant service-manager env --debug`
+    Then stdout from "bundle exec vagrant service-manager env --debug" should match /DEBUG command: [ service-manager: env ]/
+
     Examples:
       | box   | provider   | ip          |
       | cdk   | virtualbox | 10.10.10.42 |
