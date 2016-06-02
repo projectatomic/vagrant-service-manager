@@ -18,12 +18,26 @@ module VagrantPlugins
         PluginUtil.print_service_status(ui, machine, service)
       end
 
+      def self.docker_registry_host(machine)
+        url = ''
+        PluginLogger.debug
+        command = \
+          "sudo oc --config=/var/lib/openshift/openshift.local." +
+          "config/master/admin.kubeconfig get route/docker-registry " +
+          "-o template --template={{.spec.host}}"
+        machine.communicate.execute(command) do |type, data|
+          url << data.chomp if type == :stdout
+        end
+        url
+      end
+
       def self.info(machine, ui, options = {})
         options[:script_readable] ||= false
 
         if PluginUtil.service_running?(machine, 'openshift')
           options[:url] = "https://#{PluginUtil.machine_ip(machine)}:#{OPENSHIFT_PORT}"
           options[:console_url] = "#{options[:url]}/console"
+          options[:docker_registry] = docker_registry_host(machine)
           print_info(ui, options)
         else
           ui.error I18n.t('servicemanager.commands.env.service_not_running',
@@ -38,7 +52,8 @@ module VagrantPlugins
         label = PluginUtil.env_label(options[:script_readable])
         message = I18n.t("servicemanager.commands.env.openshift.#{label}",
                          openshift_url: options[:url],
-                         openshift_console_url: options[:console_url])
+                         openshift_console_url: options[:console_url],
+                         docker_registry: options[:docker_registry])
         ui.info(message)
         unless options[:script_readable] || options[:all]
           PluginUtil.print_shell_configure_info(ui, ' openshift')
