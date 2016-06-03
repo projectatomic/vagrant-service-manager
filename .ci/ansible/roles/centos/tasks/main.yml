@@ -1,0 +1,38 @@
+- name: Enable centos-release-scl repo
+  yum: name=centos-release-scl state=latest
+
+- name: Setup Vagrant
+  yum: name={{item}} state=latest
+  with_items:
+      - sclo-vagrant1
+      - rsync
+
+- name: Setup libvirt
+  yum: name={{item}} state=latest
+  with_items:
+      - qemu-kvm
+      - sclo-vagrant1-vagrant-libvirt
+
+- name: Setup VirtualBox dependencies
+  yum: name={{item}} state=latest
+  with_items:
+      - gcc
+      - kernel-devel
+
+- name: Install VirtualBox
+  yum: name=http://download.virtualbox.org/virtualbox/rpm/rhel/7/x86_64/VirtualBox-5.0-5.0.8_103449_el7-1.x86_64.rpm state=present
+
+- name: start-enable-libvirtd
+  service: name=libvirtd state=started enabled=yes
+
+- name: Setup Ruby dev environment
+  yum: name={{item}} state=latest
+  with_items:
+      - zlib-devel
+      - ruby-devel
+      - rh-ruby22-ruby-devel
+      - libvirt-devel
+
+- name: Install Development Tools
+  yum: name="@Development tools" state=present
+

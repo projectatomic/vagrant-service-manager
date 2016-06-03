@@ -5,6 +5,7 @@ default: --profile html
 
 pretty: --format pretty -b
 html: --format progress --format html --out=build/features_report.html -b
+ci: --format pretty --format html --out=build/features_report.html --no-color -b
 
 help: --tags @help --profile html
 box: --tags @box --profile html
