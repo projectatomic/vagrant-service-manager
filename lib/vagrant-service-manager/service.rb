@@ -1,3 +1,4 @@
+require_relative 'service_base'
 # Loads all services
 Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
 
