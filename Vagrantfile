@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-unless Vagrant.has_plugin?("vagrant-service-manager")
+if ENV['SERVICE_MANAGER_TEST'] != 'true' && !Vagrant.has_plugin?("vagrant-service-manager")
   $stderr.puts <<-MSG
     vagrant-service-manager plugin is required for projectatomic/adb.
     Kindly install the plugin: `$ vagrant plugin install vagrant-service-manager`
