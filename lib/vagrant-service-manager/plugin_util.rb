@@ -1,7 +1,6 @@
 module VagrantPlugins
   module ServiceManager
     module PluginUtil
-
       def self.service_class(service)
         SERVICES_MAP[service]
       end
@@ -94,6 +93,15 @@ module VagrantPlugins
         ui.error e.message.squeeze
       end
 
+      def self.execute_once(machine, ui, command)
+        machine.communicate.sudo(command) do |_, data|
+          PluginLogger.debug
+          return data.chomp
+        end
+      rescue StandardError => e
+        ui.error e.message.squeeze
+      end
+
       def self.print_shell_configure_info(ui, command = '')
         label = if !Vagrant::Util::Platform.windows?
                   'unix_configure_info'
@@ -115,6 +123,22 @@ module VagrantPlugins
           'windows_cygwin'
         else
           'windows'
+        end
+      end
+
+      def self.binary_downloaded?(path)
+        File.file?(path)
+      end
+
+      def self.format_path(path)
+        case
+        when Vagrant::Util::Platform.cygwin?
+          path[0..1] = ''                # Remove drive letter and colon from path
+          "/cygdrive/c#{path}"
+        when Vagrant::Util::Platform.windows?
+          windows_path(path)
+        else
+          path
         end
       end
     end
