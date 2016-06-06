@@ -23,7 +23,12 @@ Feature: Command output from service operations like stop/start/restart
     """
 
     When I successfully run `bundle exec vagrant up --provider <provider>`
-    And the "docker" service is running
+    And I successfully run `bundle exec vagrant service-manager status`
+    Then stdout from "bundle exec vagrant service-manager status" should contain "docker - running"
+    Then stdout from "bundle exec vagrant service-manager status" should contain "openshift - stopped"
+    Then stdout from "bundle exec vagrant service-manager status" should contain "kubernetes - stopped"
+
+    When the "docker" service is running
     And I successfully run `bundle exec vagrant service-manager stop docker`
     Then the service "docker" should be stopped
 
