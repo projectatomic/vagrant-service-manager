@@ -153,3 +153,6 @@ en:
         status:
           running: running
           stopped: stopped
+        unsupported_service: |-
+          Unkown service '%{service}'.
+          Supported services are %{services}.
