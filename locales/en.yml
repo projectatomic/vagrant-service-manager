@@ -58,8 +58,9 @@ en:
 
           Examples:
                 vagrant service-manager box version
-                vagrant service-manager box ip
                 vagrant service-manager box version --script-readable
+                vagrant service-manager box ip
+                vagrant service-manager box ip --script-readable
         status: |-
           Usage: vagrant service-manager status [service] [options]
 

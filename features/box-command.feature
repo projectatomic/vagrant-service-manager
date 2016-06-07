@@ -41,6 +41,9 @@ Feature: Command output from box command
     When I successfully run `bundle exec vagrant service-manager box ip`
     Then stdout from "bundle exec vagrant service-manager box ip" should contain "<ip>"
 
+    When I successfully run `bundle exec vagrant service-manager box ip --script-readable`
+    Then stdout from "bundle exec vagrant service-manager box ip --script-readable" should be script readable
+
     Examples:
       | box   | provider   | ip          |
       | cdk   | virtualbox | 10.10.10.42 |
