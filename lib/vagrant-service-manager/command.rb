@@ -100,6 +100,8 @@ module VagrantPlugins
             case option
             when nil
               display_box_ip
+            when '--script-readable'
+              display_box_ip(true)
             when '--help', '-h'
               print_help(type: command)
             else
@@ -207,9 +209,11 @@ module VagrantPlugins
         end
       end
 
-      def display_box_ip
+      def display_box_ip(script_readable = false)
+        options = { script_readable: script_readable }
+
         with_target_vms(nil, single_target: true) do |machine|
-          @env.ui.info machine.guest.capability(:machine_ip)
+          @env.ui.info machine.guest.capability(:machine_ip, options)
         end
       end
     end
