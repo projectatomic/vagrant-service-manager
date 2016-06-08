@@ -1,18 +1,31 @@
 # Changelog
 
 ## Unreleased
+
+## v1.1.0 Jun 08, 2016
 - Updated README to make Installation Instructions clearer @bexelbie
 - Fix #195: Adding Cucumber and Aruba based acceptance tests @hferentschik
 - CHANGELOG fix and README update for OS support for tests @budhrg
+- Fix #220: Bypass hook if no supported guest/box found @budhrg
+- Issue #212 Updating the CONTRIBUTING page with latest guidelines @hferentschik
 - Fix #188: Name of k8s service not consistent @budhrg
 - Fix #225: service-manager env throws NameError @budhrg
 - Fix #168: Extend --debug flag to show plugin activity @budhrg
+- Fixed help messages for box and status commands @budhrg
 - Don't set private network for unsupported box @budhrg
 - Convert CONTRIBUTING and README docs to AsciiDoc @bexelbie
+- Fix #235: Unable to access docker daemon from host @budhrg
 - Fix #172: Implement "start/enable" service command @budhrg
+- Issue #172 Modifying Rake CDK download task to allow downloading latest nightly build @hferentschik
+- Pre-release v1.1.0.beta.1 @navidshaikh
 - Fix #237: README and CONTRIBUTING should make use of Asciidoc's :toc: feature @hferentschik
 - Fix #230: Improve acceptance test run time @hferentschik
 - Fix #214: Update acceptance tests to support Mac OS without installing Libvirt @hferentschik
+- Fix #247: Moved status test into service-operation @hferentschik
+- Issue #211 Adding configuration for CI build @hferentschik
+- Fix #210: Adds docker registry URL in openshift env info @navidshaikh
+- Fix #250: status throws error with invalid service name @budhrg
+- vagrant-service-manager release=1.1.0 version=1 @navidshaikh
 
 ## v1.0.2 May 09, 2016
 - Add --script-readable to env and env docker @bexelbie

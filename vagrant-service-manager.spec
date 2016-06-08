@@ -2,7 +2,7 @@
 %global vagrant_plugin_name vagrant-service-manager
 
 Name: %{vagrant_plugin_name}
-Version: 1.0.2
+Version: 1.1.0
 Release: 1%{?dist}
 Summary: To provide the user a CLI to configure the ADB/CDK for different use cases and to provide glue between ADB/CDK and the user's developer environment.
 Group: Development/Languages
@@ -71,14 +71,16 @@ popd
 %{vagrant_plugin_spec}
 %{vagrant_plugin_instdir}/plugins/guests/
 %{vagrant_plugin_instdir}/locales/
+%exclude %{vagrant_plugin_instdir}/.ci
+%exclude %{vagrant_plugin_instdir}/.config
 
 %files doc
 %doc %{vagrant_plugin_docdir}
 %{vagrant_plugin_instdir}/Gemfile
-%doc %{vagrant_plugin_instdir}/README.md
+%doc %{vagrant_plugin_instdir}/README.adoc
 %{vagrant_plugin_instdir}/Rakefile
 %{vagrant_plugin_instdir}/Vagrantfile
-%{vagrant_plugin_instdir}/CONTRIBUTING.md
+%{vagrant_plugin_instdir}/CONTRIBUTING.adoc
 %{vagrant_plugin_instdir}/LICENSE
 %{vagrant_plugin_instdir}/MAINTAINERS
 %{vagrant_plugin_instdir}/vagrant-service-manager.gemspec
@@ -86,8 +88,35 @@ popd
 %{vagrant_plugin_instdir}/CHANGELOG.md
 %{vagrant_plugin_instdir}/TODO
 %{vagrant_plugin_instdir}/.gitattributes
+%{vagrant_plugin_instdir}/features
 
 %changelog
+* Wed Jun 08 2016 Navid Shaikh - 1.1.0-1
+- Bumps verison to 1.1.0
+- Updated README to make Installation Instructions clearer @bexelbie
+- Fix #195: Adding Cucumber and Aruba based acceptance tests @hferentschik
+- CHANGELOG fix and README update for OS support for tests @budhrg
+- Fix #220: Bypass hook if no supported guest/box found @budhrg
+- Issue #212 Updating the CONTRIBUTING page with latest guidelines @hferentschik
+- Fix #188: Name of k8s service not consistent @budhrg
+- Fix #225: service-manager env throws NameError @budhrg
+- Fix #168: Extend --debug flag to show plugin activity @budhrg
+- Fixed help messages for box and status commands @budhrg
+- Don't set private network for unsupported box @budhrg
+- Convert CONTRIBUTING and README docs to AsciiDoc @bexelbie
+- Fix #235: Unable to access docker daemon from host @navidshaikh
+- Fix #172: Implement "start/enable" service command @budhrg
+- Issue #172 Modifying Rake CDK download task to allow downloading latest nightly build @hferentschik
+- Pre-release v1.1.0.beta.1 @navidshaikh
+- Fix #237: README and CONTRIBUTING should make use of Asciidoc's :toc: feature @hferentschik
+- Fix #230: Improve acceptance test run time @hferentschik
+- Fix #214: Update acceptance tests to support Mac OS without installing Libvirt @hferentschik
+- Fix #247: Moved status test into service-operation @hferentschik
+- Issue #211 Adding configuration for CI build @hferentschik
+- Fix #210: Adds docker registry URL in openshift env info @navidshaikh
+- Fix #250: status throws error with invalid service name @budhrg
+- vagrant-service-manager release=1.1.0 version=1 @navidshaikh
+
 * Mon May 09 2016 Navid Shaikh - 1.0.2-1
 - Add --script-readable to env and env docker @bexelbie
 - Fix #178: Add status command and separate status from env @bexelbie
@@ -102,7 +131,6 @@ popd
 - Fix #200: Simplify the eval hint for `vagrant service-manager env` command @budhrg
 - Add environment variables for Openshift env output @bexelbie
 - Fix #181: vagrant-service-manager version 1.0.2 release @navidshaikh
-
 
 * Tue Apr 12 2016 Navid Shaikh - 1.0.1-1
 - Updated SPEC (v1.0.0) for url, date and format @budhrg
