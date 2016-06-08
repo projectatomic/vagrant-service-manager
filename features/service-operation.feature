@@ -28,6 +28,17 @@ Feature: Command output from service operations like stop/start/restart
     Then stdout from "bundle exec vagrant service-manager status" should contain "openshift - stopped"
     Then stdout from "bundle exec vagrant service-manager status" should contain "kubernetes - stopped"
 
+    And I successfully run `bundle exec vagrant service-manager status docker`
+    Then stdout from "bundle exec vagrant service-manager status" should contain "docker - running"
+
+    And I run `bundle exec vagrant service-manager status abcd`
+    Then the exit status should be 126
+    And stderr from "bundle exec vagrant service-manager status abcd" should contain:
+    """
+    Unkown service 'abcd'.
+    Supported services are docker, openshift, kubernetes etc.
+    """
+
     When the "docker" service is running
     And I successfully run `bundle exec vagrant service-manager stop docker`
     Then the service "docker" should be stopped

@@ -141,13 +141,18 @@ module VagrantPlugins
 
       def execute_status_display(service = nil)
         with_target_vms(nil, single_target: true) do |machine|
-          if service
+          if service && SUPPORTED_SERVICES.include?(service)
             PluginUtil.service_class(service).status(machine, @env.ui, service)
-          else
+          elsif service.nil?
             @env.ui.info I18n.t('servicemanager.commands.status.nil')
             SUPPORTED_SERVICES.each do |s|
               PluginUtil.service_class(s).status(machine, @env.ui, s)
             end
+          else
+            @env.ui.error I18n.t('servicemanager.commands.status.unsupported_service',
+                                  service: service,
+                                  services: SUPPORTED_SERVICES.join(', ') + ' etc')
+            exit 126
           end
         end
       end
