@@ -36,6 +36,7 @@ Feature: Command output from various OpenShift related commands
     # To use OpenShift CLI, run: oc login https://<ip>:8443
     export OPENSHIFT_URL=https://<ip>:8443
     export OPENSHIFT_WEB_CONSOLE=https://<ip>:8443/console
+    export DOCKER_REGISTRY=hub.openshift.rhel-cdk.<ip>.xip.io
 
     # run following command to configure your shell:
     # eval "$(vagrant service-manager env openshift)"
@@ -47,6 +48,25 @@ Feature: Command output from various OpenShift related commands
     """
     OPENSHIFT_URL=https://<ip>:8443
     OPENSHIFT_WEB_CONSOLE=https://<ip>:8443/console
+    DOCKER_REGISTRY=hub.openshift.rhel-cdk.<ip>.xip.io
+    """
+
+    When I successfully run `bundle exec vagrant service-manager env`
+    Then stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_HOST=tcp://<ip>:2376"
+    And stdout from "bundle exec vagrant service-manager env" should match /export DOCKER_CERT_PATH=.*\/.vagrant\/machines\/cdk\/virtualbox\/docker/
+    And stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_TLS_VERIFY=1"
+    And stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_API_VERSION=1.21"
+    And stdout from "bundle exec vagrant service-manager env" should match /# eval "\$\(vagrant service-manager env\)"/
+    And stdout from "bundle exec vagrant service-manager env" should contain:
+    """
+    # openshift env:
+    # You can access the OpenShift console on: https://<ip>:8443/console
+    # To use OpenShift CLI, run: oc login https://<ip>:8443
+    export OPENSHIFT_URL=https://<ip>:8443
+    export OPENSHIFT_WEB_CONSOLE=https://<ip>:8443/console
+    export DOCKER_REGISTRY=hub.openshift.rhel-cdk.<ip>.xip.io
+    # run following command to configure your shell:
+    # eval "$(vagrant service-manager env)"
     """
 
     Examples:

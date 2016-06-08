@@ -120,19 +120,23 @@ en:
             # To use OpenShift CLI, run: oc login %{openshift_url}
             setx OPENSHIFT_URL %{openshift_url}
             setx OPENSHIFT_WEB_CONSOLE %{openshift_console_url}
+            setx DOCKER_REGISTRY %{docker_registry}
           non_windows: |-
             # You can access the OpenShift console on: %{openshift_console_url}
             # To use OpenShift CLI, run: oc login %{openshift_url}
             export OPENSHIFT_URL=%{openshift_url}
             export OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+            export DOCKER_REGISTRY=%{docker_registry}
           windows_cygwin: |-
             # You can access the OpenShift console on: %{openshift_console_url}
             # To use OpenShift CLI, run: oc login %{openshift_url}
             export OPENSHIFT_URL=%{openshift_url}
             export OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+            export DOCKER_REGISTRY=%{docker_registry}
           script_readable: |-
             OPENSHIFT_URL=%{openshift_url}
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
+            DOCKER_REGISTRY=%{docker_registry}
         windows_cygwin_configure_info: |-
             # run following command to configure your shell:
             # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env%{command} | tr -d '\r')"
