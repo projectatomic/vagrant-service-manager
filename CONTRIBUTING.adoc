@@ -49,7 +49,7 @@ using the issue key you are working on. If there is not already an issue
 covering the work you want to do, create one (see
 link:#submitting-issues[submitting issues]). Assuming for example you
 will be working from the master branch and working on the GitHub issue
-123 : `git checkout -b issue-123 master`
+123 : `git checkout -b fix-123 master`
 
 === Code
 
@@ -60,7 +60,7 @@ section in the link:README.md[README] to get started.
 
 * Make commits of logical units.
 * Be sure to use the GitHub issue key in the commit message, eg
-`Issue #123 ...`.
+`Fix #123 ...`.
 * Make sure you have added the necessary tests for your changes.
 * Make sure you have added appropriate documentation updates.
 * Run _all_ the tests to assure nothing else was accidentally broken.
@@ -85,10 +85,10 @@ example work-flow assuming issue 123 from above:
 
 -------------------------------------------------------------------------
 # Create a local branch for the pull request
-$ git checkout -b issue-123 master
+$ git checkout -b fix-123 master
 
 # Pull the changes
-$ git pull <remote of the pull request> issue-123
+$ git pull <remote of the pull request> fix-123
 
 # If necessary rebase changes on master to ensure we have a fast forward.
 $ git rebase -i master
@@ -97,7 +97,7 @@ $ git rebase -i master
 
 # Merge changes into master
 $ git checkout master
-$ git merge issue-123
+$ git merge fix-123
 
 # Push to origin
 $ git push origin master

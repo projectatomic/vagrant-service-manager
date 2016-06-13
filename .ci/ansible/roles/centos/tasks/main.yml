@@ -19,8 +19,9 @@
       - gcc
       - kernel-devel
 
-- name: Install VirtualBox
-  yum: name=http://download.virtualbox.org/virtualbox/rpm/rhel/7/x86_64/VirtualBox-5.0-5.0.8_103449_el7-1.x86_64.rpm state=present
+# TODO enable when we test against VirtualBox as well
+#- name: Install VirtualBox
+#  yum: name=http://download.virtualbox.org/virtualbox/rpm/rhel/7/x86_64/VirtualBox-5.0-5.0.8_103449_el7-1.x86_64.rpm state=present
 
 - name: start-enable-libvirtd
   service: name=libvirtd state=started enabled=yes
