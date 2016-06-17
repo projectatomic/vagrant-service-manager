@@ -17,6 +17,10 @@ module VagrantPlugins
 
     # Temporally load the extra capabilities files for Red Hat
     load(File.join(source_root, 'plugins/guests/redhat/plugin.rb'))
+    # Load the host capabilities files
+    ['linux', 'darwin'].each do |host|
+      load(File.join(source_root, "plugins/hosts/#{host}/plugin.rb"))
+    end
     # Default I18n to load the en locale
     I18n.load_path << File.expand_path("locales/en.yml", source_root)
   end

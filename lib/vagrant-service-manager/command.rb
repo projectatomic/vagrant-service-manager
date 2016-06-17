@@ -1,7 +1,9 @@
-require_relative 'os'
 require 'digest'
 require_relative 'plugin_util'
 require_relative 'plugin_logger'
+require_relative 'installer'
+require_relative 'adb_installer'
+require_relative 'cdk_installer'
 
 module VagrantPlugins
   module ServiceManager
@@ -17,6 +19,14 @@ module VagrantPlugins
       'docker' => Docker, 'openshift' => OpenShift,
       'kubernetes' => Kubernetes
     }
+
+    def self.bin_dir
+      @bin_dir
+    end
+
+    def self.set_bin_dir(env)
+      @bin_dir = "#{env.data_dir}/service-manager/bin"
+    end
 
     class Command < Vagrant.plugin(2, :command)
       OS_RELEASE_FILE = '/etc/os-release'
@@ -37,6 +47,8 @@ module VagrantPlugins
       end
 
       def execute
+        ServiceManager.set_bin_dir(@env)
+
         argv = ARGV.dup
         # Don't propagate --debug argument to case operation
         if ARGV.include? '--debug'
@@ -120,6 +132,19 @@ module VagrantPlugins
           else
             perform_service(command, subcommand)
           end
+        when 'install-cli'
+          exit_if_machine_not_running
+          # Transform hyphen into underscore which is valid char in method
+          command = command.tr('-', '_')
+          # Get options as Hash which are preceeded with -- like --version
+          options = Hash[ARGV.drop(3).each_slice(2).to_a]
+
+          case subcommand
+          when '--help', '-h'
+            print_help(type: command)
+          else
+            execute_install_cli(subcommand, options)
+          end
         when '--help', '-h', 'help'
           print_help
         else
@@ -129,7 +154,7 @@ module VagrantPlugins
 
       def execute_service(name, options = {})
         with_target_vms(nil, single_target: true) do |machine|
-          PluginUtil.service_class(name).info(machine, @env.ui, options)
+          PluginUtil.service_class(name).new(machine, @env).info(options)
         end
       end
 
@@ -144,11 +169,11 @@ module VagrantPlugins
       def execute_status_display(service = nil)
         with_target_vms(nil, single_target: true) do |machine|
           if service && SUPPORTED_SERVICES.include?(service)
-            PluginUtil.service_class(service).status(machine, @env.ui, service)
+            PluginUtil.service_class(service).new(machine, @env).status
           elsif service.nil?
             @env.ui.info I18n.t('servicemanager.commands.status.nil')
             SUPPORTED_SERVICES.each do |s|
-              PluginUtil.service_class(s).status(machine, @env.ui, s)
+              PluginUtil.service_class(s).new(machine, @env).status
             end
           else
             @env.ui.error I18n.t('servicemanager.commands.status.unsupported_service',
@@ -171,7 +196,7 @@ module VagrantPlugins
             end
             # since we do not have feature to show the Kube connection information
             unless service == 'kubernetes'
-              service_class.info(machine, @env.ui, options)
+              service_class.new(machine, @env).info(options)
             end
           end
 
@@ -214,6 +239,34 @@ module VagrantPlugins
 
         with_target_vms(nil, single_target: true) do |machine|
           @env.ui.info machine.guest.capability(:machine_ip, options)
+        end
+      end
+
+      def execute_install_cli(service, options = {})
+        if service.nil?
+          help_msg = I18n.t('servicemanager.commands.help.install_cli')
+          service_missing_msg = I18n.t('servicemanager.commands.operation.service_missing')
+          @env.ui.error help_msg.gsub(/Install the client side tool for the service/, service_missing_msg)
+          exit 126
+        end
+
+        with_target_vms(nil, single_target: true) do |machine|
+          installer = ADBInstaller
+          args = [service.to_sym, machine, @env, options]
+
+          begin
+            box_version = machine.guest.capability(:os_variant)
+
+            if box_version == 'cdk'
+              ui.info I18n.t('servicemanager.commands.install_cli.unsupported_box')
+              exit 126
+              # TODO: installer = CDKInstaller.new
+            end
+            installer.new(*args).install
+          rescue Vagrant::Errors::GuestCapabilityNotFound
+            ui.info 'Not a supported box.'
+            exit 126
+          end
         end
       end
     end

@@ -1,13 +1,13 @@
 module VagrantPlugins
   module ServiceManager
-    class Docker
+    class Docker < ServiceBase
       # Hard Code the Docker port because it is fixed on the VM
       # This also makes it easier for the plugin to be cross-provider
       PORT = 2376
 
-      def initialize(machine, ui)
-        @machine = machine
-        @ui = ui
+      def initialize(machine, env)
+        super(machine, env)
+        @service_name = 'docker'
       end
 
       def execute
@@ -21,42 +21,40 @@ module VagrantPlugins
         end
       end
 
-      def self.status(machine, ui, service)
-        PluginUtil.print_service_status(ui, machine, service)
+      def status
+        PluginUtil.print_service_status(@ui, @machine, @service_name)
       end
 
-      def self.info(machine, ui, options = {})
-        if PluginUtil.service_running?(machine, 'docker')
-          options[:secrets_path] = PluginUtil.host_docker_path(machine)
-          options[:guest_ip] = PluginUtil.machine_ip(machine)
+      def info(options = {})
+        if PluginUtil.service_running?(@machine, @service_name)
+          options[:secrets_path] = PluginUtil.host_docker_path(@machine)
+          options[:guest_ip] = PluginUtil.machine_ip(@machine)
 
           # Verify valid certs and copy if invalid
-          unless PluginUtil.certs_present_and_valid?(options[:secrets_path], machine)
+          unless PluginUtil.certs_present_and_valid?(options[:secrets_path], @machine)
             # Log the message prefixed by #
-            PluginUtil.copy_certs_to_host(machine, options[:secrets_path], ui, true)
+            PluginUtil.copy_certs_to_host(@machine, options[:secrets_path], @ui, true)
           end
 
-          docker_api_version_cmd = "docker version --format '{{.Server.APIVersion}}'"
-          unless machine.communicate.test(docker_api_version_cmd)
+          api_version_cmd = "docker version --format '{{.Server.APIVersion}}'"
+          unless @machine.communicate.test(api_version_cmd)
             # fix for issue #152: Fallback to older Docker version (< 1.9.1)
-            docker_api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
+            api_version_cmd.gsub!(/APIVersion/, 'ApiVersion')
           end
 
-          PluginLogger.debug
-          machine.communicate.execute(docker_api_version_cmd) do |type, data|
-            options[:api_version] = data.chomp if type == :stdout
-          end
-
+          options[:api_version] = PluginUtil.execute_once(@machine, @ui, api_version_cmd)
           # Display the information, irrespective of the copy operation
-          print_env_info(ui, options)
+          print_env_info(@ui, options)
         else
-          ui.error I18n.t('servicemanager.commands.env.service_not_running',
-                          name: 'Docker')
+          @ui.error I18n.t('servicemanager.commands.env.service_not_running',
+                          name: @service_name)
           exit 126
         end
       end
 
-      def self.print_env_info(ui, options)
+      private
+
+      def print_env_info(ui, options)
         PluginLogger.debug("script_readable: #{options[:script_readable] || false}")
 
         label = PluginUtil.env_label(options[:script_readable])

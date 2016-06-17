@@ -94,6 +94,15 @@ module VagrantPlugins
         ui.error e.message.squeeze
       end
 
+      def self.execute_once(machine, ui, command)
+        machine.communicate.sudo(command) do |type, data|
+          PluginLogger.debug
+          return data.chomp
+        end
+      rescue StandardError => e
+        ui.error e.message.squeeze
+      end
+
       def self.print_shell_configure_info(ui, command = '')
         label = if OS.unix?
                   'unix_configure_info'
@@ -116,6 +125,10 @@ module VagrantPlugins
         else
           'windows'
         end
+      end
+
+      def self.binary_downloaded?(path)
+        File.file?(path)
       end
     end
   end
