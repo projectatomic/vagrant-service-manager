@@ -40,7 +40,7 @@ en:
                 docker      display information and environment variables for docker
                 openshift   display information and environment variables for openshift
 
-          If OBJECT is ommitted, display the information for all active services
+          If OBJECT is omitted, display the information for all active services
 
           Options:
                 --script-readable  display information in a script readable format.
