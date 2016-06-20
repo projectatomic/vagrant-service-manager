@@ -49,13 +49,14 @@ module VagrantPlugins
         command, subcommand, option = argv.drop(1)
         case command
         when 'env'
-          exit_if_machine_not_running
           case subcommand
           when 'docker', 'openshift'
             case option
             when nil
+              exit_if_machine_not_running
               execute_service(subcommand)
             when '--script-readable'
+              exit_if_machine_not_running
               execute_service(subcommand, script_readable: true)
             when '--help', '-h'
               print_help(type: command)
@@ -64,8 +65,10 @@ module VagrantPlugins
             end
           when nil
             # display information about all the providers inside ADB/CDK
+            exit_if_machine_not_running
             print_all_provider_info
           when '--script-readable'
+            exit_if_machine_not_running
             print_all_provider_info(script_readable: true)
           when '--help', '-h'
             print_help(type: command)
@@ -73,23 +76,25 @@ module VagrantPlugins
             print_help(type: command, exit_status: 1)
           end
         when 'status'
-          exit_if_machine_not_running
           case subcommand
           when nil
+            exit_if_machine_not_running
             execute_status_display
           when '--help', '-h'
             print_help(type: command)
           else
+            exit_if_machine_not_running
             execute_status_display(subcommand)
           end
         when 'box'
-          exit_if_machine_not_running
           case subcommand
           when 'version'
             case option
             when nil
+              exit_if_machine_not_running
               print_vagrant_box_version
             when '--script-readable'
+              exit_if_machine_not_running
               print_vagrant_box_version(true)
             when '--help', '-h'
               print_help(type: command)
@@ -99,8 +104,10 @@ module VagrantPlugins
           when 'ip'
             case option
             when nil
+              exit_if_machine_not_running
               display_box_ip
             when '--script-readable'
+              exit_if_machine_not_running
               display_box_ip(true)
             when '--help', '-h'
               print_help(type: command)
@@ -113,11 +120,11 @@ module VagrantPlugins
             print_help(type: command, exit_status: 1)
           end
         when 'restart', 'start', 'stop'
-          exit_if_machine_not_running
           case subcommand
           when '--help', '-h'
             print_help(type: 'operation', operation: command)
           else
+            exit_if_machine_not_running
             perform_service(command, subcommand)
           end
         when '--help', '-h', 'help'
