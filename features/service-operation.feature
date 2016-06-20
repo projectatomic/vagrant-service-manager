@@ -23,7 +23,80 @@ Feature: Command output from service operations like stop/start/restart
     """
 
     When I successfully run `bundle exec vagrant up --provider <provider>`
-    And I successfully run `bundle exec vagrant service-manager status`
+    And I successfully run `bundle exec vagrant service-manager status --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager status --help" should contain:
+    """
+    Usage: vagrant service-manager status [service] [options]
+
+    Options:
+          -h, --help         print this help
+
+    If a service is provided, only that service is reported.
+    If no service is provided only supported orchestrators are reported.
+
+    Example:
+          vagrant service-manager status openshift
+    """
+
+    And I successfully run `bundle exec vagrant service-manager stop --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager stop --help" should contain:
+    """
+    stops the service
+
+    Usage: vagrant service-manager stop <service> [options]
+
+    Service:
+        A service provided by sccli. For example:
+         docker, kubernetes, openshift etc
+
+    Options:
+          -h, --help         print this help
+
+    Examples:
+      vagrant service-manager stop docker
+    """
+
+    And I successfully run `bundle exec vagrant service-manager start --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager start --help" should contain:
+    """
+    starts the service
+
+    Usage: vagrant service-manager start <service> [options]
+
+    Service:
+        A service provided by sccli. For example:
+         docker, kubernetes, openshift etc
+
+    Options:
+          -h, --help         print this help
+
+    Examples:
+      vagrant service-manager start docker
+    """
+
+    And I successfully run `bundle exec vagrant service-manager restart --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager restart --help" should contain:
+    """
+    restarts the service
+
+    Usage: vagrant service-manager restart <service> [options]
+
+    Service:
+        A service provided by sccli. For example:
+         docker, kubernetes, openshift etc
+
+    Options:
+          -h, --help         print this help
+
+    Examples:
+      vagrant service-manager restart docker
+    """
+
+    When I successfully run `bundle exec vagrant service-manager status`
     Then stdout from "bundle exec vagrant service-manager status" should contain "docker - running"
     Then stdout from "bundle exec vagrant service-manager status" should contain "openshift - stopped"
     Then stdout from "bundle exec vagrant service-manager status" should contain "kubernetes - stopped"

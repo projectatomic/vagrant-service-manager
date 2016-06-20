@@ -38,6 +38,27 @@ Feature: Command output from box command
           -h, --help         print this help
     """
 
+    When I successfully run `bundle exec vagrant service-manager box --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager box --help" should contain:
+    """
+    Usage: vagrant service-manager box <sub-command> [options]
+
+    Sub-Command:
+          version    display version and release information about the running VM
+          ip         display routable IP address of the running VM
+
+    Options:
+          --script-readable  display information in a script readable format
+          -h, --help         print this help
+
+    Examples:
+          vagrant service-manager box version
+          vagrant service-manager box version --script-readable
+          vagrant service-manager box ip
+          vagrant service-manager box ip --script-readable
+    """
+
     When I successfully run `bundle exec vagrant service-manager box ip`
     Then stdout from "bundle exec vagrant service-manager box ip" should contain "<ip>"
 

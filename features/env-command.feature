@@ -23,7 +23,24 @@ Feature: Command output from env command
     """
 
     When I successfully run `bundle exec vagrant up --provider <provider>`
-    And I successfully run `bundle exec vagrant service-manager env`
+    And I successfully run `bundle exec vagrant service-manager env --help`
+    Then the exit status should be 0
+    And stdout from "bundle exec vagrant service-manager env --help" should contain:
+    """
+    Usage: vagrant service-manager env [object] [options]
+
+    Objects:
+          docker      display information and environment variables for docker
+          openshift   display information and environment variables for openshift
+
+    If OBJECT is omitted, display the information for all active services
+
+    Options:
+          --script-readable  display information in a script readable format.
+          -h, --help         print this help
+    """
+
+    When I successfully run `bundle exec vagrant service-manager env`
     Then stdout from "bundle exec vagrant service-manager env" should be evaluable in a shell
 
     When I successfully run `bundle exec vagrant service-manager env --script-readable`
