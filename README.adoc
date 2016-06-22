@@ -19,6 +19,11 @@ Documentation].
 toc::[]
 '''
 
+== Status
+
+[[img-build-status]]
+image::https://ci.centos.org/buildStatus/icon?job=vagrant-service-manager[link="https://ci.centos.org/job/vagrant-service-manager"]
+
 == Installation
 
 The plugin is distributed as both a Ruby Gem and via RPM using the
