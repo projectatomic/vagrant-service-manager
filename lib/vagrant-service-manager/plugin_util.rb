@@ -95,9 +95,9 @@ module VagrantPlugins
       end
 
       def self.print_shell_configure_info(ui, command = '')
-        label = if OS.unix?
+        label = if !Vagrant::Util::Platform.windows?
                   'unix_configure_info'
-                elsif OS.windows_cygwin?
+                elsif Vagrant::Util::Platform.cygwin?
                   'windows_cygwin_configure_info'
                 end
 
@@ -109,9 +109,9 @@ module VagrantPlugins
       def self.env_label(script_readable)
         if script_readable
           'script_readable'
-        elsif OS.unix?
+        elsif !Vagrant::Util::Platform.windows?
           'non_windows'
-        elsif OS.windows_cygwin?
+        elsif Vagrant::Util::Platform.cygwin?
           'windows_cygwin'
         else
           'windows'

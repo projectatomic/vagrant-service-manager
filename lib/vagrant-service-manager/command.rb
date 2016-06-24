@@ -1,4 +1,3 @@
-require_relative 'os'
 require 'digest'
 require_relative 'plugin_util'
 require_relative 'plugin_logger'
