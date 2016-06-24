@@ -60,12 +60,15 @@ module VagrantPlugins
         PluginLogger.debug("script_readable: #{options[:script_readable] || false}")
 
         label = PluginUtil.env_label(options[:script_readable])
-        options[:secrets_path] = PluginUtil.windows_path(options[:secrets_path]) unless OS.unix?
+
+        if Vagrant::Util::Platform.windows?
+          options[:secrets_path] = PluginUtil.windows_path(options[:secrets_path])
+        end
         message = I18n.t("servicemanager.commands.env.docker.#{label}",
                          ip: options[:guest_ip], port: PORT, path: options[:secrets_path],
                          api_version: options[:api_version])
         # Puts is used to escape and render the back slashes in Windows path
-        message = puts(message) if OS.windows?
+        message = puts(message) if Vagrant::Util::Platform.windows?
         ui.info(message)
         unless options[:script_readable] || options[:all]
           PluginUtil.print_shell_configure_info(ui, ' docker')

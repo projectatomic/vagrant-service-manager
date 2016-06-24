@@ -6,7 +6,6 @@ end
 
 require 'vagrant-service-manager/plugin'
 require 'vagrant-service-manager/command'
-require 'vagrant-service-manager/os'
 
 module VagrantPlugins
   module ServiceManager
