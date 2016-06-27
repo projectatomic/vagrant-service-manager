@@ -86,7 +86,6 @@ popd
 %{vagrant_plugin_instdir}/vagrant-service-manager.gemspec
 %{vagrant_plugin_instdir}/vagrant-service-manager.spec
 %{vagrant_plugin_instdir}/CHANGELOG.md
-%{vagrant_plugin_instdir}/TODO
 %{vagrant_plugin_instdir}/.gitattributes
 %{vagrant_plugin_instdir}/features
 
