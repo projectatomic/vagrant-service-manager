@@ -136,7 +136,7 @@ module VagrantPlugins
           path[0..1] = ''                # Remove drive letter and colon from path
           "/cygdrive/c#{path}"
         when Vagrant::Util::Platform.windows?
-          windows_path(path)
+          windows_path(path).chop
         else
           path
         end

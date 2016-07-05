@@ -35,7 +35,7 @@ Feature: Command output from help command
          start        starts the given service in the box
          stop         stops the given service in the box
          status       list services and their running state
-         install-cli  install the client side tool for the service
+         install-cli  install the client binary for the specified service
 
     Options:
          -h, --help   print this help
@@ -55,6 +55,7 @@ Feature: Command output from help command
          start        starts the given service in the box
          stop         stops the given service in the box
          status       list services and their running state
+         install-cli  install the client binary for the specified service
 
     Options:
          -h, --help   print this help
@@ -75,6 +76,7 @@ Feature: Command output from help command
          start        starts the given service in the box
          stop         stops the given service in the box
          status       list services and their running state
+         install-cli  install the client binary for the specified service
 
     Options:
          -h, --help   print this help

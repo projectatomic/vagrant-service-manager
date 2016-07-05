@@ -5,6 +5,7 @@ require 'mechanize'
 require 'fileutils'
 require 'yaml'
 require 'launchy'
+require 'rake/testtask'
 
 CDK_DOWNLOAD_URL='https://access.redhat.com/downloads/content/293/ver=2/rhel---7/2.0.0/x86_64/product-software'
 CDK_BOX_BASE_NAME='rhel-cdk-kubernetes-7.2-23.x86_64.vagrant'
@@ -23,6 +24,13 @@ end
 
 task :clean_for_testing do
   FileUtils.rm_rf ['build/aruba', 'build/vagrant.d', 'build/features_report.html']
+end
+
+# Default unit test task
+desc 'Run all unit tests'
+Rake::TestTask.new do |t|
+  t.pattern = 'test/**/*_test.rb'
+  t.libs << 'test'
 end
 
 # Cucumber acceptance test tasks

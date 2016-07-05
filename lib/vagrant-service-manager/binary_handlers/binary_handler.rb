@@ -1,5 +1,11 @@
+require 'net/http'
+
 module VagrantPlugins
   module ServiceManager
+    class URLValidationError < Vagrant::Errors::VagrantError
+      error_key(:url_validation_error)
+    end
+
     class BinaryHandler
       BINARY_ARCHIVE_FORMATS = ['.tgz', '.tar.gz', '.gz', '.zip'].freeze
       BINARY_NAME = {
@@ -37,6 +43,7 @@ module VagrantPlugins
 
       def install
         build_download_url
+        validate_url
         build_archive_path
         ensure_binary_and_temp_directories
         download_archive
@@ -84,6 +91,17 @@ module VagrantPlugins
       def file_regex
         os_type = Vagrant::Util::Platform.windows? ? :windows : :unix
         BINARY_REGEX[os_type][@type]
+      end
+
+      # Checks if url is accessible or not
+      def validate_url
+        url = URI.parse(@url)
+        req = Net::HTTP.new(url.host, url.port)
+        res = req.request_head(url.path)
+
+        unless res.code == '200'
+          raise URLValidationError, I18n.t('servicemanager.commands.install_cli.url_validation_error')
+        end
       end
 
       private

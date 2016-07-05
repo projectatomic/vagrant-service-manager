@@ -27,13 +27,12 @@ Feature: Command behavior of client side tools installation
     Then the exit status should be 0
     And stdout from "bundle exec vagrant service-manager install-cli --help" should contain:
     """
-    Install the client side tool for the service
+    Install the client binary for the specified service
 
     Usage: vagrant service-manager install-cli [service] [options]
 
     Service:
-        A service provided by sccli. For example:
-         docker, kubernetes, openshift etc
+      A supported service. For example: docker, kubernetes or openshift.
 
     Options:
           -h, --help         print this help
@@ -46,8 +45,8 @@ Feature: Command behavior of client side tools installation
     Then the exit status should be 126
     And stdout from "bundle exec vagrant service-manager install-cli" should match /Service name missing/
 
-    When I successfully run `bundle exec vagrant service-manager install-cli docker`
-    Then the exit status should be 0
+    When I run `bundle exec vagrant service-manager install-cli docker --cli-version 111.222.333`
+    Then the exit status should be 126
 
     Examples:
       | box   | provider   | ip          |

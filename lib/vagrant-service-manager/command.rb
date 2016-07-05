@@ -279,7 +279,10 @@ module VagrantPlugins
             args.last[:box_version] = machine.guest.capability(:os_variant)
             Installer.new(*args).install
           rescue Vagrant::Errors::GuestCapabilityNotFound
-            ui.info 'Not a supported box.'
+            @env.ui.info 'Not a supported box.'
+            exit 126
+          rescue StandardError => e
+            @env.ui.error e.message
             exit 126
           end
         end
