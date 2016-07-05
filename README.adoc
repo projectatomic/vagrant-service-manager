@@ -7,8 +7,8 @@ easier access to the features and services provided by the
 https://github.com/projectatomic/adb-atomic-developer-bundle[Atomic
 Developer Bundle (ADB)]. It provides setup information, including
 environment variables and certificates, required to access services
-provided by the ADB and is a must have for most ADB users.
-
+provided by the ADB and is a must have for most ADB users. +
+ +
 This plugin makes it easier to use the ADB with host-based tools such as
 Eclipse and the docker and kubernetes CLI commands. Details on how to
 use ADB with this plugin can be found in the
@@ -26,10 +26,10 @@ image::https://ci.centos.org/buildStatus/icon?job=vagrant-service-manager[link="
 
 == Installation
 
-The plugin is distributed as both a Ruby Gem and via RPM using the
+The vagrant-service-manager plugin is distributed as both a Ruby Gem and via RPM using the
 Fedora COPR system.
 
-=== Installing from a RubyGems
+=== Installing from RubyGems
 
 The vagrant-service-manager
 https://rubygems.org/gems/vagrant-service-manager[gem] is available on
@@ -60,7 +60,7 @@ $ dnf --enablerepo=nshaikh-vagrant-service-manager install vagrant-service-manag
 ----------------------------------------------
 vagrant plugin install vagrant-service-manager
 ----------------------------------------------
-2.  Download the relevant Vagrantfile for your
+1.  Download the relevant Vagrantfile for your
 https://github.com/projectatomic/adb-atomic-developer-bundle[ADB]
 vagrant box, from the
 https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos[repository].
@@ -68,12 +68,12 @@ For further details on the usage of custom Vagrantfiles designed for
 specific use cases, refer to the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst[Usage
 Documentation].
-3.  Start the ADB vagrant box using `vagrant up`. For detailed
+1.  Start the ADB vagrant box using `vagrant up`. For detailed
 instructions consult the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[Installation
 Documentation].
 +
-*Note:* When the vagrant-service-manager plugin is loaded and a box is
+*Note:* When the vagrant-service-manager plugin is loaded and an ADB box is
 started using the VirtualBox provider, the user needs to add a routable
 non NAT network interface declaration in the Vagrantfile. If the user
 does not provide a network declaration in the Vagrantfile, a private
@@ -85,10 +85,11 @@ DHCP network is added by default and a warning is displayed.
 $ vagrant service-manager env docker
 # Set the following environment variables to enable access to the
 # docker daemon running inside of the vagrant virtual machine:
-export DOCKER_HOST=tcp://172.28.128.4:2376
+export DOCKER_HOST=tcp://172.28.128.182:2376
 export DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker
 export DOCKER_TLS_VERIFY=1
-export DOCKER_API_VERSION=1.21
+export DOCKER_API_VERSION=1.20
+
 # run following command to configure your shell:
 # eval "$(vagrant service-manager env docker)"
 ----------------------------------------------------------------------------
@@ -105,57 +106,58 @@ will also re-download the certificates onto the host machine.
 The following section lists the available commands for the plugin and
 their explanation:
 
-1.  `vagrant service-manager env [service] [--script-readable]`
-+
-Displays connection information for all active services in the box in a
-manner that can be evaluated in a shell. If a `service` is specified,
-only the information for that service is displayed. When
-`--script-readable` is specified the output is in `key=value` format.
-The supported services are: Docker, OpenShift.
-+
-*Note:* If a `service` is not specified, it displays information of all active services.
-
-1.  `vagrant service-manager box [command]`
-+
-Displays box related information like release version, IP etc.
-
-1.  `vagrant service-manager box version [--script-readable]`
-+
-Displays the version and release information of the running VM. When
-`--script-readable` is specified the output is in `key=value` format.
-
-1.  `vagrant service-manager box ip`
-+
-Displays the routable IP address of the running VM.
-
-1.  `vagrant service-manager status [service]`
-+
-Lists services and their running state. If a `service` is specified only
-the status of that service is displayed. If no service is provided then
-only supported orchestrators are reported.
-
-1.  `vagrant service-manager [operation] [service]`
-+
-where `operation` could be:
-
-  * `restart` : Restart the given service in the box.
-  * `start`   : Start the given service in the box.
-  * `stop`    : Stop the given service in the box.
-+
-and `service` could be `docker`, `openshift`, `kubernetes` etc.
-
 1.  `vagrant service-manager [command] [--help | -h]`
 +
 Displays the possible commands, options and other relevant information
 for the vagrant-service-manager plugin. If a `command` is specified,
 only the help relevant to that command is displayed.
 
+1.  `vagrant service-manager env [service] [--script-readable]`
++
+Displays connection information for all active services in the box in a
+manner that can be evaluated in a shell. +
+If a `service` is specified, only the information for that service is displayed.
+The supported services are: Docker, OpenShift. +
+When `--script-readable` is specified the output is in `key=value` format.
+
+1.  `vagrant service-manager box [command] [--script-readable]`
++
+Displays box related information like release version, IP etc.
++
+--
+The possible options for `command` are:
+
+* `version`: Displays the version and release information of the running VM.
+* `ip`: Displays the routable IP address of the running VM.
++
+--
+When `--script-readable` is specified the output is in `key=value` format.
+
+1.  `vagrant service-manager [operation] [service]`
++
+Manages the life cycle of a service.
++
+--
+The possible options for `operation` are:
+
+  * `status`: Lists services and their running state. If a `service` is specified only
+the status of that service is displayed. If no service is provided then
+only supported orchestrators are reported.
+  * `start`: Start the given service in the box.
+  * `stop`: Stop the given service in the box.
+  * `restart`: Restart the given service in the box.
++
+--
+The supported options for `service` are: Docker, OpenShift.
+
+
+
 [[debug-flag]]
 ==== Debug Flag
 
 Append `--debug` flag to enable debug mode.
 
-_Note_: Debug output from `vagrant-service-manager` is prepended with
+*Note:* Debug output from `vagrant-service-manager` is prepended with
 the following string:
 
 `DEBUG command: [ service-manager: <command name / log message> ]`
@@ -189,23 +191,23 @@ have IPv4 addresses, the address on eth2 is used.
 
 === Setup
 
-After cloning the repository, install the http://bundler.io/[Bundler]
+1. After cloning the repository, install the http://bundler.io/[Bundler]
 gem:
-
++
 ---------------------
 $ gem install bundler
 ---------------------
 
-Then setup your project dependencies:
-
+1. Then setup your project dependencies:
++
 ----------------
 $ bundle install
 ----------------
 
-The build is driven via rake. All build related tash should be executed
+1. The build is driven via `rake`. All build related tasks should be executed
 in the Bundler environment, e.g. `bundle exec rake clean`. You can get a
 list of available Rake tasks via:
-
++
 ---------------------
 $ bundle exec rake -T
 ---------------------
@@ -219,23 +221,25 @@ acceptance tests. They can be run via:
 $ bundle exec rake features
 ---------------------------
 
-_NOTE_: Only Linux OS is supported at present.
+*Note:* These tests can be executed in Linux. Not all of the tests run
+appropriately in Windows, pending resolution of
+https://github.com/projectatomic/vagrant-service-manager/issues/213[Issue #213].
 
 The tests assume that the ADB and CDK box files are available under
-_build/boxes/adb-<provider>.box_ resp
-_build/boxes/cdk-<provider>.box_. You can either copy the box files
-manually or use the _get_adb_ resp. _get_cdk_ Rake tasks.
+_build/boxes/adb-<provider>.box_ and
+_build/boxes/cdk-<provider>.box_ respectively. You can either copy the box files
+manually or use the _get_adb_ and _get_cdk_ Rake tasks, respectively.
 
-Per default only the scenarios for ADB in combination with the
-VirtualBox provider are run. However, you can also run against CDK
+Per default, only the scenarios for ADB in combination with the
+VirtualBox provider are run. However, you can also run the tests against CDK
 and/or use the Libvirt provider using the environment variables _BOX_
-resp _PROVIDER_:
+and _PROVIDER_ respectively:
 
 -----------------------------------------------------
 # Run tests against CDK using Libvirt
 $ bundle exec rake features BOX=cdk PROVIDER=libvirt
 
-# Run against ADB and CDK (boxes are comma seperated)
+# Run against ADB and CDK (boxes are comma separated)
 $ bundle exec rake features BOX=cdk,adb
 -----------------------------------------------------
 
@@ -246,8 +250,8 @@ to use:
 $ bundle exec rake features FEATURE=features/<feature-filename>.feature
 -----------------------------------------------------------------------
 
-After test execution the Cucumber test reports can be found under
-_build/features_report.html_. They can also be opened via
+After test execution, the Cucumber test reports can be found under
+_build/features_report.html_. They can also be opened via:
 
 ---------------------------------------
 $ bundle exec rake features:open_report
@@ -257,7 +261,7 @@ $ bundle exec rake features:open_report
 
 We welcome your input. You can submit issues or pull requests with
 respect to the vagrant-service-manager plugin. Refer to the
-https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.md[contributing
+https://github.com/projectatomic/vagrant-service-manager/blob/master/CONTRIBUTING.adoc[contributing
 guidelines] for detailed information on how to contribute to this
 plugin.
 
