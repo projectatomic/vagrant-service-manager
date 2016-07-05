@@ -41,7 +41,7 @@ module VagrantPlugins
       def print_message
         binary_path = PluginUtil.format_path(@path)
         @ui.info I18n.t(LABEL,
-                        path: binary_path, dir: File.dirname(binary_path),
+                        path: binary_path, dir: File.dirname(binary_path), service: @type,
                         binary: binary_name, when: (@binary_exists ? 'already' : 'now'))
       end
 

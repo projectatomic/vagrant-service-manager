@@ -215,6 +215,23 @@ list of available Rake tasks via:
 $ bundle exec rake -T
 ---------------------
 
+=== Unit tests
+
+The source contains a set of http://ruby-doc.org/stdlib-2.0.0/libdoc/minitest/rdoc/MiniTest.html[Minitest]
+unit tests. They can be run as follows:
+
+To run the entire test suite:
+
+------------------------
+$ bundle exec rake test
+------------------------
+
+To run a single test:
+
+-------------------------------------------------
+$ bundle exec rake test TEST=<path to test file>
+-------------------------------------------------
+
 === Acceptance tests
 
 The source also contains a set of https://cucumber.io/[Cucumber]

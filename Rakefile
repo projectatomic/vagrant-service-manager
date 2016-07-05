@@ -1,5 +1,6 @@
 require 'bundler/gem_tasks'
 require 'rake/clean'
+require 'rake/testtask'
 require 'cucumber/rake/task'
 require 'mechanize'
 require 'fileutils'
@@ -21,6 +22,14 @@ task :clean_boxes do
   FileUtils.rmtree '.boxes'
 end
 
+# Default unit test task
+desc 'Run all unit tests'
+Rake::TestTask.new do |t|
+  t.pattern = 'test/**/*_test.rb'
+  t.libs << 'test'
+end
+
+# Cucumber acceptance test tasks
 Cucumber::Rake::Task.new(:features)
 task :features => [:clean, :init, :get_boxes]
 

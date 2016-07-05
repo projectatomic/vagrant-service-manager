@@ -108,7 +108,7 @@ Feature: Command output from service operations like stop/start/restart
     Then the exit status should be 126
     And stderr from "bundle exec vagrant service-manager status abcd" should contain:
     """
-    Unkown service 'abcd'.
+    Unknown service 'abcd'.
     Supported services are docker, openshift, kubernetes etc.
     """
 
