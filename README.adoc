@@ -118,7 +118,8 @@ Displays connection information for all active services in the box in a
 manner that can be evaluated in a shell. +
 If a `service` is specified, only the information for that service is displayed.
 The supported services are: Docker, OpenShift. +
-When `--script-readable` is specified the output is in `key=value` format.
+When `--script-readable` is specified the output is in `key=value` format. +
+The TLS certificates will be regenerated if they don't exist or are found to be invalid.
 
 1.  `vagrant service-manager box [command] [--script-readable]`
 +
