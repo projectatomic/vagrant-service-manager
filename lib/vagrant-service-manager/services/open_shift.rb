@@ -10,7 +10,7 @@ module VagrantPlugins
       end
 
       def execute
-        command = "#{@extra_cmd} sccli openshift"
+        command = "#{@extra_cmd} sccli openshift start"
         PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
       end
 
