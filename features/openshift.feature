@@ -15,7 +15,7 @@ Feature: Command output from various OpenShift related commands
 
     Vagrant.configure('2') do |config|
       config.vm.box = '<box>'
-      config.vm.box_url = 'file://../boxes/<box>-<provider>.box'
+      config.vm.box_url = 'file://../../.boxes/<box>-<provider>.box'
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
       config.servicemanager.services = 'docker'
@@ -65,6 +65,7 @@ Feature: Command output from various OpenShift related commands
     export OPENSHIFT_URL=https://<ip>:8443
     export OPENSHIFT_WEB_CONSOLE=https://<ip>:8443/console
     export DOCKER_REGISTRY=hub.openshift.rhel-cdk.<ip>.xip.io
+
     # run following command to configure your shell:
     # eval "$(vagrant service-manager env)"
     """
