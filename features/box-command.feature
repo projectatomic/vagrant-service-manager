@@ -15,7 +15,7 @@ Feature: Command output from box command
 
     Vagrant.configure('2') do |config|
       config.vm.box = '<box>'
-      config.vm.box_url = 'file://../boxes/<box>-<provider>.box'
+      config.vm.box_url = 'file://../../.boxes/<box>-<provider>.box'
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
       config.servicemanager.services = 'docker'
