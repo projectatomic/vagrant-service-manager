@@ -5,7 +5,8 @@ module VagrantPlugins
     SERVICES = ['docker', 'openshift']
     CONFIG_KEYS  = [
       :services, :openshift_docker_registry,
-      :openshift_image_name, :openshift_image_tag
+      :openshift_image_name, :openshift_image_tag,
+      :openshift_proxy, :openshift_proxy_user, :openshift_proxy_password
     ]
 
     class Config < Vagrant.plugin('2', :config)
