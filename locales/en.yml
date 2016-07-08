@@ -1,4 +1,10 @@
 en:
+  vagrant:
+    errors:
+      url_validation_error: |-
+        Download URL is not accessible.
+        Possible reason: Invalid version name
+
   servicemanager:
     synopsis: |-
       provides the IP address:port and tls certificate file location for a docker daemon
@@ -28,6 +34,7 @@ en:
                start        starts the given service in the box
                stop         stops the given service in the box
                status       list services and their running state
+               install-cli  install the client binary for the specified service
 
           Options:
                -h, --help   print this help
@@ -86,6 +93,19 @@ en:
 
           Examples:
             vagrant service-manager %{operation} docker
+        install_cli: |-
+          Install the client binary for the specified service
+
+          Usage: vagrant service-manager install-cli [service] [options]
+
+          Service:
+            A supported service. For example: docker, kubernetes or openshift.
+
+          Options:
+                -h, --help         print this help
+
+          Example:
+                vagrant service-manager install-cli docker
 
       env:
         docker:
@@ -152,6 +172,21 @@ en:
           Only sccli services are supported. For example:
             docker, openshift and kubernetes
 
+      install_cli:
+        message: |-
+          # Binary %{when} available at %{path}
+          # run binary as:
+          # %{binary} <command>
+          export PATH=%{dir}:$PATH
+
+          # run following command to configure your shell:
+          # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service} | tr -d '\r')"
+        unsupported_box: |-
+          The CDK does not support client binary installs via the 'install-cli' command.
+          Please visit access.redhat.com to download client binaries.
+        service_not_enabled: |-
+          '%{service}' service is not enabled.
+
       status:
         nil: |-
           Configured services:
@@ -159,5 +194,5 @@ en:
           running: running
           stopped: stopped
         unsupported_service: |-
-          Unkown service '%{service}'.
+          Unknown service '%{service}'.
           Supported services are %{services}.

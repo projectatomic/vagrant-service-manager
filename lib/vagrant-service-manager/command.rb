@@ -1,24 +1,50 @@
 require 'digest'
 require_relative 'plugin_util'
 require_relative 'plugin_logger'
+require_relative 'installer'
+require_relative 'archive_handlers/tar_handler'
+require_relative 'archive_handlers/zip_handler'
+require_relative 'binary_handlers/binary_handler'
+require_relative 'binary_handlers/adb_binary_handler'
+require_relative 'binary_handlers/cdk_binary_handler'
+require_relative 'binary_handlers/adb_docker_binary_handler'
+require_relative 'binary_handlers/adb_openshift_binary_handler'
+require_relative 'binary_handlers/cdk_docker_binary_handler'
+require_relative 'binary_handlers/cdk_openshift_binary_handler'
 
 module VagrantPlugins
   module ServiceManager
-    DOCKER_PATH = '/home/vagrant/.docker'
-    SUPPORTED_SERVICES = ['docker', 'openshift', 'kubernetes']
+    DOCKER_PATH = '/home/vagrant/.docker'.freeze
+    SUPPORTED_SERVICES = %w(docker openshift kubernetes).freeze
     KUBE_SERVICES = [
       'etcd', 'kube-apiserver', 'kube-controller-manager', 'kube-scheduler',
       'kubelet', 'kube-proxy', 'docker'
-    ]
+    ].freeze
     # NOTE: SERVICES_MAP[<service>] will give fully-qualified service class name
     # Eg: SERVICES_MAP['docker'] gives Vagrant::ServiceManager::Docker
     SERVICES_MAP = {
       'docker' => Docker, 'openshift' => OpenShift,
       'kubernetes' => Kubernetes
-    }
+    }.freeze
+
+    def self.bin_dir
+      @bin_dir
+    end
+
+    def self.temp_dir
+      @temp_dir
+    end
+
+    def self.bin_dir=(path)
+      @bin_dir = path
+    end
+
+    def self.temp_dir=(path)
+      @temp_dir = path
+    end
 
     class Command < Vagrant.plugin(2, :command)
-      OS_RELEASE_FILE = '/etc/os-release'
+      OS_RELEASE_FILE = '/etc/os-release'.freeze
 
       def self.synopsis
         I18n.t('servicemanager.synopsis')
@@ -36,6 +62,9 @@ module VagrantPlugins
       end
 
       def execute
+        ServiceManager.bin_dir = "#{@env.data_dir}/service-manager/bin"
+        ServiceManager.temp_dir = "#{@env.data_dir}/service-manager/tmp"
+
         argv = ARGV.dup
         # Don't propagate --debug argument to case operation
         if ARGV.include? '--debug'
@@ -119,6 +148,19 @@ module VagrantPlugins
           else
             perform_service(command, subcommand)
           end
+        when 'install-cli'
+          exit_if_machine_not_running
+          # Transform hyphen into underscore which is valid char in method
+          command = command.tr('-', '_')
+          # Get options as Hash which are preceeded with -- like --version
+          options = Hash[ARGV.drop(3).each_slice(2).to_a]
+
+          case subcommand
+          when '--help', '-h'
+            print_help(type: command)
+          else
+            execute_install_cli(subcommand, options)
+          end
         when '--help', '-h', 'help'
           print_help
         else
@@ -128,7 +170,7 @@ module VagrantPlugins
 
       def execute_service(name, options = {})
         with_target_vms(nil, single_target: true) do |machine|
-          PluginUtil.service_class(name).info(machine, @env.ui, options)
+          PluginUtil.service_class(name).new(machine, @env).info(options)
         end
       end
 
@@ -143,16 +185,15 @@ module VagrantPlugins
       def execute_status_display(service = nil)
         with_target_vms(nil, single_target: true) do |machine|
           if service && SUPPORTED_SERVICES.include?(service)
-            PluginUtil.service_class(service).status(machine, @env.ui, service)
+            PluginUtil.service_class(service).new(machine, @env).status
           elsif service.nil?
             @env.ui.info I18n.t('servicemanager.commands.status.nil')
             SUPPORTED_SERVICES.each do |s|
-              PluginUtil.service_class(s).status(machine, @env.ui, s)
+              PluginUtil.service_class(s).new(machine, @env).status
             end
           else
             @env.ui.error I18n.t('servicemanager.commands.status.unsupported_service',
-                                  service: service,
-                                  services: SUPPORTED_SERVICES.join(', ') + ' etc')
+                                 service: service, services: SUPPORTED_SERVICES.join(', ') + ' etc')
             exit 126
           end
         end
@@ -170,7 +211,7 @@ module VagrantPlugins
             end
             # since we do not have feature to show the Kube connection information
             unless service == 'kubernetes'
-              service_class.info(machine, @env.ui, options)
+              service_class.new(machine, @env).info(options)
             end
           end
 
@@ -213,6 +254,37 @@ module VagrantPlugins
 
         with_target_vms(nil, single_target: true) do |machine|
           @env.ui.info machine.guest.capability(:machine_ip, options)
+        end
+      end
+
+      def execute_install_cli(service, options = {})
+        help_msg = I18n.t('servicemanager.commands.help.install_cli')
+
+        if service.nil?
+          service_missing_msg = I18n.t('servicemanager.commands.operation.service_missing')
+          @env.ui.error help_msg.gsub(/Install the client side tool for the service/, service_missing_msg)
+          exit 126
+        end
+
+        unless SUPPORTED_SERVICES.include?(service)
+          @env.ui.error "Unknown service '#{service}'."
+          @env.ui.error help_msg.gsub(/Install the client side tool for the service\n/, '')
+          exit 126
+        end
+
+        with_target_vms(nil, single_target: true) do |machine|
+          args = [service.to_sym, machine, @env, options]
+
+          begin
+            args.last[:box_version] = machine.guest.capability(:os_variant)
+            Installer.new(*args).install
+          rescue Vagrant::Errors::GuestCapabilityNotFound
+            @env.ui.info 'Not a supported box.'
+            exit 126
+          rescue StandardError => e
+            @env.ui.error e.message
+            exit 126
+          end
         end
       end
     end

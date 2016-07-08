@@ -72,6 +72,7 @@ for host in data['hosts']:
     build_cmd  = 'cd vagrant-service-manager && '
     build_cmd += 'bundle exec rake build && '
     build_cmd += 'bundle exec rake get_adb[\'libvirt\'] && '
+    build_cmd += 'bundle exec rake test && '
     build_cmd += 'bundle exec rake features CUCUMBER_OPTS=\'-p ci\' PROVIDER=libvirt'
     execute_on_host(host, build_cmd, "Tests failures")
 
