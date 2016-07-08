@@ -224,14 +224,8 @@ acceptance tests. They can be run via:
 $ bundle exec rake features
 ---------------------------
 
-*Note:* These tests can be executed in Linux. Not all of the tests run
-appropriately in Windows, pending resolution of
+*Note:* This Cucumber tests do not run on Windows, pending resolution of
 https://github.com/projectatomic/vagrant-service-manager/issues/213[Issue #213].
-
-The tests assume that the ADB and CDK box files are available under
-_build/boxes/adb-<provider>.box_ and
-_build/boxes/cdk-<provider>.box_ respectively. You can either copy the box files
-manually or use the _get_adb_ and _get_cdk_ Rake tasks, respectively.
 
 Per default, only the scenarios for ADB in combination with the
 VirtualBox provider are run. However, you can also run the tests against CDK
@@ -244,7 +238,18 @@ $ bundle exec rake features BOX=cdk PROVIDER=libvirt
 
 # Run against ADB and CDK (boxes are comma separated)
 $ bundle exec rake features BOX=cdk,adb
+
+# Run against ADB and CDK using VirtualBox and Libvirt
+$ bundle exec rake features BOX=cdk,adb PROVIDER=libvirt,virtualbox
 -----------------------------------------------------
+
+The _features_ task will transparently download the required Vagrant
+boxes and cache them in _.boxes_. The cache can be cleared
+via the _clean_boxes_ task.
+
+Using the variable _NIGHTLY=true_ you can make sure that the
+latest nightly build of the CDK is used (VPN access required).
+Per default the latest public release of the CDK is used.
 
 You can also run a single feature specifying the explicit feature file
 to use:

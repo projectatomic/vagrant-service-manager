@@ -71,8 +71,7 @@ for host in data['hosts']:
     # run build and features
     build_cmd  = 'cd vagrant-service-manager && '
     build_cmd += 'bundle exec rake build && '
-    build_cmd += 'bundle exec rake get_adb[\'libvirt\'] && '
-    build_cmd += 'bundle exec rake features CUCUMBER_OPTS=\'-p ci\' PROVIDER=libvirt'
+    build_cmd += 'bundle exec rake features CUCUMBER_OPTS=\'-p ci\' PROVIDER=libvirt BOX=adb,cdk'
     execute_on_host(host, build_cmd, "Tests failures")
 
     done_nodes_url = "%s/Node/done?key=%s&sside=%s" % (url_base, api_key, data['ssid'])
