@@ -14,7 +14,7 @@ module VagrantPlugins
       @debug = true
     end
 
-    def self.set_logger(logger)
+    def self.logger=(logger)
       @logger = logger
     end
 
@@ -24,7 +24,7 @@ module VagrantPlugins
 
     def self.debug(message = nil)
       if debug_mode?
-        message = "#{command}" if message.nil?
+        message = command.to_s if message.nil?
         logger.debug "[ service-manager: #{message} ]"
       end
     end

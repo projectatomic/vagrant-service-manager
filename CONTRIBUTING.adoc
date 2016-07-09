@@ -59,8 +59,8 @@ section in the link:README.md[README] to get started.
 === Commit
 
 * Make commits of logical units.
-* Be sure to use the GitHub issue key in the commit message, eg
-`Fix #123 ...`.
+* Be sure to use the GitHub issue key in the commit message, eg `Fix #123 ...`.
+* Make sure your code conforms to the coding style
 * Make sure you have added the necessary tests for your changes.
 * Make sure you have added appropriate documentation updates.
 * Run _all_ the tests to assure nothing else was accidentally broken.

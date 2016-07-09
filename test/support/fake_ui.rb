@@ -1,4 +1,4 @@
 class FakeUI
-  def self.info(*args)
+  def self.info(*_args)
   end
 end

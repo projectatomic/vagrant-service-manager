@@ -2,7 +2,7 @@ module VagrantPlugins
   module HostWindows
     module Cap
       class OSArch
-        def self.os_arch(env)
+        def self.os_arch(_env)
           # Logic taken from http://stackoverflow.com/a/25845488
           arch = 'x86_64'
 

@@ -215,6 +215,18 @@ list of available Rake tasks via:
 $ bundle exec rake -T
 ---------------------
 
+=== Code style
+
+As most other open-source projects, vagrant-service-manager has a set of conventions
+about how to write code for it. It follows the
+https://github.com/bbatsov/ruby-style-guide[Ruby Style Guide].
+
+You can verify that your changes adhere to this style using the http://batsov.com/rubocop[RuboCop] Rake task:
+
+--------------------------
+$ bundle exec rake rubocop
+--------------------------
+
 === Unit tests
 
 The source contains a set of http://ruby-doc.org/stdlib-2.0.0/libdoc/minitest/rdoc/MiniTest.html[Minitest]

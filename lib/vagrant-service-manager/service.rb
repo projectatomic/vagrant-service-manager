@@ -4,7 +4,7 @@ Dir["#{File.dirname(__FILE__)}/services/*.rb"].each { |f| require_relative f }
 
 module VagrantPlugins
   module ServiceManager
-    SUPPORTED_BOXES = ['adb', 'cdk']
+    SUPPORTED_BOXES = %w(adb cdk).freeze
 
     class Service
       def initialize(app, env)
@@ -23,10 +23,10 @@ module VagrantPlugins
           # docker service needs to be started by default for ADB and CDK box
           @docker_hook.execute
 
-          if @machine.guest.capability(:os_variant) == "cdk" && @services.length == 0
+          if @machine.guest.capability(:os_variant) == 'cdk' && @services.empty?
             # openshift to be started by default for CDK
             @openshift_hook.execute
-          elsif @services.include? "openshift"
+          elsif @services.include? 'openshift'
             # Start OpenShift service if it is configured in Vagrantfile
             @openshift_hook.execute
           end

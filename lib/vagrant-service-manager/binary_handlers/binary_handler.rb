@@ -16,8 +16,8 @@ module VagrantPlugins
         openshift: "oc version | grep 'oc' | grep -oE '[0-9.]+'"
       }.freeze
       BINARY_REGEX = {
-        windows: { docker: %r{\/docker.exe$}, openshift: %r{oc.exe$} },
-        unix: { docker: %r{\/docker$}, openshift: %r{oc$} }
+        windows: { docker: %r{\/docker.exe$}, openshift: /oc.exe$/ },
+        unix: { docker: %r{\/docker$}, openshift: /oc$/ }
       }.freeze
       ARCHIVE_MAP = {
         '.tgz' => 'Tar', '.tar.gz' => 'Tar', '.gz' => 'Tar', '.zip' => 'Zip'

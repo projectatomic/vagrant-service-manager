@@ -105,6 +105,6 @@ end
 
 module MiniTest
   class Spec
-    alias_method :hush, :capture_io
+    alias hush capture_io
   end
 end

@@ -28,7 +28,7 @@ module VagrantPlugins
           print_info(options)
         else
           @ui.error I18n.t('servicemanager.commands.env.service_not_running',
-                          name: 'OpenShift')
+                           name: 'OpenShift')
           exit 126
         end
       end
@@ -37,9 +37,9 @@ module VagrantPlugins
 
       def build_extra_command
         cmd = ''
-        CONFIG_KEYS.select {|e| e[/^openshift_/] }.each do |key|
+        CONFIG_KEYS.select { |e| e[/^openshift_/] }.each do |key|
           unless @machine.config.servicemanager.send(key).nil?
-            env_name = key.to_s.gsub(/openshift_/,'').upcase
+            env_name = key.to_s.gsub(/openshift_/, '').upcase
             cmd += "#{env_name}='#{@machine.config.servicemanager.send(key)}' "
           end
         end
@@ -56,18 +56,17 @@ module VagrantPlugins
                          docker_registry: options[:docker_registry])
         @ui.info(message)
 
-        unless options[:script_readable] || options[:all]
-          PluginUtil.print_shell_configure_info(@ui, ' openshift')
-        end
+        return if options[:script_readable] || options[:all]
+        PluginUtil.print_shell_configure_info(@ui, ' openshift')
       end
 
       def docker_registry_host
         url = ''
         PluginLogger.debug
         command = \
-          "sudo oc --config=/var/lib/openshift/openshift.local." +
-          "config/master/admin.kubeconfig get route/docker-registry " +
-          "-o template --template={{.spec.host}}"
+          'sudo oc --config=/var/lib/openshift/openshift.local.' \
+          'config/master/admin.kubeconfig get route/docker-registry ' \
+          '-o template --template={{.spec.host}}'
 
         @machine.communicate.execute(command) do |type, data|
           url << data.chomp if type == :stdout
