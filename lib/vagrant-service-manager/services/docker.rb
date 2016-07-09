@@ -47,7 +47,7 @@ module VagrantPlugins
           print_env_info(@ui, options)
         else
           @ui.error I18n.t('servicemanager.commands.env.service_not_running',
-                          name: @service_name)
+                           name: @service_name)
           exit 126
         end
       end
@@ -68,9 +68,8 @@ module VagrantPlugins
         # Puts is used to escape and render the back slashes in Windows path
         message = puts(message) if Vagrant::Util::Platform.windows?
         ui.info(message)
-        unless options[:script_readable] || options[:all]
-          PluginUtil.print_shell_configure_info(ui, ' docker')
-        end
+        return if options[:script_readable] || options[:all]
+        PluginUtil.print_shell_configure_info(ui, ' docker')
       end
     end
   end

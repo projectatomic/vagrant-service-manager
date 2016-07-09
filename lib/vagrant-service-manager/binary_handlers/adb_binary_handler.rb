@@ -32,7 +32,7 @@ module VagrantPlugins
         end
 
         FileUtils.cp(tmp_binary_file_path, @path)
-        File.chmod(0755, @path)
+        File.chmod(0o755, @path)
       rescue StandardError => e
         @ui.error e.message
         exit 126

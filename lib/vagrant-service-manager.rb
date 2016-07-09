@@ -9,7 +9,7 @@ require 'vagrant-service-manager/command'
 
 module VagrantPlugins
   module ServiceManager
-    SUPPORTED_HOSTS = ['linux', 'darwin', 'windows']
+    SUPPORTED_HOSTS = %w(linux darwin windows).freeze
 
     # Returns the path to the source of this plugin
     def self.source_root
@@ -23,6 +23,6 @@ module VagrantPlugins
       load(File.join(source_root, "plugins/hosts/#{host}/plugin.rb"))
     end
     # Default I18n to load the en locale
-    I18n.load_path << File.expand_path("locales/en.yml", source_root)
+    I18n.load_path << File.expand_path('locales/en.yml', source_root)
   end
 end

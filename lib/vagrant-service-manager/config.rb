@@ -2,18 +2,18 @@ require 'set'
 
 module VagrantPlugins
   module ServiceManager
-    SERVICES = ['docker', 'openshift']
-    CONFIG_KEYS  = [
+    SERVICES = %w(docker openshift).freeze
+    CONFIG_KEYS = [
       :services, :openshift_docker_registry,
       :openshift_image_name, :openshift_image_tag
-    ]
+    ].freeze
 
     class Config < Vagrant.plugin('2', :config)
       attr_accessor(*CONFIG_KEYS)
 
       DEFAULTS = {
         services: ''
-      }
+      }.freeze
 
       def initialize
         super
@@ -28,10 +28,10 @@ module VagrantPlugins
         end
       end
 
-      def validate(machine)
+      def validate(_machine)
         errors = _detected_errors
         errors.concat(validate_services)
-        { "servicemanager" => errors }
+        { 'servicemanager' => errors }
       end
 
       private
@@ -39,7 +39,7 @@ module VagrantPlugins
       def validate_services
         errors = []
 
-        unless is_supported_services?
+        unless supported_services?
           errors << I18n.t('servicemanager.config.supported_devices',
                            services: SERVICES.inspect)
         end
@@ -47,7 +47,7 @@ module VagrantPlugins
         errors
       end
 
-      def is_supported_services?
+      def supported_services?
         @services.split(',').map(&:strip).to_set.subset?(SERVICES.to_set)
       end
     end

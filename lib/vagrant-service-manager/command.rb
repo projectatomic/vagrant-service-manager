@@ -69,7 +69,7 @@ module VagrantPlugins
         # Don't propagate --debug argument to case operation
         if ARGV.include? '--debug'
           PluginLogger.enable_debug_mode
-          PluginLogger.set_logger(@logger)
+          PluginLogger.logger = @logger
           argv.delete('--debug')
         end
 

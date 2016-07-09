@@ -34,7 +34,7 @@ module VagrantPlugins
         return false if Dir["#{path}/*"].empty?
 
         # check validity of certs
-        Dir[path + "/*"].each do |f|
+        Dir[path + '/*'].each do |f|
           guest_file_path = "#{DOCKER_PATH}/#{File.basename(f)}"
           guest_sha = machine.guest.capability(:sha_id, guest_file_path)
           return false if sha_id(File.read(f)) != guest_sha
@@ -131,11 +131,10 @@ module VagrantPlugins
       end
 
       def self.format_path(path)
-        case
-        when Vagrant::Util::Platform.cygwin?
-          path[0..1] = ''                # Remove drive letter and colon from path
+        if Vagrant::Util::Platform.cygwin?
+          path[0..1] = '' # Remove drive letter and colon from path
           "/cygdrive/c#{path}"
-        when Vagrant::Util::Platform.windows?
+        elsif Vagrant::Util::Platform.windows?
           windows_path(path).chop
         else
           path

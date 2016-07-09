@@ -2,7 +2,6 @@ module VagrantPlugins
   module ServiceManager
     module Action
       class SetupNetwork
-
         def initialize(app, env)
           @app = app
           @machine = env[:machine]
@@ -31,7 +30,6 @@ Adding a private network using DHCP
           MSG
           @machine.config.vm.network :private_network, type: :dhcp
         end
-
       end
     end
   end

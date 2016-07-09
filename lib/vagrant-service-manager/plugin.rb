@@ -5,8 +5,8 @@ require_relative 'service'
 module VagrantPlugins
   module ServiceManager
     class Plugin < Vagrant.plugin('2')
-      name "service-manager"
-      description "Service manager for services inside vagrant box."
+      name 'service-manager'
+      description 'Service manager for services inside vagrant box.'
 
       command 'service-manager' do
         require_relative 'command'

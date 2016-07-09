@@ -2,6 +2,7 @@ require 'bundler/gem_tasks'
 require 'rake/clean'
 require 'rake/testtask'
 require 'cucumber/rake/task'
+require 'rubocop/rake_task'
 require 'mechanize'
 require 'fileutils'
 require 'yaml'
@@ -11,7 +12,7 @@ require 'date'
 CLOBBER.include('pkg')
 CLEAN.include('build')
 
-BOX_DIR='.boxes'
+BOX_DIR = '.boxes'.freeze
 
 task :init do
   FileUtils.mkdir_p 'build'
@@ -22,6 +23,8 @@ task :clean_boxes do
   FileUtils.rmtree '.boxes'
 end
 
+RuboCop::RakeTask.new
+
 # Default unit test task
 desc 'Run all unit tests'
 Rake::TestTask.new do |t|
@@ -31,7 +34,7 @@ end
 
 # Cucumber acceptance test tasks
 Cucumber::Rake::Task.new(:features)
-task :features => [:clean, :init, :get_boxes]
+task features: [:clean, :init, :get_boxes]
 
 namespace :features do
   desc 'Opens the HTML Cucumber test report'
@@ -41,26 +44,26 @@ namespace :features do
 end
 
 desc 'Download the required Vagrant boxes for the Cucumber tests'
-task :get_boxes => :init do
+task get_boxes: :init do
   box_dir = File.join(File.dirname(__FILE__), BOX_DIR)
 
-  requested_providers =  ENV.has_key?('PROVIDER') ? ENV['PROVIDER'].split(',').collect(&:strip) : ['virtualbox']
-  requested_boxes =  ENV.has_key?('BOX') ? ENV['BOX'].split(',').collect(&:strip) : ['adb']
-  nightly_cdk_builds = ENV.has_key?('NIGHTLY') ? ENV['NIGHTLY'].eql?('true') : false
+  requested_providers = ENV.key?('PROVIDER') ? ENV['PROVIDER'].split(',').collect(&:strip) : ['virtualbox']
+  requested_boxes =  ENV.key?('BOX') ? ENV['BOX'].split(',').collect(&:strip) : ['adb']
+  nightly_cdk_builds = ENV.key?('NIGHTLY') ? ENV['NIGHTLY'].eql?('true') : false
 
   download_tasks = requested_boxes.map do |box|
     requested_providers.map do |provider|
       case box
-        when 'cdk'
-          if nightly_cdk_builds
-            NightlyCDKDownloader.new(box_dir, provider)
-          else
-            PublicCDKDownloader.new(box_dir, provider)
-          end
-        when 'adb'
-          ADBDownloader.new(box_dir, provider)
+      when 'cdk'
+        if nightly_cdk_builds
+          NightlyCDKDownloader.new(box_dir, provider)
         else
-          raise "Unknown provider #{provider}"
+          PublicCDKDownloader.new(box_dir, provider)
+        end
+      when 'adb'
+        ADBDownloader.new(box_dir, provider)
+      else
+        raise "Unknown provider #{provider}"
       end
     end
   end.flatten!
@@ -71,8 +74,8 @@ task :get_boxes => :init do
     end
   end
 
-  while threads.any?(&:alive?) do
-    pinwheel = %w{| / - \\}
+  while threads.any?(&:alive?)
+    pinwheel = %w(| / - \\)
     4.times do
       print "\b" + pinwheel.rotate!.first
       sleep(0.3)
@@ -88,9 +91,7 @@ class DownloadTask
   attr_reader :meta
 
   def initialize(box_dir, provider)
-    unless File.directory?(box_dir)
-      FileUtils.mkdir_p(box_dir)
-    end
+    FileUtils.mkdir_p(box_dir) unless File.directory?(box_dir)
     @box_dir = box_dir
     @provider = provider
 
@@ -137,8 +138,8 @@ class DownloadTask
 end
 
 class ADBDownloader < DownloadTask
-  ADB_DOWNLOAD_URL='http://cloud.centos.org/centos/7/atomic/images'
-  ADB_BOX_BASE_NAME='AtomicDeveloperBundle'
+  ADB_DOWNLOAD_URL = 'http://cloud.centos.org/centos/7/atomic/images'.freeze
+  ADB_BOX_BASE_NAME = 'AtomicDeveloperBundle'.freeze
 
   def initialize(box_dir, provider)
     super(box_dir, provider)
@@ -160,11 +161,10 @@ class ADBDownloader < DownloadTask
   def download
     agent.get(ADB_DOWNLOAD_URL) do |page|
       page.links.each do |link|
-        if link.href =~ /#{Regexp.quote(ADB_BOX_BASE_NAME)}-#{Regexp.quote(@meta[:current_version])}-CentOS7-#{Regexp.quote(provider)}.box/i
-          agent.pluggable_parser.default = Mechanize::Download
-          puts "Downloading ADB box #{ADB_DOWNLOAD_URL}/#{link.href}"
-          agent.get(link.href).save(box_file)
-        end
+        next unless link.href =~ /#{Regexp.quote(ADB_BOX_BASE_NAME)}-#{Regexp.quote(@meta[:current_version])}-CentOS7-#{Regexp.quote(provider)}.box/i
+        agent.pluggable_parser.default = Mechanize::Download
+        puts "Downloading ADB box #{ADB_DOWNLOAD_URL}/#{link.href}"
+        agent.get(link.href).save(box_file)
       end
     end
   end
@@ -186,7 +186,7 @@ class ADBDownloader < DownloadTask
 end
 
 class NightlyCDKDownloader < DownloadTask
-  CDK_DOWNLOAD_URL_NIGHTLY='http://cdk-builds.usersys.redhat.com/builds/nightly'
+  CDK_DOWNLOAD_URL_NIGHTLY = 'http://cdk-builds.usersys.redhat.com/builds/nightly'.freeze
 
   def initialize(box_dir, provider)
     super(box_dir, provider)
@@ -209,11 +209,10 @@ class NightlyCDKDownloader < DownloadTask
     download_base_url = "#{CDK_DOWNLOAD_URL_NIGHTLY}/#{meta[:current_version]}"
     agent.get(download_base_url) do |page|
       page.links.each do |link|
-        if link.href.match(/.*#{Regexp.quote(provider)}.box$/)
-          agent.pluggable_parser.default = Mechanize::Download
-          puts "Downloading #{download_base_url}/#{link.href}"
-          agent.get(link.href).save(box_file)
-        end
+        next unless link.href =~ /.*#{Regexp.quote(provider)}.box$/
+        agent.pluggable_parser.default = Mechanize::Download
+        puts "Downloading #{download_base_url}/#{link.href}"
+        agent.get(link.href).save(box_file)
       end
     end
   end
@@ -228,15 +227,15 @@ class NightlyCDKDownloader < DownloadTask
     agent.get(CDK_DOWNLOAD_URL_NIGHTLY) do |page|
       return page.links.select { |link| link.href =~ /\d{1,2}-[a-zA-Z]{3}-\d{4}/ }
                  .map { |link| link.href.chomp('/') }
-                 .sort {|a,b| DateTime.strptime(a, '%d-%b-%Y') <=> DateTime.strptime(b, '%d-%b-%Y')}
+                 .sort { |a, b| DateTime.strptime(a, '%d-%b-%Y') <=> DateTime.strptime(b, '%d-%b-%Y') }
     end
   end
 end
 
 class PublicCDKDownloader < DownloadTask
-  CDK_DOWNLOAD_URL='https://access.redhat.com/downloads/content/293/ver=2.1/rhel---7/2.1.0/x86_64/product-software'
-  CDK_BOX_BASE_NAME='rhel-cdk-kubernetes-7.2-25.x86_64.vagrant'
-  LATEST_VERSION='v. 2.1.0 for x86_64'
+  CDK_DOWNLOAD_URL = 'https://access.redhat.com/downloads/content/293/ver=2.1/rhel---7/2.1.0/x86_64/product-software'.freeze
+  CDK_BOX_BASE_NAME = 'rhel-cdk-kubernetes-7.2-25.x86_64.vagrant'.freeze
+  LATEST_VERSION = 'v. 2.1.0 for x86_64'.freeze
 
   def initialize(box_dir, provider)
     super(box_dir, provider)
@@ -260,10 +259,10 @@ class PublicCDKDownloader < DownloadTask
       login_page = page.forms.first.submit
 
       # Submit the login form
-      after_login = login_page.form_with(:id => 'kc-form-login') do |f|
-        username_field = f.field_with(:id => 'username')
+      after_login = login_page.form_with(id: 'kc-form-login') do |f|
+        username_field = f.field_with(id: 'username')
         username_field.value = 'service-manager@mailinator.com'
-        password_field = f.field_with(:id => 'password')
+        password_field = f.field_with(id: 'password')
         password_field.value = 'service-manager'
       end.click_button
 
@@ -271,11 +270,10 @@ class PublicCDKDownloader < DownloadTask
       download_page = after_login.forms.first.submit
 
       download_page.links.each do |link|
-        if link.href =~ /#{Regexp.quote(CDK_BOX_BASE_NAME)}-#{Regexp.quote(provider)}.box/
-          agent.pluggable_parser.default = Mechanize::Download
-          puts "Downloading public release CDK #{link.href}"
-          agent.get(link.href).save(box_file)
-        end
+        next unless link.href =~ /#{Regexp.quote(CDK_BOX_BASE_NAME)}-#{Regexp.quote(provider)}.box/
+        agent.pluggable_parser.default = Mechanize::Download
+        puts "Downloading public release CDK #{link.href}"
+        agent.get(link.href).save(box_file)
       end
     end
   end
@@ -284,5 +282,3 @@ class PublicCDKDownloader < DownloadTask
     'cdk'
   end
 end
-
-

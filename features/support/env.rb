@@ -19,9 +19,9 @@ end
 After do |_scenario|
   if File.exist?(File.join(aruba.config.working_directory, 'Vagrantfile'))
     Komenda.run('bundle exec vagrant destroy -f', cwd: aruba.config.working_directory, fail_on_fail: true)
-    if ENV.has_key?('CUCUMBER_RUN_PROVIDER')
-      # if we have more than one provider we need to wait between scenarios in order to allow for proper cleanup/shutdown
-      # of virtualization framework
+    if ENV.key?('CUCUMBER_RUN_PROVIDER')
+      # if we have more than one provider we need to wait between scenarios in order to allow for
+      # proper cleanup/shutdown of virtualization framework
       sleep 10
     end
   end
@@ -59,19 +59,21 @@ end
 # Some shared step definitions
 ##############################################################################
 Given /provider is (.*)/ do |current_provider|
-  requested_provider =  ENV.has_key?('PROVIDER') ? ENV['PROVIDER']: 'virtualbox'
+  requested_provider = ENV.key?('PROVIDER') ? ENV['PROVIDER'] : 'virtualbox'
 
   unless requested_provider.include?(current_provider)
-    #puts "Skipping scenario '#{@scenario_name}' for provider '#{current_provider}', since this provider is not explicitly enabled via environment variable 'PROVIDER'"
+    # puts "Skipping scenario '#{@scenario_name}' for provider '#{current_provider}', since this
+    # provider is not explicitly enabled via environment variable 'PROVIDER'"
     skip_this_scenario
   end
 end
 
 Given /box is (.*)/ do |current_box|
-  requested_box =  ENV.has_key?('BOX') ? ENV['BOX']: 'adb'
+  requested_box = ENV.key?('BOX') ? ENV['BOX'] : 'adb'
 
   unless requested_box.include?(current_box)
-    #puts "Skipping scenario '#{@scenario_name}' for box '#{current_box}', since this box is not explicitly enabled via environment variable 'BOX'"
+    # puts "Skipping scenario '#{@scenario_name}' for box '#{current_box}', since this box is not explicitly
+    # enabled via environment variable 'BOX'"
     skip_this_scenario
   end
 end
@@ -84,7 +86,7 @@ Then(/^stdout from "([^"]*)" should be script readable$/) do |cmd|
   output_is_script_readable(aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout))
 end
 
-Then(/^stdout from "([^"]*)" should match \/(.*)\/$/) do |cmd, regexp|
+Then(%r{^stdout from "([^"]*)" should match /(.*)/$}) do |cmd, regexp|
   aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout) =~ /#{regexp}/
 end
 
@@ -95,7 +97,7 @@ end
 Then(/^the service "([^"]*)" should be ([^"]*)$/) do |service, operation|
   run("vagrant ssh -c \"sudo systemctl status #{service}\"")
 
-  if ['running', 'restarted'].include? operation
+  if %w(running restarted).include? operation
     exit_code = 0
     regexp = /Active: active \(running\)/
   elsif operation == 'stopped'
@@ -126,7 +128,7 @@ When(/^the "([^"]*)" service is \*not\* running$/) do |service|
   run("vagrant ssh -c \"sudo systemctl stop #{service}\"")
 
   expect(last_command_started).to have_exit_status(0)
-  step "the \"docker\" service is not running"
+  step 'the "docker" service is not running'
 end
 
 # Note: Only for services supported through systemctl. Not for 'kubernetes'.

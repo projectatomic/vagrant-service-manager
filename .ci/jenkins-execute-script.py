@@ -70,6 +70,7 @@ for host in data['hosts']:
 
     # run build and features
     build_cmd  = 'cd vagrant-service-manager && '
+    build_cmd += 'bundle exec rake rubocop && '
     build_cmd += 'bundle exec rake test && '
     build_cmd += 'bundle exec rake features CUCUMBER_OPTS=\'-p ci\' PROVIDER=libvirt BOX=adb,cdk && '
     build_cmd += 'bundle exec rake build'
