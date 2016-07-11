@@ -71,6 +71,17 @@ module VagrantPlugins
           @installer.instance_variable_get('@binary_handler').binary_exists.must_equal true
         end
       end
+
+      describe 'Kubernetes' do
+        before do
+          @type = :kubernetes
+          @options = { box_version: 'adb' }
+        end
+
+        it 'should exit' do
+          assert_raises(SystemExit) { @installer = Installer.new(@type, @machine, @machine.env, @options) }
+        end
+      end
     end
   end
 end
