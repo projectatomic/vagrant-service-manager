@@ -127,20 +127,17 @@ If existing certificates are found to be invalid, they get regenerated.
 +
 Displays box related information like release version, IP etc.
 +
---
 The possible options for `command` are:
 
 * `version`: Displays the version and release information of the running VM.
 * `ip`: Displays the routable IP address of the running VM.
 +
---
 When `--script-readable` is specified the output is in `key=value` format.
 
 1.  `vagrant service-manager [operation] [service]`
 +
 Manages the life cycle of a service.
 +
---
 The possible options for `operation` are:
 
   * `status`: Lists services and their running state. If a `service` is specified only
@@ -150,10 +147,18 @@ only supported orchestrators are reported.
   * `stop`: Stop the given service in the box.
   * `restart`: Restart the given service in the box.
 +
---
 The supported options for `service` are: Docker, OpenShift.
 
+1. `vagrant service-manager install-cli [service] [--cli-version] [--path]`
++
+Install the client binary for the specified `service`.
++
+The possible options are:
 
+  * `--cli-version`: Download the binary in the specified version, if it exist.
+  * `--path`: Download the binary to the specified path on the host.
++
+The supported options for `service` are: Docker, OpenShift.
 
 [[debug-flag]]
 ==== Debug Flag

@@ -186,6 +186,8 @@ en:
           Please visit access.redhat.com to download client binaries.
         service_not_enabled: |-
           '%{service}' service is not enabled.
+        kube_not_supported: |-
+          Installation of Kubernetes client library via the install-cli command is not supported yet.
 
       status:
         nil: |-

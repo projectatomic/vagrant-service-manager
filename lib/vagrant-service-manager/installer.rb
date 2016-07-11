@@ -33,6 +33,11 @@ module VagrantPlugins
           exit 126
         end
 
+        if @type == :kubernetes
+          @env.ui.info I18n.t('servicemanager.commands.install_cli.kube_not_supported')
+          exit 126
+        end
+
         unless PluginUtil.service_running?(@machine, @type.to_s)
           @env.ui.info I18n.t('servicemanager.commands.install_cli.service_not_enabled',
                               service: @type)
