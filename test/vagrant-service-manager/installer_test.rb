@@ -5,6 +5,8 @@ module VagrantPlugins
     describe Installer do
       before do
         @machine = fake_machine
+        @ui = FakeUI.new
+        @machine.env.stubs(:ui).returns(@ui)
 
         # set test path
         @plugin_test_path = "#{@machine.env.data_dir}/service-manager/test"
@@ -79,7 +81,14 @@ module VagrantPlugins
         end
 
         it 'should exit' do
-          assert_raises(SystemExit) { @installer = Installer.new(@type, @machine, @machine.env, @options) }
+          begin
+            Installer.new(@type, @machine, @machine.env, @options)
+            refute(true, 'Installer should have exited')
+          rescue SystemExit => e
+            e.status.must_equal 126 # exited with failure status
+          end
+          @ui.received_info_messages.must_include 'Installation of Kubernetes client library via the install-cli ' \
+                                                  'command is not supported yet.'
         end
       end
     end

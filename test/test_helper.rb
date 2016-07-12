@@ -8,13 +8,24 @@ require 'minitest/autorun'
 require 'mocha/mini_test'
 
 require 'vagrant-service-manager'
-# capibilities
 require 'guests/redhat/cap/box_version'
 require 'guests/redhat/cap/os_variant'
-require_relative 'support/fake_ui'
 
 def fake_environment(options = { enabled: true })
   { machine: fake_machine(options), ui: FakeUI }
+end
+
+class FakeUI
+  attr_reader :received_info_messages
+
+  def initialize
+    @received_info_messages = []
+  end
+
+  def info(*args)
+    # puts "#{args}"
+    @received_info_messages << args[0]
+  end
 end
 
 class RecordingCommunicator
