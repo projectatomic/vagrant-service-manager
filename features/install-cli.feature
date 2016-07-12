@@ -48,9 +48,11 @@ Feature: Command behavior of client side tools installation
     When I run `bundle exec vagrant service-manager install-cli docker --cli-version 111.222.333`
     Then the exit status should be 126
 
+    When I run `bundle exec vagrant service-manager install-cli docker`
+    Then the exit status should be 0
+    And the binary "docker" should be installed
+
     Examples:
       | box   | provider   | ip          |
-      | cdk   | virtualbox | 10.10.10.42 |
       | adb   | virtualbox | 10.10.10.42 |
-      | cdk   | libvirt    | 10.10.10.42 |
       | adb   | libvirt    | 10.10.10.42 |

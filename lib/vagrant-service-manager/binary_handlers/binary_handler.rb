@@ -97,6 +97,7 @@ module VagrantPlugins
       def validate_url
         url = URI.parse(@url)
         req = Net::HTTP.new(url.host, url.port)
+        req.use_ssl = true if url.scheme == 'https'
         res = req.request_head(url.path)
 
         unless res.code == '200'

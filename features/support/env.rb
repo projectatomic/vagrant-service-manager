@@ -1,5 +1,6 @@
 require 'aruba/cucumber'
 require 'komenda'
+require 'find'
 
 ###############################################################################
 # Aruba config and Cucumber hooks
@@ -25,6 +26,9 @@ After do |_scenario|
       sleep 10
     end
   end
+
+  # Remove the created Vagrant home dir
+  FileUtils.rmtree(ENV['VAGRANT_HOME']) if File.directory? ENV['VAGRANT_HOME']
 end
 
 ###############################################################################
@@ -138,4 +142,14 @@ Then(/^have a new pid for "([^"]*)" service$/) do |service|
   expect(last_command_started).to have_exit_status(0)
   stdout = aruba.command_monitor.find(Aruba.platform.detect_ruby(last_command_started)).send(:stdout)
   expect(@service_current_process_id).not_to eq(extract_process_id(stdout))
+end
+
+Then(/^the binary "([^"]*)" should be installed$/) do |binary|
+  binaries = []
+  Find.find("#{ENV['VAGRANT_HOME']}/data/service-manager/bin") do |path|
+    binaries << path if path =~ %r{.*\/#{Regexp.quote(binary)}$} && File.file?(path)
+  end
+
+  expect(binaries.size).to eq(1)
+  expect(File.executable?(binaries[0])).to eq(true)
 end
