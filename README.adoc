@@ -155,7 +155,7 @@ Install the client binary for the specified `service`.
 +
 The possible options are:
 
-  * `--cli-version`: Download the binary in the specified version, if it exist.
+  * `--cli-version`: Download the binary in the specified version, if it exists.
   * `--path`: Download the binary to the specified path on the host.
 +
 The supported options for `service` are: Docker, OpenShift.
