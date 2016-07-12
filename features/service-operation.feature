@@ -125,6 +125,19 @@ Feature: Command output from service operations like stop/start/restart
     Then the service "docker" should be running
     And have a new pid for "docker" service
 
+    When the "kubernetes" service is running
+    And I successfully run `bundle exec vagrant service-manager stop kubernetes`
+    Then the service "kubernetes" should be stopped
+
+    When the "kubernetes" service is not running
+    And I successfully run `bundle exec vagrant service-manager start kubernetes`
+    Then the service "kubernetes" should be running
+
+    When the "kubernetes" service is running
+    And I successfully run `bundle exec vagrant service-manager restart kubernetes`
+    Then the service "kubernetes" should be running
+    And have a new pid for "kubernetes" service
+
     Examples:
       | box   | provider   | ip          |
       | cdk   | virtualbox | 10.10.10.42 |

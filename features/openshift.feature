@@ -18,11 +18,7 @@ Feature: Command output from various OpenShift related commands
       config.vm.box_url = 'file://../boxes/<box>-<provider>.box'
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
-      config.servicemanager.services = 'docker'
-      config.vm.provision "shell", inline: <<-SHELL
-        systemctl enable openshift 2>&1
-        systemctl start openshift | true
-      SHELL
+      config.servicemanager.services = 'docker, openshift'
     end
     """
 
