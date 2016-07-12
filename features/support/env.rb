@@ -25,6 +25,10 @@ After do |_scenario|
       sleep 10
     end
   end
+
+  # Remove the directory created due to execution of install-cli
+  plugin_dir = ENV['VAGRANT_HOME'] + '/data/service-manager'
+  FileUtils.rmtree(plugin_dir) if File.directory? plugin_dir
 end
 
 ###############################################################################
@@ -138,4 +142,12 @@ Then(/^have a new pid for "([^"]*)" service$/) do |service|
   expect(last_command_started).to have_exit_status(0)
   stdout = aruba.command_monitor.find(Aruba.platform.detect_ruby(last_command_started)).send(:stdout)
   expect(@service_current_process_id).not_to eq(extract_process_id(stdout))
+end
+
+Then(/^the binary for "([^"]*)" with version "([^"]*)" should be installed$/) do |service, version|
+  BINARY_MAP = { docker: 'docker', openshift: 'oc' }.freeze
+  bin_path = "#{ENV['VAGRANT_HOME']}/data/service-manager/bin"
+  binary_path = "#{bin_path}/#{service}/#{version}/#{BINARY_MAP[service.to_sym]}"
+
+  expect(File.exist?(binary_path)).to eq(true)
 end
