@@ -48,6 +48,20 @@ Feature: Command behavior of client side tools installation
     When I run `bundle exec vagrant service-manager install-cli docker --cli-version 111.222.333`
     Then the exit status should be 126
 
+    When I run `bundle exec vagrant service-manager install-cli docker`
+    And box is "adb"
+    Then the exit status should be 0
+    And the binary for "docker" with version "1.9.1" should be installed
+
+    When I run `bundle exec vagrant service-manager install-cli docker`
+    And box is "cdk"
+    Then the exit status should be 126
+    And stdout from "bundle exec vagrant service-manager install-cli docker" should contain:
+    """
+    The CDK does not support client binary installs via the 'install-cli' command.
+    Please visit access.redhat.com to download client binaries.
+    """
+
     Examples:
       | box   | provider   | ip          |
       | cdk   | virtualbox | 10.10.10.42 |
