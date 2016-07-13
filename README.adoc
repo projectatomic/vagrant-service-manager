@@ -151,7 +151,9 @@ The supported options for `service` are: Docker, OpenShift.
 
 1. `vagrant service-manager install-cli [service] [--cli-version] [--path]`
 +
-Install the client binary for the specified `service`.
+Install the client binary for the specified `service`. Binaries are per default downloaded to
+`$VAGRANT_HOME/data/service-manager/bin/<service>/<cli-version>`, where `$VAGRANT_HOME` defaults to
+`.vagrant.d` in your home directory.
 +
 The possible options are:
 
