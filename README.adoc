@@ -161,6 +161,9 @@ The possible options are:
   * `--path`: Download the binary to the specified path on the host.
 +
 The supported options for `service` are: Docker, OpenShift.
++
+Client binaries are downloaded in `data/service-manager/bin/<service>/<cli-version>/` directory under Vagrant home directory by default.
+Vagrant home directory can be accessed via environment variable `VAGRANT_HOME` and is usually `.vagrant.d/` under home directory of user.
 
 [[debug-flag]]
 ==== Debug Flag
