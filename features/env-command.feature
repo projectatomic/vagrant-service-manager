@@ -51,7 +51,7 @@ Feature: Command output from env command
     And stdout from "bundle exec vagrant service-manager env docker" should contain "export DOCKER_HOST=tcp://<ip>:2376"
     And stdout from "bundle exec vagrant service-manager env docker" should match /export DOCKER_CERT_PATH=.*\/.vagrant\/machines\/cdk\/virtualbox\/docker/
     And stdout from "bundle exec vagrant service-manager env docker" should contain "export DOCKER_TLS_VERIFY=1"
-    And stdout from "bundle exec vagrant service-manager env docker" should contain "export DOCKER_API_VERSION=1.21"
+    And stdout from "bundle exec vagrant service-manager env docker" should match /export DOCKER_API_VERSION=1.2\d/
     And stdout from "bundle exec vagrant service-manager env docker" should match /# eval "\$\(vagrant service-manager env docker\)"/
 
     When I successfully run `bundle exec vagrant service-manager env docker --script-readable`
