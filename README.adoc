@@ -57,7 +57,7 @@ instructions consult the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[Installation
 Documentation].
 +
-*Note:* When the vagrant-service-manager plugin is loaded and an ADB box is
+NOTE: When the vagrant-service-manager plugin is loaded and an ADB box is
 started using the VirtualBox provider, the user needs to add a routable
 non NAT network interface declaration in the Vagrantfile. If the user
 does not provide a network declaration in the Vagrantfile, a private
@@ -78,77 +78,50 @@ export DOCKER_API_VERSION=1.20
 # eval "$(vagrant service-manager env docker)"
 ----------------------------------------------------------------------------
 +
-*Note:* The required TLS certificates are copied to the host machine at
+NOTE: The required TLS certificates are copied to the host machine at
 the time of `vagrant up` itself. Every run of
 `vagrant service-manager env docker` checks for the validity of the
 certificates on the host machine by matching the certificates inside the
-box. If the certificates on the host machine are invalid, this command
+VM. If the certificates on the host machine are invalid, this command
 will also re-download the certificates onto the host machine.
 
 === Available commands
 
-The following section lists the available commands for the plugin and
-their explanation:
+The following section lists the high level commands available for the plugin,
+which enable you to:
 
-1.  `vagrant service-manager [command] [--help | -h]`
-+
+- set up your environment variables and get the TLS certificates to secure the
+Docker communication channel
+- identify the routable ip address as well as the version of your VM
+- and manage the life cycle of the configured services
+
+For a detailed list of all available commands and their explanations refer
+ to the <<commands.adoc#, Commands Document>>.
+
+- `vagrant service-manager [command] [--help | -h]` +
 Displays the possible commands, options and other relevant information
-for the vagrant-service-manager plugin. If a `command` is specified,
-only the help relevant to that command is displayed.
+for the vagrant-service-manager plugin.
 
-1.  `vagrant service-manager env [service] [--script-readable]`
-+
-Displays connection information for all active services in the box in a
-manner that can be evaluated in a shell. +
-If a `service` is specified, only the information for that service is displayed.
-The supported services are: Docker, OpenShift. +
-When `--script-readable` is specified the output is in `key=value` format. +
-In the case of the _docker_ service, the required TLS certificates for securing the Docker
-communication will be regenerated and copied to the host as part of the command execution.
-If existing certificates are found to be invalid, they get regenerated.
+-  `vagrant service-manager env [service] [--script-readable]` +
+Displays connection information for all active services in the VM, in a
+manner that can be evaluated in a shell.
 
-1.  `vagrant service-manager box [command] [--script-readable]`
-+
-Displays box related information like release version, IP etc.
-+
-The possible options for `command` are:
+-  `vagrant service-manager box [command] [--script-readable]` +
+Displays VM related information like release version, IP, etc.
 
-* `version`: Displays the version and release information of the running VM.
-* `ip`: Displays the routable IP address of the running VM.
-+
-When `--script-readable` is specified the output is in `key=value` format.
-
-1.  `vagrant service-manager [operation] [service]`
-+
+-  `vagrant service-manager [operation] [service]` +
 Manages the life cycle of a service.
-+
-The possible options for `operation` are:
 
-  * `status`: Lists services and their running state. If a `service` is specified only
-the status of that service is displayed. If no service is provided then
-only supported orchestrators are reported.
-  * `start`: Start the given service in the box.
-  * `stop`: Stop the given service in the box.
-  * `restart`: Restart the given service in the box.
-+
-The supported options for `service` are `docker` and `openshift`.
-
-1. `vagrant service-manager install-cli [service]`
-+
-Install the client binary for the specified `service`. Binaries are per default downloaded to
-`$VAGRANT_HOME/data/service-manager/bin/<service>/<cli-version>`, where `$VAGRANT_HOME` defaults to
-`.vagrant.d` in your home directory.
-+
-The supported options for `service` are `docker` and `openshift`.
+- `vagrant service-manager install-cli [service]` +
+Installs the client binary for the specified service.
 
 [[debug-flag]]
 ==== Debug Flag
 
 Append `--debug` flag to enable debug mode.
 
-*Note:* Debug output from `vagrant-service-manager` is prepended with
+NOTE: Debug output from `vagrant-service-manager` is prepended with
 the following string:
-
 `DEBUG command: [ service-manager: <command name / log message> ]`
 
 === Exit codes
@@ -207,7 +180,8 @@ As most other open-source projects, vagrant-service-manager has a set of convent
 about how to write code for it. It follows the
 https://github.com/bbatsov/ruby-style-guide[Ruby Style Guide].
 
-You can verify that your changes adhere to this style using the http://batsov.com/rubocop[RuboCop] Rake task:
+You can verify that your changes adhere to this style using the
+ http://batsov.com/rubocop[RuboCop] Rake task:
 
 --------------------------
 $ bundle exec rake rubocop
@@ -239,7 +213,7 @@ acceptance tests. They can be run via:
 $ bundle exec rake features
 ---------------------------
 
-*Note:* This Cucumber tests do not run on Windows, pending resolution of
+NOTE: These Cucumber tests do not run on Windows, pending resolution of
 https://github.com/projectatomic/vagrant-service-manager/issues/213[Issue #213].
 
 Per default, only the scenarios for ADB in combination with the

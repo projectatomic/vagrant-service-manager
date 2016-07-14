@@ -1,0 +1,272 @@
+= Available Commands and Examples
+:toc:
+:toc-placement!:
+
+Once you start the virtual machine using `vagrant up`, you can use
+ vagrant-service-manager to manage your development environment.
+
+'''
+toc::[]
+'''
+
+You can use vagrant-service-manager to set up your environment variables and
+ get the TLS certificates to secure the Docker communication channel; identify
+ the routable ip address and version of your VM; and check the status and
+ manage the life cycle of the configured services in the development environment.
+
+To run the vagrant-service-manager plugin use: +
+-------------------------------------------
+vagrant service-manager [command] [options]
+-------------------------------------------
+The following commands can be used: +
+
+`env`::  Displays the connection information for services in the VM +
+`box`:: Displays the VM related information like version, release, IP etc +
+`status`:: Lists services and their running state +
+`start`:: Starts the given service in the VM +
+`stop`:: Stops the given service in the VM +
+`restart`:: Restarts the given service in the VM +
+
+The following options can be used: +
+
+`--script-readable`:: Displays information in a key=value format +
+`-h, --help`:: Prints help for the specific command being run +
+
+
+== Set Environment Variables and Get Certificates
+
+If you need to set the environment variables and get the certificates for all
+ active services in the VM, run: +
+
+`$ vagrant service-manager env` +
+
+Usage: `vagrant service-manager env [service] [options]`
+
+The possible options for service are `docker` and `openshift`. +
+If no service is specified `vagrant service-manager env` provides connection
+ information for all active services.
+
+The following options can be used: +
+
+`--script-readable`:: Displays information in a key=value format +
+`-h, --help`:: Prints help for the specific command being run. +
+
+=== Examples
+
+If you need connection information for all active services in the VM, in a
+manner that can be evaluated in a shell, use:
+-----------------------------------------------------------------------------
+$ vagrant service-manager env
+
+# docker env:
+# Set the following environment variables to enable access to the
+# docker daemon running inside of the vagrant virtual machine:
+export DOCKER_HOST=tcp://10.1.2.2:2376
+export DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker
+export DOCKER_TLS_VERIFY=1
+export DOCKER_API_VERSION=1.21
+
+# openshift env:
+# You can access the OpenShift console on: https://10.1.2.2:8443/console
+# To use OpenShift CLI, run: oc login https://10.1.2.2:8443
+export OPENSHIFT_URL=https://10.1.2.2:8443
+export OPENSHIFT_WEB_CONSOLE=https://10.1.2.2:8443/console
+export DOCKER_REGISTRY=hub.openshift.centos7-adb.10.1.2.2.xip.io
+
+# run following command to configure your shell:
+# eval "$(vagrant service-manager env)"
+-----------------------------------------------------------------------------
+
+If you would like to get the environment variables, and if applicable,
+ certificates for a specific service, specify the service name. For example, for
+ Docker use: +
+
+----------------------------------------------------------------------------
+$ vagrant service-manager env docker
+# Set the following environment variables to enable access to the
+# docker daemon running inside of the vagrant virtual machine:
+export DOCKER_HOST=tcp://172.28.128.3:2376
+export DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker
+export DOCKER_TLS_VERIFY=1
+export DOCKER_API_VERSION=1.21
+
+# run following command to configure your shell:
+# eval "$(vagrant service-manager env docker)"
+----------------------------------------------------------------------------
+
+NOTE: The `env` command checks to make sure that the TLS certificate on the host
+ used with docker is valid. If it is invalid, the command will automatically
+ regenerate the docker TLS certificate and copy the new certificate to the host.
+
+Similarly, for OpenShift you can use: +
+`$ vagrant service-manager env openshift`
+
+If you want to run the plugin and get the environment variables and certificates
+ for docker in key=value format, use:
+----------------------------------------------------------------------
+$ vagrant service-manager env docker --script-readable
+DOCKER_HOST=tcp://172.28.128.3:2376
+DOCKER_CERT_PATH=/foo/bar/.vagrant/machines/default/virtualbox/docker'
+DOCKER_TLS_VERIFY=1
+DOCKER_API_VERSION=1.21
+----------------------------------------------------------------------
+
+
+== Get IP Address and Version Information
+
+If you need information about the development environment, such as the routable
+IP address or the version and release information, use:
+
+`$ vagrant service-manager box` +
+
+Usage: `vagrant service-manager box [sub-command] [options]`
+
+The following sub-commands can be used: +
+
+`ip`:: Displays the routable IP address of the VM +
+`version`:: Displays the version and release information of the VM +
+
+The following options can be used: +
+
+`--script-readable`:: Displays information in a key=value format +
+`-h, --help`:: Prints help for the specific command being run.
+
+=== Examples
+
+To check the routable IP address of the VM:
+---------------------------------
+$ vagrant service-manager box ip
+172.28.128.3
+---------------------------------
+
+To check the routable IP address of the VM in key=value format:
+---------------------------------------------------
+$ vagrant service-manager box ip --script-readable
+IP=172.28.128.3
+---------------------------------------------------
+
+To check the version information:
+--------------------------------------
+$ vagrant service-manager box version
+Atomic Developer Bundle (ADB) 2.2.0
+--------------------------------------
+
+To get the version information in key=value format:
+--------------------------------------------------------
+$ vagrant service-manager box version --script-readable
+VARIANT="Atomic Developer Bundle (ADB)"
+VARIANT_ID="adb"
+VARIANT_VERSION="2.2.0"
+--------------------------------------------------------
+
+
+== Manage Services
+
+If you need to check the status, start, stop or restart a specific service use: +
+`$ vagrant service-manager [sub-command] [service]`
+
+The following sub-commands can be used: +
+
+`status`::   Lists services and their state (running/stopped) +
+`start`::   Starts the given service in the VM +
+`stop`::   Stops the given service in the VM +
+`restart`::   Restarts the given service in the VM +
+
+The possible options for service are `docker`, `openshift` and `kubernetes`.
+
+=== Examples
+
+If no service is specified `vagrant service-manager status` will provide
+information on all the configured services and their state (running/stopped).
+---------------------------------------
+$ vagrant service-manager status
+Configured services:
+docker - running
+openshift - stopped
+kubernetes - stopped
+---------------------------------------
+
+To check the status of Docker:
+-------------------------------------------
+$ vagrant service-manager status docker
+docker - running
+-------------------------------------------
+
+To start Docker, if it is stopped:
+---------------------------------------------
+$ vagrant service-manager start docker
+$ vagrant service-manager status docker
+docker - running
+---------------------------------------------
+
+To stop Docker:
+---------------------------------------------
+$ vagrant service-manager stop docker
+$ vagrant service-manager status docker
+docker - stopped
+---------------------------------------------
+
+To restart Docker:
+-----------------------------------------
+$ vagrant service-manager restart docker
+$ vagrant service-manager status docker
+docker - running
+-----------------------------------------
+
+Similarly, you can use `$ vagrant service-manager status openshift`,
+ `$ vagrant service-manager start openshift`, `$ vagrant service-manager stop openshift`,
+ and `$ vagrant service-manager restart openshift`, to verify the status, start,
+  stop and restart OpenShift.
+
+
+== Install CLI
+
+If you need to install the client binary for a specified service, use: +
+
+`vagrant service-manager install-cli [service]` +
+
+The possible options for service are `docker` and `openshift`. +
+
+As per default, binaries are downloaded to
+ `$VAGRANT_HOME/data/service-manager/bin/<service>/<cli-version>`, where
+ `$VAGRANT_HOME` defaults to `.vagrant.d` in your home directory.
+
+=== Example
+
+To install client binary for Docker:
+
+----------------------------------------------------------------------------------------------------
+$ vagrant service-manager install-cli docker
+# Binary already available at /home/johndoe/.vagrant.d/data/service-manager/bin/docker/1.9.1/docker
+# run binary as:
+# docker <command>
+export PATH=/home/johndoe/.vagrant.d/data/service-manager/bin/docker/1.9.1:$PATH
+
+# run following command to configure your shell:
+# eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli docker | tr -d '\r')"
+----------------------------------------------------------------------------------------------------
+
+
+== Access Help
+If you need information on the possible commands, options and other relevant
+information for the vagrant-service-manager plugin, access the help by using
+`--help` or `-h` as is shown below:
+
+--------------------------------------------------------------------------------
+$ vagrant service-manager [--help | -h]
+Usage: vagrant service-manager <command> [options]
+
+The following commands can be used:
+env: displays connection information for services in the VM
+box: displays VM related information like version, release, IP etc
+status: lists services and their running state
+start: starts the given service in the VM
+stop: stops the given service in the VM
+restart: restarts the given service in the VM
+
+The following options can be used:
+--script-readable : Displays information in a key=value format
+-h, --help   print this help
+
+For help on any individual command run `vagrant service-manager <command> -h`
+--------------------------------------------------------------------------------
