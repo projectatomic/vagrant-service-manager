@@ -14,7 +14,7 @@ Feature: Command output from various OpenShift related commands
     end
 
     Vagrant.configure('2') do |config|
-      config.vm.box = '<box>'
+      config.vm.box = '<box>-<provider>'
       config.vm.box_url = 'file://../../.boxes/<box>-<provider>.box'
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
