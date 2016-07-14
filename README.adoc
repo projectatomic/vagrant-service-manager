@@ -26,30 +26,14 @@ image::https://ci.centos.org/buildStatus/icon?job=vagrant-service-manager[link="
 
 == Installation
 
-The vagrant-service-manager plugin is distributed as both a Ruby Gem and via RPM using the
-Fedora COPR system.
-
-=== Installing from RubyGems
-
-The vagrant-service-manager
-https://rubygems.org/gems/vagrant-service-manager[gem] is available on
+The vagrant-service-manager plugin is distributed as a Ruby Gem.
+The https://rubygems.org/gems/vagrant-service-manager[gem] is available on
 https://rubygems.org[RubyGems] and can be installed via the standard
 Vagrant plugin installation method:
 
 ------------------------------------------------
 $ vagrant plugin install vagrant-service-manager
 ------------------------------------------------
-
-=== Installing from RPM
-
-The
-https://copr.fedorainfracloud.org/coprs/nshaikh/vagrant-service-manager/builds/[Copr
-build] is accessible via the standard COPR access/install method:
-
-----------------------------------------------------------------------------------
-$ dnf copr enable nshaikh/vagrant-service-manager
-$ dnf --enablerepo=nshaikh-vagrant-service-manager install vagrant-service-manager
-----------------------------------------------------------------------------------
 
 == Usage
 
