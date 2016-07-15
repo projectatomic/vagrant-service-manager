@@ -96,7 +96,7 @@ Docker communication channel
 - and manage the life cycle of the configured services
 
 For a detailed list of all available commands and their explanations refer
- to the <<commands.adoc#, Commands Document>>.
+ to the link:commands.adoc[Commands Document].
 
 - `vagrant service-manager [command] [--help | -h]` +
 Displays the possible commands, options and other relevant information
