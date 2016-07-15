@@ -2,26 +2,28 @@
 
 ## v1.2.0 Jul 14, 2016
 
-- Issue #331: Update expectation for DOCKER_API_VERSION in cucumber test
-- Issue #323: Add note about default download location of client binaries in README documentation
-- Issue #321: `install-cli docker` errors "Download URL is not accessible" blocker bug
-- Issue #312: install-cli commands throws an error when trying to install Kubernetes CLI bug
-- Issue #291: Update doc example for env to reflect new changes documentation
-- Issue #289: Remove Vagrantfile in root of repository
-- Issue #287: Remove unnecessary TODO file from repo
-- Issue #285: Use native methods to detect host platform instead of OS module
-- Issue #282: Add build status to README build
-- Issue #281: The ADB/CDK download rake tasks should be made proper Rake tasks build enhancement
-- Issue #278: Missing acceptance tests for command like status, service operations test
-- Issue #275: Typo in `vagrant service-manager env --help` command output text bug
-- Issue #270: DOCKER_API_VERSION not set properly on Windows bug
-- Issue #262: Update CI setup configuration
-- Issue #252: Cosmetic bug: vagrant service-manager box ip --script-readable
-- Issue #207: Remove vagrant-service-manager.spec and stop publishing gem as rpm
-- Issue #196: Introduce unit test harness test
-- Issue #93: Implement style guide based test using rubocop test
-- Issue #90: Add install-cli command enhancement focus:devex
-- Issue #20: --force should force redownloading the TLS certificates documentation
+- Fix #331 Updating test expectation after latest ADB release @hferentschik
+- Fix #207 Removes SPEC file from repository and reference from README @navidshaikh
+- Fix #321 Adding support for HTTPS URLs for download URLs @budhrg
+- Fix #323 Adding note about CLI default download location @navidshaikh
+- Fix #312 Improving test for install-cli of Kubernetes @hferentschik
+- Fix #312 Adding message to install-cli to indicate that Kubernetes is not supported by this command @budhrg
+- Fix #93 Adding Rubocop configuration @hferentschik
+- Fix #90, #196 and #289 Introducing unit tests using minitest @budhrg
+- Fix #90 Add install-cli command @budhrg
+- Fix #281 Making download of box file a true dependency of the feature task with update checks @hferentschik
+- Fix #20 Adding documentation about the Docker TLS certification creation @hferentschik
+- Fix #291 Reorganized the Available Commands section @preeticp
+- Fix #285 Native methods to detect host platform @budhrg
+- Fix #287 Removed Unnecessary TODO file @budhrg
+- Fix #288 Adding build status image to README @hferentschik
+- Fix #278 Acceptance tests for --help option for commands like box, env and service-operations @budhrg
+- Fix #275 Fixes typo in vagrant service-manager --help output @navidshaikh
+- Fix #272 README fix for env default behavior @budhrg
+- Fix #262 Updating CI config @hferentschik
+- Fix #270 Fix DOCKER_API_VERSION properly on Windows @budhrg
+- Fix #268 Explicitly setting v1.8.4 as dev version for Vagrant as HEAD has switched to Ruby 2.2 @hferentschik
+- Fix #252 Added --script-readable option to box ip @budhrg
 
 ## v1.1.0 Jun 08, 2016
 - Updated README to make Installation Instructions clearer @bexelbie
