@@ -18,4 +18,15 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rubyzip', '~> 1.2.0'
+
+  spec.add_development_dependency 'mechanize'
+  spec.add_development_dependency 'json'
+  spec.add_development_dependency 'cucumber', '~> 2.1'
+  spec.add_development_dependency 'aruba', '~> 0.13'
+  spec.add_development_dependency 'komenda', '~> 0.1.6'
+  spec.add_development_dependency 'launchy'
+  spec.add_development_dependency 'rake', '10.4.2'
+  spec.add_development_dependency 'minitest'
+  spec.add_development_dependency 'mocha'
+  spec.add_development_dependency 'rubocop'
 end
