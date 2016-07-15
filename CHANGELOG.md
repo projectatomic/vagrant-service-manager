@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.1 Jul 15, 2016
+
+- Fix #343 Updated CHANGELOG for user name @budhrg
+- Fix #330 Documenting release process @hferentschik
+- Fix #313 Explicitly requiring rubyzip as dependency in gemspec @hferentschik
+- Fix #336 Link commands.adoc @budhrg
+- Fix #197 Created new doc for available commands with examples @Preeticp
+
 ## v1.2.0 Jul 14, 2016
 
 - Fix #331 Updating test expectation after latest ADB release @hferentschik
