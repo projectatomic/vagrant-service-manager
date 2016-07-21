@@ -5,9 +5,8 @@ require 'find'
 ###############################################################################
 # Aruba config and Cucumber hooks
 ###############################################################################
-
 Aruba.configure do |config|
-  config.exit_timeout = 300
+  config.exit_timeout = 3600
   config.activate_announcer_on_command_failure = [:stdout, :stderr]
   config.working_directory = 'build/aruba'
 end

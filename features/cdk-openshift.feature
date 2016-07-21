@@ -1,5 +1,5 @@
-Feature: Command output from various OpenShift related commands
-  service-manager should return the correct output from commands affecting OpenShift
+Feature: Command output from various OpenShift related commands in CDK
+  service-manager should return the correct output from commands affecting OpenShift in CDK
 
   @openshift
   Scenario Outline: Boot and execute commands
@@ -55,7 +55,7 @@ Feature: Command output from various OpenShift related commands
     Then stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_HOST=tcp://<ip>:2376"
     And stdout from "bundle exec vagrant service-manager env" should match /export DOCKER_CERT_PATH=.*\/.vagrant\/machines\/cdk\/virtualbox\/docker/
     And stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_TLS_VERIFY=1"
-    And stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_API_VERSION=1.21"
+    And stdout from "bundle exec vagrant service-manager env" should contain "export DOCKER_API_VERSION=1.2\d"
     And stdout from "bundle exec vagrant service-manager env" should match /# eval "\$\(vagrant service-manager env\)"/
     And stdout from "bundle exec vagrant service-manager env" should contain:
     """
