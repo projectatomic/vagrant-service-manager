@@ -21,9 +21,8 @@ module VagrantPlugins
         data = Net::HTTP.get(URI(tag_url))
         tokens = data.match("-v#{@version}-(.*)-#{archive_ext}").captures
         tokens.first unless tokens.empty?
-      rescue StandardError => e
-        @ui.error e.message
-        exit 126
+      rescue StandardError
+        raise I18n.t('servicemanager.commands.install_cli.unsupported_version')
       end
 
       def os_type

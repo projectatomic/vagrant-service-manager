@@ -188,6 +188,10 @@ en:
           '%{service}' service is not enabled.
         kube_not_supported: |-
           Installation of Kubernetes client library via the install-cli command is not supported yet.
+        unsupported_version: |-
+          Something went wrong to find the correct download link.
+          We recommend you to use '--cli-version' for your desired client version.
+          If still facing issues, please report to https://github.com/projectatomic/vagrant-service-manager.
 
       status:
         nil: |-
