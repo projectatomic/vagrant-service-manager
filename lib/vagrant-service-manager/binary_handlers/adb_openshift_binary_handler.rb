@@ -22,7 +22,6 @@ module VagrantPlugins
         tokens = data.match("-v#{@version}-(.*)-#{archive_ext}").captures
         tokens.first unless tokens.empty?
       rescue StandardError
-        @ui.error e.message
         raise I18n.t('servicemanager.commands.install_cli.unsupported_version')
       end
 

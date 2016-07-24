@@ -1,6 +1,7 @@
 module VagrantPlugins
   module ServiceManager
-    class CDKDockerBinaryHandler < CDKBinaryHandler
+    # Currently client binary installation of docker for CDK is same as ADB
+    class CDKDockerBinaryHandler < ADBDockerBinaryHandler
       def initialize(machine, env, options)
         super(machine, env, options)
       end

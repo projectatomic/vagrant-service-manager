@@ -28,11 +28,6 @@ module VagrantPlugins
       private
 
       def validate_prerequisites
-        if @box_version == 'cdk'
-          @env.ui.info I18n.t('servicemanager.commands.install_cli.unsupported_box')
-          exit 126
-        end
-
         if @type == :kubernetes
           @env.ui.info I18n.t('servicemanager.commands.install_cli.kube_not_supported')
           exit 126

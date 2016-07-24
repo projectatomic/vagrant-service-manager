@@ -181,9 +181,6 @@ en:
 
           # run following command to configure your shell:
           # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service} | tr -d '\r')"
-        unsupported_box: |-
-          The CDK does not support client binary installs via the 'install-cli' command.
-          Please visit access.redhat.com to download client binaries.
         service_not_enabled: |-
           '%{service}' service is not enabled.
         kube_not_supported: |-
@@ -191,7 +188,8 @@ en:
         unsupported_version: |-
           Something went wrong to find the correct download link.
           We recommend you to use '--cli-version' for your desired client version.
-          If still facing issues, please report to https://github.com/projectatomic/vagrant-service-manager.
+          If you are still facing issues, please report to
+          https://github.com/projectatomic/vagrant-service-manager.
 
       status:
         nil: |-
