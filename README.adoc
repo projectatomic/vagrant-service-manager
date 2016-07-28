@@ -35,6 +35,9 @@ Vagrant plugin installation method:
 $ vagrant plugin install vagrant-service-manager
 ------------------------------------------------
 
+NOTE: To resolve any issues with the plugin installation and for more information on how to install Vagrant on various systems, refer to the
+https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[ADB installation instructions].
+
 == Usage
 
 === Example execution of the plugin
