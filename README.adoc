@@ -24,6 +24,11 @@ toc::[]
 [[img-build-status]]
 image::https://ci.centos.org/buildStatus/icon?job=vagrant-service-manager[link="https://ci.centos.org/job/vagrant-service-manager"]
 
+== Prerequisites
+
+Follow the https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[ADB installation instructions]
+to install a virtualization provider, Vagrant, and any additional dependencies that your operating system requires.
+
 == Installation
 
 The vagrant-service-manager plugin is distributed as a Ruby Gem.
