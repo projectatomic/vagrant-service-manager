@@ -13,7 +13,7 @@ module VagrantPlugins
       }.freeze
       VERSION_CMD = {
         docker: "docker version --format '{{.Server.Version}}'",
-        openshift: "oc version | grep 'oc' | grep -oE '[0-9.]+'"
+        openshift: "oc version | grep -oE 'oc v([0-9a-z.]+-?[a-z0-9]*.?[0-9])' | sed -E 's/oc v//'"
       }.freeze
       BINARY_REGEX = {
         windows: { docker: %r{\/docker.exe$}, openshift: /oc.exe$/ },
@@ -100,9 +100,11 @@ module VagrantPlugins
         req.use_ssl = true if url.scheme == 'https'
         res = req.request_head(url.path)
 
-        unless res.code == '200'
+        unless %w(200 302).include? res.code
           raise URLValidationError, I18n.t('servicemanager.commands.install_cli.url_validation_error')
         end
+
+        true
       end
 
       private

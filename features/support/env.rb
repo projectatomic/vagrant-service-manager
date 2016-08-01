@@ -5,9 +5,8 @@ require 'find'
 ###############################################################################
 # Aruba config and Cucumber hooks
 ###############################################################################
-
 Aruba.configure do |config|
-  config.exit_timeout = 300
+  config.exit_timeout = 3600
   config.activate_announcer_on_command_failure = [:stdout, :stderr]
   config.working_directory = 'build/aruba'
 end
@@ -19,7 +18,7 @@ end
 
 After do |_scenario|
   if File.exist?(File.join(aruba.config.working_directory, 'Vagrantfile'))
-    Komenda.run('bundle exec vagrant destroy -f', cwd: aruba.config.working_directory, fail_on_fail: true)
+    #Komenda.run('bundle exec vagrant destroy -f', cwd: aruba.config.working_directory, fail_on_fail: true)
     if ENV.key?('CUCUMBER_RUN_PROVIDER')
       # if we have more than one provider we need to wait between scenarios in order to allow for
       # proper cleanup/shutdown of virtualization framework
@@ -28,7 +27,7 @@ After do |_scenario|
   end
 
   # Remove the created Vagrant home dir
-  FileUtils.rmtree(ENV['VAGRANT_HOME']) if File.directory? ENV['VAGRANT_HOME']
+  # FileUtils.rmtree(ENV['VAGRANT_HOME']) if File.directory? ENV['VAGRANT_HOME']
 end
 
 ###############################################################################

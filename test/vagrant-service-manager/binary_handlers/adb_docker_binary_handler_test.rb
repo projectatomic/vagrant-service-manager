@@ -54,6 +54,11 @@ module VagrantPlugins
       end
 
       it 'should validate download url' do
+        @handler.build_download_url
+        @handler.validate_url.must_equal true
+      end
+
+      it 'should raise error with invalid --cli-version' do
         @options['--cli-version'] = '111.222.333'
         @handler = ADBDockerBinaryHandler.new(@machine, @machine.env, @options)
         @handler.build_download_url
