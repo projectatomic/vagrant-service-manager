@@ -216,8 +216,17 @@ acceptance tests. They can be run via:
 $ bundle exec rake features
 ---------------------------
 
+You can run a single feature specifying the path to the feature file
+to run via the _FEATURE_ environment variable:
+
+-----------------------------------------------------------------------
+$ bundle exec rake features FEATURE=features/<feature-filename>.feature
+-----------------------------------------------------------------------
+
 NOTE: These Cucumber tests do not run on Windows, pending resolution of
 https://github.com/projectatomic/vagrant-service-manager/issues/213[Issue #213].
+
+==== Controlling virtualization provider and box type via _PROVIDER_ and _BOX_ environment variables
 
 Per default, only the scenarios for ADB in combination with the
 VirtualBox provider are run. However, you can also run the tests against CDK
@@ -235,23 +244,43 @@ $ bundle exec rake features BOX=cdk,adb
 $ bundle exec rake features BOX=cdk,adb PROVIDER=libvirt,virtualbox
 -----------------------------------------------------
 
+==== Test boxes
+
 The _features_ task will transparently download the required Vagrant
-boxes and cache them in _.boxes_. The cache can be cleared
-via the _clean_boxes_ task.
+boxes and cache them in the _.boxes_ directory. The cache can be cleared
+via the _clean_boxes_ task. For implementation details refer to the
+https://github.com/projectatomic/vagrant-service-manager/blob/master/Rakefile[Rakefile].
 
 Using the variable _NIGHTLY=true_ you can make sure that the
 latest nightly build of the CDK is used (VPN access required).
-Per default the latest public release of the CDK is used.
 
-You can also run a single feature specifying the explicit feature file
-to use:
+--------------------------------------------------
+# Uses the latest nightly build of the CDK instead of the latest public release as per developer.redhat.com
+$ bundle exec rake features BOX=cdk NIGHTLY=true
+--------------------------------------------------
 
------------------------------------------------------------------------
-$ bundle exec rake features FEATURE=features/<feature-filename>.feature
------------------------------------------------------------------------
+NOTE: Per default the latest public release of the CDK is used.
+
+==== Cucumber tags
+
+Some of the scenarios take a long time to run, so in order to keep the
+turn-around time on the development machine acceptable, we also make
+use of the _@ci-only_ https://github.com/cucumber/cucumber/wiki/Tags[tag].
+
+Per default scenarios annotated with _@ci-only_ are only run on the
+https://ci.centos.org/job/vagrant-service-manager[CI server]. Also, to run these tests locally,
+you need to activate the _all_ profile:
+
+--------------------------------------------------
+bundle exec rake features CUCUMBER_OPTS='-p all'
+--------------------------------------------------
+
+For other defined profiles refer to Cucumber config file https://github.com/projectatomic/vagrant-service-manager/blob/master/.config/cucumber.yml[cucumber.yml].
+
+==== Cucumber test reports
 
 After test execution, the Cucumber test reports can be found under
-_build/features_report.html_. They can also be opened via:
+_build/features_report.html_. They can be opened via:
 
 ---------------------------------------
 $ bundle exec rake features:open_report
