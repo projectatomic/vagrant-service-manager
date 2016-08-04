@@ -1,5 +1,5 @@
 module VagrantPlugins
   module ServiceManager
-    VERSION = '1.3.0.dev'.freeze
+    VERSION = '1.2.2'.freeze
   end
 end

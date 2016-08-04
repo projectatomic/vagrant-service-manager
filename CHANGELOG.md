@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.2.2 Aug 04, 2016
+
+- Fix #365 undefined method `captures' for nil:NilClass @budhrg
+- Fix #348 Handle 302 redirection in install-cli URL validation @budhrg
+- Adding docs about using Cucumber tags @hferentschik
+- Fix #357 Unable to download cli if user used latest tag or a alpha/beta tag @budhrg
+- Fix #358 Adding reference to ADB installation documentation @hferentschik
+- Fix #352 Create ISSUE_TEMPLATE.MD @budhrg
+
 ## v1.2.1 Jul 15, 2016
 
 - Fix #343 Updated CHANGELOG for user name @budhrg
