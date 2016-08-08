@@ -9,11 +9,12 @@ module VagrantPlugins
     class BinaryHandler
       BINARY_ARCHIVE_FORMATS = ['.tgz', '.tar.gz', '.gz', '.zip'].freeze
       BINARY_NAME = {
-        docker: 'docker', openshift: 'oc'
+        docker: 'docker', openshift: 'oc', kubernetes: 'kubectl'
       }.freeze
       VERSION_CMD = {
         docker: "docker version --format '{{.Server.Version}}'",
-        openshift: "oc version | grep -oE 'oc v([0-9a-z.]+-?[a-z0-9]*.?[0-9])' | sed -E 's/oc v//'"
+        openshift: "oc version | grep -oE 'oc v([0-9a-z.]+-?[a-z0-9]*.?[0-9])' | sed -E 's/oc v//'",
+        kubernetes: %q(kubectl version --client | sed -E 's/(.*)v([0-9a-z.]+-?[a-z0-9]*.?[0-9]*)",(.*)/\2/')
       }.freeze
       BINARY_REGEX = {
         windows: { docker: %r{\/docker.exe$}, openshift: /oc.exe$/ },
@@ -29,7 +30,7 @@ module VagrantPlugins
 
       def initialize(machine, env, options)
         @machine = machine
-        @ui      = env.ui
+        @ui = env.ui
         @url = ''
         @binary_exists = true
         @skip_download = false

@@ -8,9 +8,11 @@ require_relative 'binary_handlers/binary_handler'
 require_relative 'binary_handlers/adb_binary_handler'
 require_relative 'binary_handlers/cdk_binary_handler'
 require_relative 'binary_handlers/adb_docker_binary_handler'
-require_relative 'binary_handlers/adb_openshift_binary_handler'
 require_relative 'binary_handlers/cdk_docker_binary_handler'
+require_relative 'binary_handlers/adb_openshift_binary_handler'
 require_relative 'binary_handlers/cdk_openshift_binary_handler'
+require_relative 'binary_handlers/adb_kubernetes_binary_handler'
+require_relative 'binary_handlers/cdk_kubernetes_binary_handler'
 
 module VagrantPlugins
   module ServiceManager
