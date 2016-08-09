@@ -11,13 +11,15 @@ module VagrantPlugins
       end
 
       def execute
-        command = 'sudo rm /etc/docker/ca.pem && sudo systemctl restart docker'
+        if service_start_allowed?
+          command = 'sudo rm /etc/docker/ca.pem && sudo systemctl restart docker'
 
-        exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
-        # Copy certs on command execution success
-        if exit_code
-          secrets_path = PluginUtil.host_docker_path(@machine)
-          PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
+          exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+          # Copy certs on command execution success
+          if exit_code
+            secrets_path = PluginUtil.host_docker_path(@machine)
+            PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
+          end
         end
       end
 

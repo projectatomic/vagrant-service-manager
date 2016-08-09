@@ -7,7 +7,10 @@ module VagrantPlugins
       end
 
       def execute
-        # TODO: Implement execute method
+        if service_start_allowed?
+          command = 'sccli kubernetes'
+          PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+        end
       end
 
       def status
@@ -16,6 +19,10 @@ module VagrantPlugins
 
       def info(options = {})
         # TODO: Implement info method
+      end
+
+      def service_start_allowed?
+        @services.include?('kubernetes')
       end
     end
   end

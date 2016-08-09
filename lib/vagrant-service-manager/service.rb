@@ -9,30 +9,21 @@ module VagrantPlugins
     class Service
       def initialize(app, env)
         @app = app
+        @env = env
         @machine = env[:machine]
-        @ui = env[:ui]
-        @services = @machine.config.servicemanager.services.split(',').map(&:strip)
-        @docker_hook = Docker.new(@machine, @ui)
-        @openshift_hook = OpenShift.new(@machine, @ui)
+        @service_hooks = load_service_hooks
       end
 
       def call(env)
         @app.call(env)
+        return false unless SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
+        @service_hooks.each(&:execute)
+      end
 
-        if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
-          # docker service needs to be started by default for ADB and CDK box
-          @docker_hook.execute
+      private
 
-          if @machine.guest.capability(:os_variant) == 'cdk' && @services.empty?
-            # openshift to be started by default for CDK
-            @openshift_hook.execute
-          elsif @services.include? 'openshift'
-            # Start OpenShift service if it is configured in Vagrantfile
-            @openshift_hook.execute
-          end
-        end
-      rescue Vagrant::Errors::GuestCapabilityNotFound
-        # Do nothing if supported box variant not found
+      def load_service_hooks
+        SUPPORTED_SERVICES.map { |s| PluginUtil.service_class(s).new(@machine, @env) }
       end
     end
   end

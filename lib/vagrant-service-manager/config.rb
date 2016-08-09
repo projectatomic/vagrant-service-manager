@@ -2,7 +2,7 @@ require 'set'
 
 module VagrantPlugins
   module ServiceManager
-    SERVICES = %w(docker openshift).freeze
+    SERVICES = %w(docker openshift kubernetes).freeze
     CONFIG_KEYS = [
       :services, :openshift_docker_registry,
       :openshift_image_name, :openshift_image_tag

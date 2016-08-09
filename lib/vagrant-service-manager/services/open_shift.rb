@@ -10,8 +10,13 @@ module VagrantPlugins
       end
 
       def execute
-        command = "#{@extra_cmd} sccli openshift"
-        PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+        if service_start_allowed?
+          # openshift to be started by default for CDK
+          command = "#{@extra_cmd} sccli openshift"
+          PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+        end
+      rescue Vagrant::Errors::GuestCapabilityNotFound
+        PluginLogger.debug('Guest capability not found while starting OpenShift service')
       end
 
       def status
@@ -31,6 +36,10 @@ module VagrantPlugins
                            name: 'OpenShift')
           exit 126
         end
+      end
+
+      def service_start_allowed?
+        (cdk? && @services.empty?) || @services.include?('openshift')
       end
 
       private
