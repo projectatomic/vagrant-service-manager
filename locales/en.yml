@@ -1,10 +1,12 @@
 en:
+# Vagrant related translations
   vagrant:
     errors:
       url_validation_error: |-
         Download URL is not accessible.
         Possible reason: Invalid version name
 
+# Plugin related translations
   servicemanager:
     synopsis: |-
       provides the IP address:port and tls certificate file location for a docker daemon
@@ -13,15 +15,14 @@ en:
       Try this in the directory with your Vagrantfile:
       vagrant up
 
-#-------------------------------------------------------------------------------
-# Translations for config validation errors
-#-------------------------------------------------------------------------------
+# Config related translations
     config:
       supported_devices: |-
         services should be subset of %{services}.
-#-------------------------------------------------------------------------------
-# Translations for commands. e.g. `vagrant x`
-#-------------------------------------------------------------------------------
+      only_one_service: |-
+        Only one of the service out of openshift and kubernetes can be enabled at a time.
+
+# Command related translations
     commands:
       help:
         default: |-
@@ -46,6 +47,7 @@ en:
           Objects:
                 docker      display information and environment variables for docker
                 openshift   display information and environment variables for openshift
+                kubernetes  display information and environment variables for kubernetes
 
           If OBJECT is omitted, display the information for all active services
 
@@ -106,7 +108,6 @@ en:
 
           Example:
                 vagrant service-manager install-cli docker
-
       env:
         docker:
           windows: |-
@@ -158,9 +159,24 @@ en:
             OPENSHIFT_URL=%{openshift_url}
             OPENSHIFT_WEB_CONSOLE=%{openshift_console_url}
             DOCKER_REGISTRY=%{docker_registry}
+        kubernetes:
+          windows: |-
+            # Set the following environment variables to enable access to the
+            # kubernetes server running inside of the vagrant virtual machine:
+            setx KUBECONFIG %{kubeconfig_path}
+          non_windows: |-
+            # Set the following environment variables to enable access to the
+            # kubernetes server running inside of the vagrant virtual machine:
+            export KUBECONFIG=%{kubeconfig_path}
+          windows_cygwin: |-
+            # Set the following environment variables to enable access to the
+            # kubernetes server running inside of the vagrant virtual machine:
+            export KUBECONFIG=%{kubeconfig_path}
+          script_readable: |-
+            KUBECONFIG=%{kubeconfig_path}
         windows_cygwin_configure_info: |-
-            # run following command to configure your shell:
-            # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env%{command} | tr -d '\r')"
+          # run following command to configure your shell:
+          # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager env%{command} | tr -d '\r')"
         unix_configure_info: |-
           # run following command to configure your shell:
           # eval "$(vagrant service-manager env%{command})"
@@ -171,7 +187,6 @@ en:
         sccli_only_support: |-
           Only sccli services are supported. For example:
             docker, openshift and kubernetes
-
       install_cli:
         message: |-
           # Binary %{when} available at %{path}
@@ -188,7 +203,6 @@ en:
           We recommend you to use '--cli-version' for your desired client version.
           If you are still facing issues, please report to
           https://github.com/projectatomic/vagrant-service-manager.
-
       status:
         nil: |-
           Configured services:
@@ -198,3 +212,24 @@ en:
         unsupported_service: |-
           Unknown service '%{service}'.
           Supported services are %{services}.
+
+# Kube config template translation
+    kube_config: |-
+      apiVersion: v1
+      clusters:
+      - cluster:
+          insecure-skip-tls-verify: true
+          server: https://%{ip}:6443
+        name: k8s
+      contexts:
+      - context:
+          cluster: k8s
+          user: "serviceaccount"
+        name: k8s
+      current-context: k8s
+      kind: Config
+      preferences: {}
+      users:
+      - name: serviceaccount
+        user:
+          token: %{token}

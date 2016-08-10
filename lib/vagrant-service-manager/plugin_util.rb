@@ -17,6 +17,24 @@ module VagrantPlugins
         machine.communicate.download("#{DOCKER_PATH}/key.pem", path.to_s)
       end
 
+      def self.generate_kubeconfig(machine, ui, plugin_dir)
+        FileUtils.mkdir_p(plugin_dir) unless File.directory?(plugin_dir)
+        File.open("#{plugin_dir}/kubeconfig", 'w') do |config_file|
+          config_file.write(I18n.t('servicemanager.kube_config',
+                                   ip: PluginUtil.machine_ip(machine),
+                                   token: service_token(machine, ui)))
+        end
+      end
+
+      def self.service_token(machine, ui)
+        token_template = '-o template --template="{{(index .secrets 0).name}}"'
+        secret_template = '-o template --template="{{.data.token}}"'
+        secret_name_cmd = "$(kubectl get serviceaccounts default #{token_template})"
+
+        cmd = "kubectl get secret #{secret_name_cmd} #{secret_template} | base64 -d"
+        execute_once(machine, ui, cmd)
+      end
+
       def self.host_docker_path(machine)
         # Path to the private_key and where we will store the TLS Certificates
         File.expand_path('docker', machine.data_dir)

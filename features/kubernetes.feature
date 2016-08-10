@@ -18,6 +18,7 @@ Feature: Command output from various Kubernetes related commands
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
 
+      config.registration.skip = true
       config.servicemanager.services = 'kubernetes'
     end
     """
@@ -30,9 +31,15 @@ Feature: Command output from various Kubernetes related commands
     Then the exit status should be 0
     And the binary "kubectl" should be installed
 
+    When I successfully run `bundle exec vagrant service-manager env kubernetes`
+    Then stdout from "bundle exec vagrant service-manager env kubernetes" should be evaluable in a shell
+    And stdout from "bundle exec vagrant service-manager env kubernetes" should match /export KUBECONFIG=.*\/.vagrant.d\/data\/service-manager\/kubeconfig/
+    And stdout from "bundle exec vagrant service-manager env kubernetes" should match /# eval "\$\(vagrant service-manager env kubernetes\)"/
+
+    When I successfully run `bundle exec vagrant service-manager env kubernetes --script-readable`
+    Then stdout from "bundle exec vagrant service-manager env kubernetes --script-readable" should be script readable
+
     Examples:
       | box   | provider   | ip          |
       | adb   | virtualbox | 10.10.10.42 |
-      | adb   | libvirt    | 10.10.10.42 |
       | cdk   | virtualbox | 10.10.10.42 |
-      | cdk   | libvirt    | 10.10.10.42 |

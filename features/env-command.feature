@@ -32,6 +32,7 @@ Feature: Command output from env command
     Objects:
           docker      display information and environment variables for docker
           openshift   display information and environment variables for openshift
+          kubernetes  display information and environment variables for kubernetes
 
     If OBJECT is omitted, display the information for all active services
 

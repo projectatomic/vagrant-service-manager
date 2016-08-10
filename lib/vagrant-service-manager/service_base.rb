@@ -5,6 +5,8 @@ module VagrantPlugins
         @machine = machine
         @env = env
         @ui = env.respond_to?('ui') ? env.ui : env[:ui]
+        home_path = env.respond_to?('home_path') ? env.home_path : env[:home_path]
+        @plugin_dir = File.join(home_path, 'data', 'service-manager')
         @services = @machine.config.servicemanager.services.split(',').map(&:strip)
       end
 

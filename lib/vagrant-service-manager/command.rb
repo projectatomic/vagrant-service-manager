@@ -81,7 +81,7 @@ module VagrantPlugins
         when 'env'
           exit_if_machine_not_running
           case subcommand
-          when 'docker', 'openshift'
+          when 'docker', 'openshift', 'kubernetes'
             case option
             when nil
               execute_service(subcommand)
@@ -208,13 +208,8 @@ module VagrantPlugins
 
           running_service_classes.each do |service_class|
             service = service_class.to_s.split('::').last.downcase
-            unless options[:script_readable] || service == 'kubernetes'
-              @env.ui.info("\n# #{service} env:")
-            end
-            # since we do not have feature to show the Kube connection information
-            unless service == 'kubernetes'
-              service_class.new(machine, @env).info(options)
-            end
+            @env.ui.info("\n# #{service} env:") unless options[:script_readable]
+            service_class.new(machine, @env).info(options)
           end
 
           PluginUtil.print_shell_configure_info(@env.ui) unless options[:script_readable]
@@ -247,7 +242,11 @@ module VagrantPlugins
                   end
 
         with_target_vms(nil, single_target: true) do |machine|
-          PluginUtil.execute_and_exit_on_fail(machine, @env.ui, command)
+          exit_code = PluginUtil.execute_and_exit_on_fail(machine, @env.ui, command)
+
+          if exit_code.zero? && service == 'kubernetes' && operation == 'start'
+            PluginUtil.generate_kubeconfig(machine, @env.ui, File.dirname(ServiceManager.bin_dir))
+          end
         end
       end
 

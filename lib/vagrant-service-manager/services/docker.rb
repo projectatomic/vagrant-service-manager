@@ -15,8 +15,9 @@ module VagrantPlugins
           command = 'sudo rm /etc/docker/ca.pem && sudo systemctl restart docker'
 
           exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+
           # Copy certs on command execution success
-          if exit_code
+          if exit_code.zero?
             secrets_path = PluginUtil.host_docker_path(@machine)
             PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
           end
@@ -46,7 +47,7 @@ module VagrantPlugins
 
           options[:api_version] = PluginUtil.execute_once(@machine, @ui, api_version_cmd)
           # Display the information, irrespective of the copy operation
-          print_env_info(@ui, options)
+          print_env_info(options)
         else
           @ui.error I18n.t('servicemanager.commands.env.service_not_running',
                            name: @service_name)
@@ -56,7 +57,7 @@ module VagrantPlugins
 
       private
 
-      def print_env_info(ui, options)
+      def print_env_info(options)
         PluginLogger.debug("script_readable: #{options[:script_readable] || false}")
 
         label = PluginUtil.env_label(options[:script_readable])
@@ -69,9 +70,9 @@ module VagrantPlugins
                          api_version: options[:api_version])
         # Puts is used to escape and render the back slashes in Windows path
         message = puts(message) if Vagrant::Util::Platform.windows?
-        ui.info(message)
+        @ui.info(message)
         return if options[:script_readable] || options[:all]
-        PluginUtil.print_shell_configure_info(ui, ' docker')
+        PluginUtil.print_shell_configure_info(@ui, ' docker')
       end
     end
   end

@@ -44,11 +44,19 @@ module VagrantPlugins
                            services: SERVICES.inspect)
         end
 
+        if SERVICES.drop(1).to_set.subset? configured_services.to_set
+          errors << I18n.t('servicemanager.config.only_one_service')
+        end
+
         errors
       end
 
       def supported_services?
-        @services.split(',').map(&:strip).to_set.subset?(SERVICES.to_set)
+        configured_services.to_set.subset? SERVICES.to_set
+      end
+
+      def configured_services
+        @services.split(',').map(&:strip)
       end
     end
   end

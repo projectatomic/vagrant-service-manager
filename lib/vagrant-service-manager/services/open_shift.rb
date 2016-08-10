@@ -11,7 +11,6 @@ module VagrantPlugins
 
       def execute
         if service_start_allowed?
-          # openshift to be started by default for CDK
           command = "#{@extra_cmd} sccli openshift"
           PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
         end
@@ -39,6 +38,7 @@ module VagrantPlugins
       end
 
       def service_start_allowed?
+        # openshift to be started by default for CDK
         (cdk? && @services.empty?) || @services.include?('openshift')
       end
 
