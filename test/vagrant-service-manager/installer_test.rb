@@ -78,17 +78,27 @@ module VagrantPlugins
         before do
           @type = :kubernetes
           @options = { box_version: 'adb' }
+          @installer = Installer.new(@type, @machine, @machine.env, @options)
         end
 
-        it 'should exit' do
-          begin
-            Installer.new(@type, @machine, @machine.env, @options)
-            refute(true, 'Installer should have exited')
-          rescue SystemExit => e
-            e.status.must_equal 126 # exited with failure status
-          end
-          @ui.received_info_messages.must_include 'Installation of Kubernetes client library via the install-cli ' \
-                                                  'command is not supported yet.'
+        it 'should set default values properly' do
+          @installer.instance_variable_get('@type').must_equal @type
+          @installer.instance_variable_get('@machine').must_equal @machine
+          @installer.instance_variable_get('@env').must_equal @machine.env
+          @installer.instance_variable_get('@box_version').must_equal 'adb'
+        end
+
+        it 'should build handler class dynamically' do
+          @installer.handler_class.must_equal ADBKubernetesBinaryHandler.to_s
+        end
+
+        it 'should skip installing if binary path exists' do
+          # create mock docker binary
+          bin_folder_path = "#{ServiceManager.bin_dir}/kubernetes/#{@options['--cli-version']}"
+          FileUtils.mkdir_p(bin_folder_path)
+          FileUtils.touch("#{bin_folder_path}/kubectl")
+
+          @installer.instance_variable_get('@binary_handler').binary_exists.must_equal true
         end
       end
     end

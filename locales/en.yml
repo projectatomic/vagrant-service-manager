@@ -183,8 +183,6 @@ en:
           # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service} | tr -d '\r')"
         service_not_enabled: |-
           '%{service}' service is not enabled.
-        kube_not_supported: |-
-          Installation of Kubernetes client library via the install-cli command is not supported yet.
         unsupported_version: |-
           Something went wrong to find the correct download link.
           We recommend you to use '--cli-version' for your desired client version.
