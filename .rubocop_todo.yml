@@ -39,6 +39,8 @@ Metrics/MethodLength:
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
   Max: 111
+  Exclude:
+    - 'lib/vagrant-service-manager/plugin_util.rb'
 
 # Offense count: 1
 Metrics/PerceivedComplexity:

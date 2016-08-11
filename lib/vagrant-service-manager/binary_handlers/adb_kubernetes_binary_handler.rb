@@ -9,7 +9,7 @@ module VagrantPlugins
       end
 
       def build_download_url
-        @url = "#{BINARY_BASE_URL}/v#{@version}/bin/#{os_type}/#{arch}/kubectl"
+        @url = "#{BINARY_BASE_URL}/v#{@version}/bin/#{os_type}/#{arch}/kubectl#{ext}"
       end
 
       private
@@ -26,6 +26,10 @@ module VagrantPlugins
 
       def arch
         'amd64' # only supported arch
+      end
+
+      def ext
+        Vagrant::Util::Platform.windows? ? '.exe' : ''
       end
     end
   end
