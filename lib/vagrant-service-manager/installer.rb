@@ -5,7 +5,7 @@ module VagrantPlugins
         @type = type
         @machine = machine
         @env = env
-        @box_version = options.delete(:box_version)
+        @box_version = options[:box_version]
 
         validate_prerequisites
         binary_handler_class = Object.const_get(handler_class)
@@ -17,6 +17,7 @@ module VagrantPlugins
       end
 
       def install
+        @binary_handler.handle_windows_binary_path if Vagrant::Util::Platform.windows?
         unless PluginUtil.binary_downloaded?(@binary_handler.path)
           @binary_handler.binary_exists = false
           @binary_handler.install

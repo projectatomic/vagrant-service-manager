@@ -74,7 +74,9 @@ module VagrantPlugins
         # If binary is in archive format, extract it
         if binary_archived?
           tmp_binary_file_path = "#{archive_dir_name}/#{binary_name}"
-          archive_handler_class.new(@archive_file_path, tmp_binary_file_path, file_regex).unpack
+          unless File.file? tmp_binary_file_path
+            archive_handler_class.new(@archive_file_path, tmp_binary_file_path, file_regex).unpack
+          end
         end
 
         FileUtils.cp(tmp_binary_file_path, @path)
@@ -89,6 +91,19 @@ module VagrantPlugins
         @ui.info I18n.t(LABEL,
                         path: bin_path, dir: File.dirname(bin_path), service: @type,
                         binary: binary_name, when: (@binary_exists ? 'already' : 'now'))
+      end
+
+      def handle_windows_binary_path
+        return if @type != :openshift
+
+        if @options[:box_version] == 'cdk'
+          oc_version = CDKOpenshiftBinaryHandler::LATEST_OC_VERSION
+        end
+
+        unless @options['--cli-version'] != oc_version || @options['--path']
+          path = PluginUtil.fetch_existing_oc_binary_path_in_windows
+          @path = path unless path.nil?
+        end
       end
 
       def archive_dir_name

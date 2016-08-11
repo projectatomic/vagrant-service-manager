@@ -150,12 +150,22 @@ module VagrantPlugins
 
       def self.format_path(path)
         if Vagrant::Util::Platform.cygwin?
-          path[0..1] = '' # Remove drive letter and colon from path
-          "/cygdrive/c#{path}"
+          Vagrant::Util::Platform.cygwin_path(path)
         elsif Vagrant::Util::Platform.windows?
           windows_path(path).chop
         else
           path
+        end
+      end
+
+      # special case for oc binary in windows
+      def self.fetch_existing_oc_binary_path_in_windows
+        separator = ';'
+        path_string = ENV['PATH']
+
+        separator = ':' unless path_string.include?(';')
+        path_string.split(separator).detect do |dir_path|
+          File.exist? "#{dir_path}\\oc.exe"
         end
       end
     end
