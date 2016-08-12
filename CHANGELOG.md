@@ -1,7 +1,16 @@
 # Changelog
 
-## v1.2.2 Aug 04, 2016
+## v1.3.0 Aug 12, 2016
+- Fix #374 Fix kubernetes acceptance test @budhrg
+- Fix #372 Detect already downloaded oc binary in Windows @budhrg
+- Add fix for kubectl download in Windows @budhrg
+- Fix #11 Show Kubernetes setup info for use with kubectl @budhrg
+- Added unit and acceptance test for kubernetes @budhrg
+- Enabled kubernetes from Vagrantfile configuration option @budhrg
+- Fix #350 install-cli support for kubernetes @budhrg
+- Fix #360 install-cli for docker and openshift in CDK @budhrg
 
+## v1.2.2 Aug 04, 2016
 - Fix #365 undefined method `captures' for nil:NilClass @budhrg
 - Fix #348 Handle 302 redirection in install-cli URL validation @budhrg
 - Adding docs about using Cucumber tags @hferentschik
@@ -10,7 +19,6 @@
 - Fix #352 Create ISSUE_TEMPLATE.MD @budhrg
 
 ## v1.2.1 Jul 15, 2016
-
 - Fix #343 Updated CHANGELOG for user name @budhrg
 - Fix #330 Documenting release process @hferentschik
 - Fix #313 Explicitly requiring rubyzip as dependency in gemspec @hferentschik
@@ -18,7 +26,6 @@
 - Fix #197 Created new doc for available commands with examples @Preeticp
 
 ## v1.2.0 Jul 14, 2016
-
 - Fix #331 Updating test expectation after latest ADB release @hferentschik
 - Fix #207 Removes SPEC file from repository and reference from README @navidshaikh
 - Fix #321 Adding support for HTTPS URLs for download URLs @budhrg

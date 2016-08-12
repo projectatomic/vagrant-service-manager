@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.license       = 'GPL-2.0'
   spec.homepage      = 'https://github.com/projectatomic/vagrant-service-manager'
   spec.summary       = 'To provide the user a CLI to configure the ADB/CDK for different use cases and to provide '\
-                        'glue between ADB/CDK and the user\'s developer environment.'
+                        'glue between ADB/CDK and the user\'s development environment.'
   spec.description   = 'Provides setup information, including environment variables and certificates, required to '\
                         'access services provided by ADB/CDK.'
 
