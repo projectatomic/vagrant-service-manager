@@ -18,7 +18,6 @@ Feature: Command output from various Kubernetes related commands
       config.vm.network :private_network, ip: '<ip>'
       config.vm.synced_folder '.', '/vagrant', disabled: true
 
-      config.registration.skip = true
       config.servicemanager.services = 'kubernetes'
     end
     """
