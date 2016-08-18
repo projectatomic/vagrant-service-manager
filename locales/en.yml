@@ -213,6 +213,14 @@ en:
           Unknown service '%{service}'.
           Supported services are %{services}.
 
+# Action related translations
+    actions:
+      service_success: '%{service} service configured successfully...'
+      service_failure: '%{service} service failed to configure properly...'
+      private_network: |-
+        When using Virtualbox, a non-NAT network interface is required.
+        Adding a private network using DHCP
+
 # Kube config template translation
     kube_config: |-
       apiVersion: v1

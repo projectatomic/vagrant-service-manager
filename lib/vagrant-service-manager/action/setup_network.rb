@@ -24,10 +24,7 @@ module VagrantPlugins
         end
 
         def add_private_network
-          @ui.info <<-MSG
-When using virtualbox, a non-NAT network interface is required.
-Adding a private network using DHCP
-          MSG
+          @ui.info I18n.t('servicemanager.action.private_network')
           @machine.config.vm.network :private_network, type: :dhcp
         end
       end

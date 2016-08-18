@@ -21,11 +21,18 @@ module VagrantPlugins
       action_hook(:servicemanager, :machine_action_up) do |hook|
         hook.before(VagrantPlugins::ProviderVirtualBox::Action::Network, setup_network)
         hook.after(Vagrant::Action::Builtin::SyncedFolders, Service)
+        hook.after Vagrant::Action::Builtin::Provision, final_actions
       end
 
       def self.setup_network
         Vagrant::Action::Builder.new.tap do |b|
           b.use Action::SetupNetwork
+        end
+      end
+
+      def self.final_actions
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use Action::LogConfiguredServices
         end
       end
     end
