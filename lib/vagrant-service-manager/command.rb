@@ -248,6 +248,14 @@ module VagrantPlugins
             PluginUtil.generate_kubeconfig(machine, @env.ui, File.dirname(ServiceManager.bin_dir))
           end
         end
+      rescue StandardError => e
+        if operation == 'restart' && e.message.include?("Start #{service} first")
+          @env.ui.error I18n.t('servicemanager.commands.operation.start_service_first')
+        else
+          @env.ui.error e.message.squeeze
+        end
+
+        exit 126
       end
 
       def display_box_ip(script_readable = false)

@@ -187,6 +187,7 @@ en:
         sccli_only_support: |-
           Only sccli services are supported. For example:
             docker, openshift and kubernetes
+        start_service_first: 'Please start the service first before restarting.'
       install_cli:
         message: |-
           # Binary %{when} available at %{path}

@@ -13,6 +13,9 @@ module VagrantPlugins
           exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
           PluginUtil.generate_kubeconfig(@machine, @ui, @plugin_dir) if exit_code.zero?
         end
+      rescue StandardError => e
+        @ui.error e.message.squeeze
+        exit 126
       end
 
       def status

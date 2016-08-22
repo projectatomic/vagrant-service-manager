@@ -107,8 +107,6 @@ module VagrantPlugins
         end
 
         exit_code
-      rescue StandardError => e
-        ui.error e.message.squeeze
       end
 
       def self.execute_once(machine, ui, command)

@@ -22,6 +22,9 @@ module VagrantPlugins
             PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
           end
         end
+      rescue StandardError => e
+        @ui.error e.message.squeeze
+        exit 126
       end
 
       def status

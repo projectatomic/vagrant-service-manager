@@ -16,6 +16,9 @@ module VagrantPlugins
         end
       rescue Vagrant::Errors::GuestCapabilityNotFound
         PluginLogger.debug('Guest capability not found while starting OpenShift service')
+      rescue StandardError => e
+        @ui.error e.message.squeeze
+        exit 126
       end
 
       def status

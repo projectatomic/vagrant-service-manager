@@ -4,10 +4,12 @@ AllCops:
   Exclude:
     - 'build/**/*'
 
-# Offense count: 57
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
-# URISchemes: http, https
 Metrics/LineLength:
   Max: 120
   Exclude:
     - 'Rakefile'
+
+Metrics/ClassLength:
+  Max: 209
+  Exclude:
+    - 'lib/vagrant-service-manager/command.rb'
