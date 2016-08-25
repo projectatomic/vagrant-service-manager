@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.1 Aug 25, 2016
+- Fix #257 proper error message on restarting a stopped service @budhrg
+- Fix #379 Success message after vagrant up for Kubernetes @budhrg
+
 ## v1.3.0 Aug 12, 2016
 - Fix #374 Fix kubernetes acceptance test @budhrg
 - Fix #372 Detect already downloaded oc binary in Windows @budhrg
