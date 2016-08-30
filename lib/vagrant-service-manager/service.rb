@@ -16,8 +16,13 @@ module VagrantPlugins
 
       def call(env)
         @app.call(env)
-        return false unless SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
-        @service_hooks.each(&:execute)
+
+        if SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
+          return false unless SUPPORTED_BOXES.include? @machine.guest.capability(:os_variant)
+          @service_hooks.each(&:execute)
+        end
+      rescue Vagrant::Errors::GuestCapabilityNotFound => e
+        PluginLogger.debug e.message
       end
 
       private
