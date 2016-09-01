@@ -12,7 +12,7 @@ module VagrantPlugins
 
       def execute
         if service_start_allowed?
-          command = 'sudo rm /etc/docker/ca.pem && sudo systemctl restart docker'
+          command = 'sudo rm -f /etc/docker/ca.pem && sudo systemctl restart docker'
 
           exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
 
