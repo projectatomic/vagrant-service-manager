@@ -1,7 +1,10 @@
 # Changelog
 
+## v1.3.3 Sep 1, 2016
+- Fix #383 Service manager fails to start if /etc/docker/ca.pem doesn't exist @alexeykazakov
+
 ## v1.3.2 Aug 31, 2016
-- Fix #384: don't execute os_variant for unsupported box
+- Fix #384 don't execute os_variant for unsupported box
 
 ## v1.3.1 Aug 25, 2016
 - Fix #257 proper error message on restarting a stopped service @budhrg
