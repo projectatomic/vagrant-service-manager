@@ -57,6 +57,12 @@ Feature: Command output from various OpenShift related commands in ADB
     Then the exit status should be 0
     And the binary "oc" should be installed
 
+    # '../vagrant.d' maps to ENV['VAGRANT_HOME']
+    When I run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path ../vagrant.d/oc`
+    Then the exit status should be 0
+    And the binary "oc" should be installed with version "1.3.0"
+    And the binary should be installed in path "ENV['VAGRANT_HOME']/oc"
+
     When I successfully run `bundle exec vagrant reload`
     And I successfully run `bundle exec vagrant service-manager status openshift`
     Then the exit status should be 0

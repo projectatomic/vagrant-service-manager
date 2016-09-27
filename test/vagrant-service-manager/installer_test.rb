@@ -20,16 +20,15 @@ module VagrantPlugins
 
       describe 'Docker' do
         before do
-          @type = :docker
-          @options = { box_version: 'adb', '--cli-version' => '1.11.0' }
-          @installer = Installer.new(@type, @machine, @machine.env, @options)
+          @options = { type: :docker, box_version: 'adb', '--cli-version' => '1.11.0' }
+          @installer = Installer.new(@machine, @machine.env, @options)
         end
 
         it 'should set default values properly' do
-          @installer.instance_variable_get('@type').must_equal @type
+          @installer.instance_variable_get('@type').must_equal @options[:type]
           @installer.instance_variable_get('@machine').must_equal @machine
           @installer.instance_variable_get('@env').must_equal @machine.env
-          @installer.instance_variable_get('@box_version').must_equal 'adb'
+          @installer.instance_variable_get('@options').must_equal(@options)
         end
 
         it 'should build handler class dynamically' do
@@ -48,16 +47,15 @@ module VagrantPlugins
 
       describe 'OpenShift' do
         before do
-          @type = :openshift
-          @options = { box_version: 'adb', '--cli-version' => '1.2.0' }
-          @installer = Installer.new(@type, @machine, @machine.env, @options)
+          @options = { type: :openshift, box_version: 'adb', '--cli-version' => '1.2.0' }
+          @installer = Installer.new(@machine, @machine.env, @options)
         end
 
         it 'should set default values properly' do
-          @installer.instance_variable_get('@type').must_equal @type
+          @installer.instance_variable_get('@type').must_equal @options[:type]
           @installer.instance_variable_get('@machine').must_equal @machine
           @installer.instance_variable_get('@env').must_equal @machine.env
-          @installer.instance_variable_get('@box_version').must_equal 'adb'
+          @installer.instance_variable_get('@options').must_equal(@options)
         end
 
         it 'should build handler class dynamically' do
@@ -76,16 +74,15 @@ module VagrantPlugins
 
       describe 'Kubernetes' do
         before do
-          @type = :kubernetes
-          @options = { box_version: 'adb' }
-          @installer = Installer.new(@type, @machine, @machine.env, @options)
+          @options = { type: :kubernetes, box_version: 'adb' }
+          @installer = Installer.new(@machine, @machine.env, @options)
         end
 
         it 'should set default values properly' do
-          @installer.instance_variable_get('@type').must_equal @type
+          @installer.instance_variable_get('@type').must_equal @options[:type]
           @installer.instance_variable_get('@machine').must_equal @machine
           @installer.instance_variable_get('@env').must_equal @machine.env
-          @installer.instance_variable_get('@box_version').must_equal 'adb'
+          @installer.instance_variable_get('@options').must_equal(@options)
         end
 
         it 'should build handler class dynamically' do

@@ -1,19 +1,19 @@
 module VagrantPlugins
   module ServiceManager
     class Installer
-      def initialize(type, machine, env, options)
-        @type = type
+      def initialize(machine, env, options)
+        @options = options
+        @type = @options[:type]
         @machine = machine
         @env = env
-        @box_version = options[:box_version]
 
         validate_prerequisites
         binary_handler_class = Object.const_get(handler_class)
-        @binary_handler = binary_handler_class.new(machine, env, { type: @type }.merge(options))
+        @binary_handler = binary_handler_class.new(machine, env, @options)
       end
 
       def handler_class
-        "#{ServiceManager.name}::#{@box_version.upcase}#{@type.capitalize}BinaryHandler"
+        "#{ServiceManager.name}::#{@options[:box_version].upcase}#{@type.capitalize}BinaryHandler"
       end
 
       def install
@@ -30,7 +30,14 @@ module VagrantPlugins
 
       def validate_prerequisites
         return if PluginUtil.service_running?(@machine, @type.to_s)
-        @env.ui.info I18n.t('servicemanager.commands.install_cli.service_not_enabled', service: @type)
+        @env.ui.info I18n.t('servicemanager.commands.install_cli.service_not_enabled',
+                            service: @type)
+        exit 126
+
+        # return if --path is specified and directory mentioned by it exists
+        return if @options.key?('--path') && File.exist?(File.dirname(@options['--path']))
+        @env.ui.info I18n.t('servicemanager.commands.install_cli.invalid_binary_path',
+                            dir_path: File.dirname(@options['--path']))
         exit 126
       end
     end
