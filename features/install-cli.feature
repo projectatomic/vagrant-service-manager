@@ -35,7 +35,9 @@ Feature: Command behavior of client side tools installation
       A supported service. For example: docker, kubernetes or openshift.
 
     Options:
-          -h, --help         print this help
+          -h, --help            print this help
+          --cli-version         binary version to install
+          --path                absolute or relative path where to install the binary
 
     Example:
           vagrant service-manager install-cli docker
@@ -51,6 +53,14 @@ Feature: Command behavior of client side tools installation
     When I run `bundle exec vagrant service-manager install-cli docker`
     Then the exit status should be 0
     And the binary "docker" should be installed
+
+    When I run `bundle exec vagrant service-manager install-cli docker --cli-version 1.12.1`
+    Then the exit status should be 0
+    And the binary "docker" of service "docker" should be installed with version "1.12.1"
+
+    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/docker`
+    Then the exit status should be 0
+    And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/docker"
 
     Examples:
       | box   | provider   | ip          |

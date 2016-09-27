@@ -223,9 +223,15 @@ Similarly, you can use `$ vagrant service-manager status openshift`,
 
 If you need to install the client binary for a specified service, use: +
 
-`vagrant service-manager install-cli [service]` +
+`vagrant service-manager install-cli [service] [options]` +
 
 The possible options for service are `docker` and `openshift`. +
+
+The following options can be used: +
+
+`--cli-version value`::  Specify the version of the binary as value to be installed +
+`--path value`::   Specify the absolute or relative path as value where the binary should be installed +
+`-h, --help`::   Prints help for the specific command being run.
 
 As per default, binaries are downloaded to
  `$VAGRANT_HOME/data/service-manager/bin/<service>/<cli-version>`, where
@@ -236,11 +242,11 @@ As per default, binaries are downloaded to
 To install client binary for Docker:
 
 ----------------------------------------------------------------------------------------------------
-$ vagrant service-manager install-cli docker
-# Binary already available at /home/johndoe/.vagrant.d/data/service-manager/bin/docker/1.9.1/docker
+$ vagrant service-manager install-cli docker --cli-version 1.9.1 --path /home/johndoe/bin/docker
+# Binary already available at /home/johndoe/bin/docker
 # run binary as:
 # docker <command>
-export PATH=/home/johndoe/.vagrant.d/data/service-manager/bin/docker/1.9.1:$PATH
+export PATH=/home/johndoe/bin:$PATH
 
 # run following command to configure your shell:
 # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli docker | tr -d '\r')"

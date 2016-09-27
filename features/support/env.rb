@@ -150,5 +150,25 @@ Then(/^the binary "([^"]*)" should be installed$/) do |binary|
   end
 
   expect(binaries.size).to eq(1)
-  expect(File.executable?(binaries[0])).to eq(true)
+  expect(File.executable?(binaries.first)).to eq(true)
+end
+
+Then(/^the binary "([^"]*)" of service "([^"]*)" should be installed with version "([^"]*)"$/) do |b, s, v|
+  binary_path = "#{ENV['VAGRANT_HOME']}/data/service-manager/bin/#{s}/#{v}/#{b}"
+  expect(File.file?(binary_path)).to eq(true)
+  expect(File.executable?(binary_path)).to eq(true)
+end
+
+Then(/^the binary should be installed in path "([^"]*)"$/) do |path|
+  binary_path = eval('"' + path + '"')
+  expect(File.file?(binary_path)).to eq(true)
+  expect(File.executable?(binary_path)).to eq(true)
+end
+
+# Per default the built-in Aruba 'When I run' will not evaluate/interpolate the string.
+# We create a custom step definition to work around this
+When(/^I evaluate and run `([^`]*)`$/) do |cmd|
+  cmd = eval('"' + cmd + '"')
+  cmd = sanitize_text(cmd)
+  run_simple(cmd, fail_on_error: false)
 end

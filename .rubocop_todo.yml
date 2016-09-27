@@ -41,3 +41,6 @@ Metrics/AbcSize:
   Exclude:
     - 'lib/vagrant-service-manager/command.rb'
     - 'Rakefile'
+
+Lint/Eval:
+  Enabled: false

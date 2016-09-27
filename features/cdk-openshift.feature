@@ -70,6 +70,19 @@ Feature: Command output from various OpenShift related commands in CDK
     Then the exit status should be 0
     And the binary "oc" should be installed
 
+    When I run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0`
+    Then the exit status should be 0
+    And the binary "oc" of service "openshift" should be installed with version "1.3.0"
+
+    When I evaluate and run `bundle exec vagrant service-manager install-cli openshift --path #{ENV['VAGRANT_HOME']}/oc`
+    Then the exit status should be 0
+    And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/oc"
+
+    When I successfully run `bundle exec vagrant reload`
+    And I successfully run `bundle exec vagrant service-manager status openshift`
+    Then the exit status should be 0
+    And the service "openshift" should be running
+
     Examples:
       | box   | provider   | ip          |
       | cdk   | virtualbox | 10.10.10.42 |

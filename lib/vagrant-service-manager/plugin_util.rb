@@ -160,9 +160,11 @@ module VagrantPlugins
         path_string = ENV['PATH']
 
         separator = ':' unless path_string.include?(';')
-        path_string.split(separator).detect do |dir_path|
+        oc_path_dir = path_string.split(separator).detect do |dir_path|
           File.exist? "#{dir_path}\\oc.exe"
         end
+
+        oc_path_dir.nil? ? nil : oc_path_dir + '\oc.exe'
       end
     end
   end

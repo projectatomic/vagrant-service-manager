@@ -282,7 +282,8 @@ module VagrantPlugins
         end
 
         with_target_vms(nil, single_target: true) do |machine|
-          args = [service.to_sym, machine, @env, options]
+          options[:type] = service.to_sym
+          args = [machine, @env, options]
 
           begin
             args.last[:box_version] = machine.guest.capability(:os_variant)
