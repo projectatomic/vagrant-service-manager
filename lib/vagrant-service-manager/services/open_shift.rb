@@ -6,12 +6,14 @@ module VagrantPlugins
       def initialize(machine, env)
         super(machine, env)
         @service_name = 'openshift'
-        @extra_cmd = build_extra_command
       end
 
       def execute
         if service_start_allowed?
-          command = "#{@extra_cmd} sccli openshift"
+          command = 'sccli openshift'
+          command = "#{extra_command_options} #{command}" unless extra_command_options.empty?
+          command = "#{proxy_cmd_options} #{command}" unless proxy_cmd_options.empty?
+
           PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
         end
       rescue Vagrant::Errors::GuestCapabilityNotFound
@@ -47,14 +49,16 @@ module VagrantPlugins
 
       private
 
-      def build_extra_command
+      def extra_command_options
         cmd = ''
-        CONFIG_KEYS.select { |e| e[/^openshift_/] }.each do |key|
+
+        OPENSHIFT_CONFIG.each do |key|
           unless @machine.config.servicemanager.send(key).nil?
             env_name = key.to_s.gsub(/openshift_/, '').upcase
             cmd += "#{env_name}='#{@machine.config.servicemanager.send(key)}' "
           end
         end
+
         cmd.chop
       end
 

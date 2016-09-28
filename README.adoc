@@ -152,6 +152,23 @@ code uses the last IPv4 address available from the set of configured
 addresses that are _up_. i.e. if eth0, eth1, and eth2 are all up and
 have IPv4 addresses, the address on eth2 is used.
 
+=== HTTP Proxy Settings
+
+In an environment where HTTP traffic needs pass through a HTTP proxy, Docker
+and OpenShift need to be aware of the required proxy settings in order to function.
+`http_proxy`, `http_proxy_user` and `http_proxy_password` configurations need to be
+specified through Vagrantfile. You can do so via:
+
+----------------------------------------------------------------------------
+config.servicemanager.http_proxy = <Proxy URL>
+config.servicemanager.http_proxy_user = <Proxy user name>
+config.servicemanager.http_proxy_password = <Proxy user password>
+----------------------------------------------------------------------------
+
+When these settings are applied, they are passed through to the Docker and
+OpenShift service. `http_proxy_user` and `http_proxy_password` can be omitted in an
+unauthenticated proxy environment.
+
 == Development
 
 === Setup

@@ -3,13 +3,14 @@ require 'set'
 module VagrantPlugins
   module ServiceManager
     SERVICES = %w(docker openshift kubernetes).freeze
-    CONFIG_KEYS = [
-      :services, :openshift_docker_registry,
-      :openshift_image_name, :openshift_image_tag
+    BASE_CONFIG = [:services].freeze
+    OPENSHIFT_CONFIG = [
+      :openshift_docker_registry, :openshift_image_name, :openshift_image_tag
     ].freeze
+    PROXY_CONFIG = [:http_proxy, :http_proxy_user, :http_proxy_password].freeze
 
     class Config < Vagrant.plugin('2', :config)
-      attr_accessor(*CONFIG_KEYS)
+      attr_accessor(*(BASE_CONFIG + OPENSHIFT_CONFIG + PROXY_CONFIG))
 
       DEFAULTS = {
         services: ''
