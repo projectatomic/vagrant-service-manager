@@ -29,11 +29,9 @@ module VagrantPlugins
       private
 
       def validate_prerequisites
-        unless PluginUtil.service_running?(@machine, @type.to_s)
-          @env.ui.info I18n.t('servicemanager.commands.install_cli.service_not_enabled',
-                              service: @type)
-          exit 126
-        end
+        return if PluginUtil.service_running?(@machine, @type.to_s)
+        @env.ui.info I18n.t('servicemanager.commands.install_cli.service_not_enabled', service: @type)
+        exit 126
       end
     end
   end
