@@ -157,10 +157,10 @@ have IPv4 addresses, the address on eth2 is used.
 === Setup
 
 1. After cloning the repository, install the http://bundler.io/[Bundler]
-gem:
+gem (Note, you need to specify 1.12.5. It won't work with the latest version of Bundler):
 +
 ---------------------
-$ gem install bundler
+$ gem install bundler -v 1.12.5
 ---------------------
 
 1. Then setup your project dependencies:

@@ -64,7 +64,7 @@ for host in data['hosts']:
 
     # setup the environment
     setup_cmd  = 'cd vagrant-service-manager && '
-    setup_cmd += 'gem install bundler && '
+    setup_cmd += 'gem install bundler -v 1.12.5 && '
     setup_cmd += 'bundle install --no-color'
     execute_on_host(host, setup_cmd, "Unable to setup Ruby environment")
 
