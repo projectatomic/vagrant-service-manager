@@ -100,10 +100,9 @@ module VagrantPlugins
           oc_version = CDKOpenshiftBinaryHandler::LATEST_OC_VERSION
         end
 
-        unless @options['--cli-version'] != oc_version || @options['--path']
-          path = PluginUtil.fetch_existing_oc_binary_path_in_windows
-          @path = path unless path.nil?
-        end
+        return if @options['--cli-version'] != oc_version || @options['--path']
+        path = PluginUtil.fetch_existing_oc_binary_path_in_windows
+        @path = path unless path.nil?
       end
 
       def archive_dir_name
