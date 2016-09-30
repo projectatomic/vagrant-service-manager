@@ -36,7 +36,7 @@ module VagrantPlugins
 
       it 'should build download url' do
         expected_url = @base_download_url + '/v1.2.0/bin/linux/amd64/kubectl'
-        expected_url.sub!(/Linux/, 'Darwin') if Vagrant::Util::Platform.darwin?
+        expected_url.sub!(/linux/, 'darwin') if Vagrant::Util::Platform.darwin?
 
         @handler.send(:build_download_url)
         @handler.instance_variable_get('@url').must_equal expected_url
