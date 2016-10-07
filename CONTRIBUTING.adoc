@@ -53,8 +53,8 @@ will be working from the master branch and working on the GitHub issue
 
 === Code
 
-Do your work! Refer to the link:README.md#development[development]
-section in the link:README.md[README] to get started.
+Do your work! Refer to the link:README.adoc#development[development]
+section in the link:README.adoc[README] to get started.
 
 === Commit
 
@@ -132,6 +132,3 @@ $ git push origin master
 * Hardy Ferentschik @hferentschik
 * Lalatendu Mohanty <lmohanty@redhat.com> @LalatenduMohanty
 * Navid Shaikh <nshaikh@redhat.com> @navidshaikh
-
-
-
