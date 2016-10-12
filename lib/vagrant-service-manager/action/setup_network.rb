@@ -24,7 +24,7 @@ module VagrantPlugins
         end
 
         def add_private_network
-          @ui.info I18n.t('servicemanager.action.private_network')
+          @ui.info I18n.t('servicemanager.actions.private_network')
           @machine.config.vm.network :private_network, type: :dhcp
         end
       end

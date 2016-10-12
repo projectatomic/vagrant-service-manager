@@ -13,7 +13,13 @@ module VagrantPlugins
           command = "#{proxy_cmd_options} #{command}" unless proxy_cmd_options.empty?
 
           exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
-          PluginUtil.generate_kubeconfig(@machine, @ui, @plugin_dir) if exit_code.zero?
+
+          if exit_code.zero?
+            PluginUtil.generate_kubeconfig(@machine, @ui, @plugin_dir)
+            @ui.info I18n.t('servicemanager.actions.service_success', service: 'Kubernetes')
+          else
+            @ui.info I18n.t('servicemanager.actions.service_failure', service: 'Kubernetes')
+          end
         end
       rescue StandardError => e
         @ui.error e.message.squeeze

@@ -24,7 +24,13 @@ Feature: Command output from various OpenShift related commands in ADB
     """
 
     When I successfully run `bundle exec vagrant up --provider <provider>`
-    And I successfully run `bundle exec vagrant service-manager env openshift`
+    Then stdout from "bundle exec vagrant up --provider <provider>" should contain:
+    """
+    ==> default: Docker service configured successfully...
+    ==> default: OpenShift service configured successfully...
+    """
+
+    When I successfully run `bundle exec vagrant service-manager env openshift`
     Then stdout from "bundle exec vagrant service-manager env openshift" should be evaluable in a shell
     And stdout from "bundle exec vagrant service-manager env openshift" should contain:
     """

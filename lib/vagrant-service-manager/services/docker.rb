@@ -19,6 +19,9 @@ module VagrantPlugins
           if exit_code.zero?
             secrets_path = PluginUtil.host_docker_path(@machine)
             PluginUtil.copy_certs_to_host(@machine, secrets_path, @ui)
+            @ui.info I18n.t('servicemanager.actions.service_success', service: 'Docker')
+          else
+            @ui.info I18n.t('servicemanager.actions.service_failure', service: 'Docker')
           end
         end
       rescue StandardError => e

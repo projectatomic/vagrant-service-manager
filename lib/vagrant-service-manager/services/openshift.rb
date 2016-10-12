@@ -14,7 +14,13 @@ module VagrantPlugins
           command = "#{extra_command_options} #{command}" unless extra_command_options.empty?
           command = "#{proxy_cmd_options} #{command}" unless proxy_cmd_options.empty?
 
-          PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+          exit_code = PluginUtil.execute_and_exit_on_fail(@machine, @ui, command)
+
+          if exit_code.zero?
+            @ui.info I18n.t('servicemanager.actions.service_success', service: 'OpenShift')
+          else
+            @ui.info I18n.t('servicemanager.actions.service_failure', service: 'OpenShift')
+          end
         end
       rescue Vagrant::Errors::GuestCapabilityNotFound
         PluginLogger.debug('Guest capability not found while starting OpenShift service')
