@@ -51,6 +51,11 @@ Feature: Command output from various OpenShift related commands in ADB
     Then the exit status should be 0
     And the binary "oc" should be installed
 
+    When I successfully run `bundle exec vagrant reload`
+    And I successfully run `bundle exec vagrant service-manager status openshift`
+    Then the exit status should be 0
+    And the service "openshift" should be running
+
     Examples:
       | box   | provider   | ip          |
       | adb   | virtualbox | 10.10.10.42 |
