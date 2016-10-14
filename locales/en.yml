@@ -104,7 +104,9 @@ en:
             A supported service. For example: docker, kubernetes or openshift.
 
           Options:
-                -h, --help         print this help
+                -h, --help            print this help
+                --cli-version         binary version to install
+                --path                absolute or relative path where to install the binary
 
           Example:
                 vagrant service-manager install-cli docker
@@ -199,6 +201,8 @@ en:
           # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service} | tr -d '\r')"
         service_not_enabled: |-
           '%{service}' service is not enabled.
+        invalid_binary_path: |-
+          Directory path %{dir_path} is invalid or doesn't exist.
         unsupported_version: |-
           Something went wrong to find the correct download link.
           We recommend you to use '--cli-version' for your desired client version.

@@ -150,5 +150,22 @@ Then(/^the binary "([^"]*)" should be installed$/) do |binary|
   end
 
   expect(binaries.size).to eq(1)
-  expect(File.executable?(binaries[0])).to eq(true)
+  expect(File.executable?(binaries.first)).to eq(true)
+end
+
+Then(/^the binary "([^"]*)" should be installed with version "([^"]*)"$/) do |binary, version|
+  binaries = []
+  Find.find("#{ENV['VAGRANT_HOME']}/data/service-manager/bin") do |path|
+    binaries << path if path =~ %r{.*\/#{Regexp.quote(version + '/' + binary)}$} && File.file?(path)
+  end
+
+  expect(binaries.size).to eq(1)
+  expect(File.executable?(binaries.first)).to eq(true)
+end
+
+Then(/^the binary should be installed in path "([^"]*)"$/) do |path|
+  vagrant_home, binary = path.split('/')
+  binary_path = "#{eval(vagrant_home)}/#{binary}"
+  expect(File.file?(binary_path)).to eq(true)
+  expect(File.executable?(binary_path)).to eq(true)
 end
