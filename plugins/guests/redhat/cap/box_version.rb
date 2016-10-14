@@ -7,18 +7,17 @@ module VagrantPlugins
           command = "cat #{OS_RELEASE_FILE} | grep VARIANT"
 
           # TODO: execute efficient command to solve this
-          if machine.communicate.test(command) # test if command is exits with code 0
-            PluginLogger.debug
-            machine.communicate.execute(command) do |type, data|
-              if type == :stderr
-                @env.ui.error(data)
-                exit 126
-              end
-
-              return data.chomp if options[:script_readable]
-              info = Hash[data.delete('"').split("\n").map { |e| e.split('=') }]
-              return "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
+          return unless machine.communicate.test(command) # Return nil if command fails
+          PluginLogger.debug
+          machine.communicate.execute(command) do |type, data|
+            if type == :stderr
+              @env.ui.error(data)
+              exit 126
             end
+
+            return data.chomp if options[:script_readable]
+            info = Hash[data.delete('"').split("\n").map { |e| e.split('=') }]
+            return "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
           end
         end
       end

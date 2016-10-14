@@ -4,7 +4,7 @@ module VagrantPlugins
       class MachineIP
         def self.machine_ip(machine, options = {})
           # Find the guest IP
-          command = "ip -o -4 addr show up |egrep -v ': docker|: lo' |tail -1 | awk '{print $4}' |cut -f1 -d\/"
+          command = "ip -o -4 addr show up|egrep -v ': docker|: lo'|tail -1|awk '{print $4}'|cut -f1 -d\/"
           ip = ''
 
           PluginLogger.debug

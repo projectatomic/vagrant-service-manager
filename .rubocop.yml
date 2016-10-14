@@ -5,11 +5,14 @@ AllCops:
     - 'build/**/*'
 
 Metrics/LineLength:
-  Max: 120
+  Max: 110
   Exclude:
     - 'Rakefile'
 
-Metrics/ClassLength:
-  Max: 209
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+
+Style/FileName:
   Exclude:
-    - 'lib/vagrant-service-manager/command.rb'
+    - 'lib/vagrant-service-manager.rb'

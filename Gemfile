@@ -13,7 +13,7 @@ group :development do
   gem 'komenda', '~> 0.1.6'
   gem 'launchy'
   gem 'rake', '10.4.2'
-  gem 'rubocop'
+  gem 'rubocop', '0.44.1'
 end
 
 group :test do

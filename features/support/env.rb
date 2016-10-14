@@ -61,7 +61,7 @@ end
 ###############################################################################
 # Some shared step definitions
 ##############################################################################
-Given /provider is (.*)/ do |current_provider|
+Given(/provider is (.*)/) do |current_provider|
   requested_provider = ENV.key?('PROVIDER') ? ENV['PROVIDER'] : 'virtualbox'
 
   unless requested_provider.include?(current_provider)
@@ -71,7 +71,7 @@ Given /provider is (.*)/ do |current_provider|
   end
 end
 
-Given /box is (.*)/ do |current_box|
+Given(/box is (.*)/) do |current_box|
   requested_box = ENV.key?('BOX') ? ENV['BOX'] : 'adb'
 
   unless requested_box.include?(current_box)

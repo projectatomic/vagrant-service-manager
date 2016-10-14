@@ -23,10 +23,9 @@ module VagrantPlugins
     end
 
     def self.debug(message = nil)
-      if debug_mode?
-        message = command.to_s if message.nil?
-        logger.debug "[ service-manager: #{message} ]"
-      end
+      return unless debug_mode?
+      message = command.to_s if message.nil?
+      logger.debug "[ service-manager: #{message} ]"
     end
   end
 end

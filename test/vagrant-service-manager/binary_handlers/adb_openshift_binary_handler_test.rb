@@ -99,7 +99,7 @@ module VagrantPlugins
 
         @handler.prepare_binary
         @handler.binary_name.must_equal 'oc'
-        @handler.file_regex.must_equal /oc$/
+        @handler.file_regex.must_equal(/oc$/)
         if Vagrant::Util::Platform.darwin?
           @handler.archive_handler_class.must_equal VagrantPlugins::ServiceManager::ZipHandler
         else

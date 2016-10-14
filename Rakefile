@@ -244,7 +244,7 @@ class PublicCDKDownloader < DownloadTask
   def needed?
     if meta.fetch(:current_version, nil).eql?(LATEST_VERSION) && File.file?(box_file)
       puts "Using existing public releaase CDK box (version #{LATEST_VERSION}) in #{box_dir}"
-      return false
+      false
     else
       File.delete(box_file) if File.exist?(box_file)
       meta[:current_version] = LATEST_VERSION

@@ -125,9 +125,7 @@ module VagrantPlugins
                   'windows_cygwin_configure_info'
                 end
 
-        unless label.nil?
-          ui.info "\n" + I18n.t("servicemanager.commands.env.#{label}", command: command)
-        end
+        ui.info "\n" + I18n.t("servicemanager.commands.env.#{label}", command: command) unless label.nil?
       end
 
       def self.env_label(script_readable)
