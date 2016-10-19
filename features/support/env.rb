@@ -85,12 +85,23 @@ Then(/^stdout from "([^"]*)" should be evaluable in a shell$/) do |cmd|
   output_is_evaluable(aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout))
 end
 
+Then(/^stdout after evaluating and running "([^"]*)" should be evaluable in a shell$/) do |cmd|
+  cmd = sanitize_text(eval('"' + cmd + '"'))
+  output_is_evaluable(aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout))
+end
+
 Then(/^stdout from "([^"]*)" should be script readable$/) do |cmd|
   output_is_script_readable(aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout))
 end
 
 Then(%r{^stdout from "([^"]*)" should match /(.*)/$}) do |cmd, regexp|
   aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stdout) =~ /#{regexp}/
+end
+
+Then(%r{^stderr from evaluating and running "([^"]*)" should match /(.*)/$}) do |cmd, regexp|
+  cmd = sanitize_text(eval('"' + cmd + '"'))
+  regexp = sanitize_text(eval('"' + regexp + '"'))
+  aruba.command_monitor.find(Aruba.platform.detect_ruby(cmd)).send(:stderr) =~ /#{regexp}/
 end
 
 # track service process ID
@@ -171,4 +182,8 @@ When(/^I evaluate and run `([^`]*)`$/) do |cmd|
   cmd = eval('"' + cmd + '"')
   cmd = sanitize_text(cmd)
   run_simple(cmd, fail_on_error: false)
+end
+
+When(/^I sleep for (\d+) seconds$/) do |time|
+  sleep(time.to_i)
 end

@@ -86,10 +86,10 @@ module VagrantPlugins
         exit 126
       end
 
-      def print_message
+      def print_message(options_msg)
         bin_path = PluginUtil.format_path(@path)
         @ui.info I18n.t(LABEL,
-                        path: bin_path, dir: File.dirname(bin_path), service: @type,
+                        path: bin_path, dir: File.dirname(bin_path), service: @type, options: options_msg,
                         binary: binary_name, when: (@binary_exists ? 'already' : 'now'))
       end
 

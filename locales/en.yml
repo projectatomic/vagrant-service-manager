@@ -198,7 +198,7 @@ en:
           export PATH=%{dir}:$PATH
 
           # run following command to configure your shell:
-          # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service} | tr -d '\r')"
+          # eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli %{service}%{options} | tr -d '\r')"
         service_not_enabled: |-
           '%{service}' service is not enabled.
         invalid_binary_path: |-

@@ -53,14 +53,25 @@ Feature: Command behavior of client side tools installation
     When I run `bundle exec vagrant service-manager install-cli docker`
     Then the exit status should be 0
     And the binary "docker" should be installed
+    And the stderr should not contain anything
 
     When I run `bundle exec vagrant service-manager install-cli docker --cli-version 1.12.1`
     Then the exit status should be 0
     And the binary "docker" of service "docker" should be installed with version "1.12.1"
+    And the stderr should not contain anything
 
     When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/docker`
     Then the exit status should be 0
     And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/docker"
+    And the stderr should not contain anything
+
+    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir/docker`
+    Then the exit status should be 126
+    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir/docker" should match /Directory path #{ENV['VAGRANT_HOME']}/unknown_dir is invalid or doesn't exist/
+
+    When I run `bundle exec vagrant service-manager install-cli docker --path /foo/bar/docker`
+    Then the exit status should be 126
+    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path /foo/bar/docker" should match /Permission denied @ dir_s_mkdir - /foo/
 
     Examples:
       | box   | provider   | ip          |
