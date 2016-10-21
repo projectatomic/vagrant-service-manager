@@ -1,7 +1,6 @@
 Feature: Command output from env command
   service-manager should return the correct output from env commands
 
-  @env
   Scenario Outline: Boot and execute env commands
     Given box is <box>
     And provider is <provider>

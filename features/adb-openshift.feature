@@ -22,7 +22,7 @@ Feature: Command output from various OpenShift related commands in ADB
       config.vm.provider('libvirt') { |v| v.memory = 3072 }
       config.vm.provider('virtualbox') { |v| v.memory = 3072 }
 
-      config.servicemanager.services = 'docker, openshift'
+      config.servicemanager.services = 'openshift'
     end
     """
 
@@ -37,8 +37,7 @@ Feature: Command output from various OpenShift related commands in ADB
     And I successfully run `bundle exec vagrant service-manager status`
     Then stdout from "bundle exec vagrant service-manager status" should contain "openshift - running"
 
-    When I sleep for 10 seconds
-    And I successfully run `bundle exec vagrant service-manager env openshift`
+    When I successfully run `bundle exec vagrant service-manager env openshift`
     Then stdout from "bundle exec vagrant service-manager env openshift" should be evaluable in a shell
     And stdout from "bundle exec vagrant service-manager env openshift" should contain:
     """
@@ -61,14 +60,12 @@ Feature: Command output from various OpenShift related commands in ADB
     DOCKER_REGISTRY=hub.openshift.centos7-adb.<ip>.xip.io
     """
 
-    When I sleep for 10 seconds
-    And I successfully run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0`
+    When I successfully run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0`
     Then the exit status should be 0
     And the binary "oc" of service "openshift" should be installed with version "1.3.0"
     And stdout from "bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0" should be evaluable in a shell
 
-    When I sleep for 10 seconds
-    And I evaluate and run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}/oc`
+    When I evaluate and run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}/oc`
     Then the exit status should be 0
     And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/oc"
     And stdout after evaluating and running "bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}/oc" should be evaluable in a shell

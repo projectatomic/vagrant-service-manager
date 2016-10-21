@@ -1,7 +1,6 @@
 Feature: Command behavior of client side tools installation
   service-manager should correctly verify behavior of install-cli command
 
-  @install_cli
   Scenario Outline: Boot and install client side tools
     Given box is <box>
     And provider is <provider>

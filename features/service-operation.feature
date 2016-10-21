@@ -1,7 +1,6 @@
 Feature: Command output from service operations like stop/start/restart
   service-manager should return the correct exit code from stop/start/restart command
 
-  @operation
   Scenario Outline: Boot and execute service operations like stop/start/restart
     Given box is <box>
     And provider is <provider>

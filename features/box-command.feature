@@ -1,7 +1,6 @@
 Feature: Command output from box command
   service-manager should return the correct output from box commands
 
-  @box
   Scenario Outline: Boot and execute box commands
     Given box is <box>
     And provider is <provider>
