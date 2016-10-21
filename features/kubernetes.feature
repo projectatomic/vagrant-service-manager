@@ -42,3 +42,5 @@ Feature: Command output from various Kubernetes related commands
       | box   | provider   | ip          |
       | adb   | virtualbox | 10.10.10.42 |
       | cdk   | virtualbox | 10.10.10.42 |
+      | adb   | libvirt    | 10.10.10.42 |
+      | cdk   | libvirt    | 10.10.10.42 |
