@@ -1,6 +1,21 @@
 = Revision History
 :toc:
 
+[[v1.4.0-oct-21-2016]]
+== 1.4.0 October 21, 2016
+* Fix #376 --path option of install cli not working as expected
+* Fix #327 and #326: Tests and docs for --cli-version and --path options
+* Fix #412 Pin the rubocop version and minimize the offenses
+* Fix #409 fixes Openshift service failed message on vagrant up
+* Fix #406 Service hooks doesn't start in vagrant reload
+* Fix #338 Updating broken links in CONTRIBUTING.adoc
+* Fix #407 Converted CHANGELOG from markdown to asciidoc
+* Fix #402 rename open_shift.rb file to openshift
+* Fix #302 service-manager config options for HTTP proxy
+* Fix #393 Fix expectations for Kubernetes tests on OS X
+* Fix #394 Forcing used Bundler version to 1.12.5 as required by Vagrant.
+* Fix #397 Using a guard clause instead of wrapping the code inside a conditional
+
 [[v1.3.3-sep-1-2016]]
 == 1.3.3 September 1, 2016
 
