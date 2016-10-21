@@ -120,10 +120,10 @@ $ git push origin master
   `vagrant-service-manager version=<version>`
 * Push commit to upstream
 * Release the gem: `bundle exec rake release`
+* Create a Github https://github.com/projectatomic/vagrant-service-manager/releases[release] and paste change log for release
 * Update link:lib/vagrant-service-manager/version.rb[version.rb] with the next anticipated release version, eg _1.42.0.dev_
 * Commit with message: `vagrant-service-manager setting dev version <version>.dev`
 * Push upstream
-* Create a Github https://github.com/projectatomic/vagrant-service-manager/releases[release] and paste change log for release
 
 == Maintainers
 
