@@ -1,10 +1,9 @@
 # config/cucumber.yml
 ##YAML Template
 ---
-default: --profile html --tags ~@ci-only
+default: --profile html --tags ~@ci-only --tags ~@todo
+ci:  --format CiFormatter --no-color -m -b --tags ~@todo
 all: --profile html
 
 pretty: --format pretty -b
 html: --format progress --format html --out=build/features_report.html -b
-ci: --format CiFormatter --no-color -b
-
