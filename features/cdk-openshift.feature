@@ -1,7 +1,7 @@
 Feature: Command output from various OpenShift related commands in CDK
   service-manager should return the correct output from commands affecting OpenShift in CDK
 
-  @openshift
+  @todo
   Scenario Outline: Boot and execute commands
     Given box is <box>
     And provider is <provider>
@@ -22,7 +22,7 @@ Feature: Command output from various OpenShift related commands in CDK
       config.vm.provider('libvirt') { |v| v.memory = 3072 }
       config.vm.provider('virtualbox') { |v| v.memory = 3072 }
 
-      config.servicemanager.services = 'docker, openshift'
+      config.servicemanager.services = 'openshift'
     end
     """
 
@@ -32,8 +32,8 @@ Feature: Command output from various OpenShift related commands in CDK
     ==> default: Docker service configured successfully...
     ==> default: OpenShift service configured successfully...
     """
-
-    When I successfully run `bundle exec vagrant service-manager status`
+    
+    And I successfully run `bundle exec vagrant service-manager status`
     Then stdout from "bundle exec vagrant service-manager status" should contain "openshift - running"
 
     When I successfully run `bundle exec vagrant service-manager env openshift`
