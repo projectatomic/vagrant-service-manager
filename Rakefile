@@ -233,9 +233,9 @@ class NightlyCDKDownloader < DownloadTask
 end
 
 class PublicCDKDownloader < DownloadTask
-  CDK_DOWNLOAD_URL = 'https://access.redhat.com/downloads/content/293/ver=2.1/rhel---7/2.1.0/x86_64/product-software'.freeze
-  CDK_BOX_BASE_NAME = 'rhel-cdk-kubernetes-7.2-25.x86_64.vagrant'.freeze
-  LATEST_VERSION = 'v. 2.1.0 for x86_64'.freeze
+  CDK_DOWNLOAD_URL = 'https://access.redhat.com/downloads/content/293/ver=2.2/rhel---7/2.2.0/x86_64/product-software'.freeze
+  CDK_BOX_BASE_NAME = 'rhel-cdk-kubernetes-7.2-29.x86_64.vagrant'.freeze
+  LATEST_VERSION = 'v. 2.2.0 for x86_64'.freeze
 
   def initialize(box_dir, provider)
     super(box_dir, provider)
