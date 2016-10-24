@@ -1,6 +1,7 @@
 Feature: Command output from various OpenShift related commands in CDK
   service-manager should return the correct output from commands affecting OpenShift in CDK
 
+  @todo
   Scenario Outline: Boot and execute commands
     Given box is <box>
     And provider is <provider>
