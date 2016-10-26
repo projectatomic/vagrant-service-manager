@@ -74,6 +74,15 @@ Feature: Command output from box command
     Then stdout from "bundle exec vagrant service-manager box ip --script-readable" should contain "IP=<ip>"
     And stdout from "bundle exec vagrant service-manager box ip --script-readable" should be script readable
 
+    When I successfully run `bundle exec vagrant service-manager box version`
+    Then stdout from "bundle exec vagrant service-manager box version" should match /(Container Development Kit \(CDK\) \d.\d.?\d?|Atomic Developer Bundle \(ADB\) \d.\d.?\d?)/
+
+    When I successfully run `bundle exec vagrant service-manager box version --script-readable`
+    Then stdout from "bundle exec vagrant service-manager box version --script-readable" should match /(Container Development Kit \(CDK\)|Atomic Developer Bundle \(ADB\))/
+    And stdout from "bundle exec vagrant service-manager box version --script-readable" should match /VARIANT_ID="<box>"/
+    And stdout from "bundle exec vagrant service-manager box version --script-readable" should match /VARIANT_VERSION="\d.\d.?\d?"/
+    And stdout from "bundle exec vagrant service-manager box version --script-readable" should be script readable
+
     ####################################################################################################################
     # ENV command
     ####################################################################################################################
