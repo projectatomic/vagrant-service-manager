@@ -36,6 +36,7 @@ module VagrantPlugins
         @skip_download = false
         @archive_file_path = ''
         @options = options
+        @args = { insecure: false }
         @type = options[:type]
         @version = options['--cli-version'] || PluginUtil.execute_once(@machine, @ui, VERSION_CMD[@type])
         @path = options['--path'] || binary_path
@@ -62,7 +63,9 @@ module VagrantPlugins
 
       def download_archive
         return @skip_download = true if File.exist?(@archive_file_path)
-        Vagrant::Util::Downloader.new(@url, @archive_file_path).download!
+        set_proxy_environment
+        @args[:insecure] = true if ENV.key?('CURL_INSECURE') && ENV['CURL_INSECURE'] == 'true'
+        Vagrant::Util::Downloader.new(@url, @archive_file_path, @args).download!
       rescue Vagrant::Errors::DownloaderError => e
         @ui.error e.message
         exit 126
@@ -145,6 +148,21 @@ module VagrantPlugins
       end
 
       private
+
+      def set_proxy_environment
+        return if @machine.config.servicemanager.proxy.nil?
+
+        env_proxy = @machine.config.servicemanager.proxy
+        if @machine.config.servicemanager.proxy_user
+          user = @machine.config.servicemanager.proxy_user
+          password = @machine.config.servicemanager.proxy_password
+          env_proxy = env_proxy.sub(%r{(https?:\/\/)*}, "\\1#{user}:#{password}@")
+        end
+
+        # Net::HTTP will automatically create a proxy from the http_proxy environment variable if present
+        # More info here http://stackoverflow.com/a/23778707/1120530
+        ENV['https_proxy'] = env_proxy
+      end
 
       def binary_archived?
         BINARY_ARCHIVE_FORMATS.include? File.extname(@archive_file_path)
