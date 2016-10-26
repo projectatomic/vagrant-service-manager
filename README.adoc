@@ -47,6 +47,7 @@ https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/in
 ----------------------------------------------
 vagrant plugin install vagrant-service-manager
 ----------------------------------------------
+
 1.  Download the relevant Vagrantfile for your
 https://github.com/projectatomic/adb-atomic-developer-bundle[ADB]
 vagrant box, from the
@@ -55,6 +56,7 @@ For further details on the usage of custom Vagrantfiles designed for
 specific use cases, refer to the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst[Usage
 Documentation].
+
 1.  Start the ADB vagrant box using `vagrant up`. For detailed
 instructions consult the
 https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[Installation
@@ -66,7 +68,7 @@ non NAT network interface declaration in the Vagrantfile. If the user
 does not provide a network declaration in the Vagrantfile, a private
 DHCP network is added by default and a warning is displayed.
 
-1.  Run the plugin to get environment variables and certificates:
+1.  Run the plugin to get the environment variables and certificates:
 +
 ----------------------------------------------------------------------------
 $ vagrant service-manager env docker
@@ -154,31 +156,33 @@ have IPv4 addresses, the address on eth2 is used.
 
 === HTTP Proxy Settings
 
-In an environment where HTTP traffic needs pass through a HTTP proxy, Docker
-and OpenShift need to be aware of the required proxy settings in order to function.
-`http_proxy`, `http_proxy_user` and `http_proxy_password` configurations need to be
-specified through Vagrantfile. You can do so via:
-
-----------------------------------------------------------------------------
+In an environment where the HTTP traffic needs to pass through an
+HTTP proxy server, set the `http_proxy`, `http_proxy_user` and
+`http_proxy_password` proxy configurations in the Vagrantfiles to enable
+services like Docker and OpenShift to function correctly. +
+You can do so via:
+ +
+-----
 config.servicemanager.http_proxy = <Proxy URL>
 config.servicemanager.http_proxy_user = <Proxy user name>
 config.servicemanager.http_proxy_password = <Proxy user password>
-----------------------------------------------------------------------------
+-----
 
-When these settings are applied, they are passed through to the Docker and
-OpenShift service. `http_proxy_user` and `http_proxy_password` can be omitted in an
-unauthenticated proxy environment.
+When these settings are applied, they are passed through to the Docker and OpenShift services. In an unauthenticated proxy environment, the `http_proxy_user` and `http_proxy_password` configurations can be omitted.
 
 == Development
 
 === Setup
 
 1. After cloning the repository, install the http://bundler.io/[Bundler]
-gem (Note, you need to specify 1.12.5. It won't work with the latest version of Bundler):
+gem:
 +
 ---------------------
 $ gem install bundler -v 1.12.5
 ---------------------
++
+NOTE: You need to specify version 1.12.5. It will not work with the latest version of Bundler.
+
 
 1. Then setup your project dependencies:
 +
@@ -187,7 +191,7 @@ $ bundle install
 ----------------
 
 1. The build is driven via `rake`. All build related tasks should be executed
-in the Bundler environment, e.g. `bundle exec rake clean`. You can get a
+in the Bundler environment, for example `bundle exec rake clean`. You can get a
 list of available Rake tasks via:
 +
 ---------------------
