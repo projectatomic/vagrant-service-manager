@@ -4,8 +4,6 @@ group :development do
   gem 'vagrant',
       git: 'https://github.com/mitchellh/vagrant.git',
       ref: 'v1.8.4'
-  gem 'vagrant-libvirt'              if RUBY_PLATFORM =~ /linux/i
-  gem 'fog-libvirt', '0.0.3'         if RUBY_PLATFORM =~ /linux/i # https://github.com/pradels/vagrant-libvirt/issues/568
   gem 'mechanize'
   gem 'json'
   gem 'cucumber', '~> 2.1'
@@ -23,4 +21,6 @@ end
 
 group :plugins do
   gemspec
+  gem 'vagrant-libvirt'              if RUBY_PLATFORM =~ /linux/i
+  gem 'fog-libvirt', '0.0.3'         if RUBY_PLATFORM =~ /linux/i # https://github.com/pradels/vagrant-libvirt/issues/568
 end
