@@ -21,7 +21,7 @@ module VagrantPlugins
       def proxy_cmd_options
         options = ''
 
-        return options unless http_proxy_settings_valid?
+        return options unless proxy_settings_valid?
 
         PROXY_CONFIG.each do |key|
           options += "#{key.to_s.upcase}='#{@machine.config.servicemanager.send(key)}' "
@@ -30,10 +30,10 @@ module VagrantPlugins
         options.chop
       end
 
-      def http_proxy_settings_valid?
-        proxy = @machine.config.servicemanager.send('http_proxy')
-        user = @machine.config.servicemanager.send('http_proxy_user')
-        password = @machine.config.servicemanager.send('http_proxy_password')
+      def proxy_settings_valid?
+        proxy = @machine.config.servicemanager.send('proxy')
+        user = @machine.config.servicemanager.send('proxy_user')
+        password = @machine.config.servicemanager.send('proxy_password')
 
         if proxy && user.nil? && password.nil? || (proxy && user && password)
           PluginLogger.debug('Detected proxy settings. Going to apply them to service commands.')

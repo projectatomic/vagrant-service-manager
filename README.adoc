@@ -153,18 +153,20 @@ have IPv4 addresses, the address on eth2 is used.
 === HTTP Proxy Settings
 
 In an environment where the HTTP traffic needs to pass through an
-HTTP proxy server, set the `http_proxy`, `http_proxy_user` and
-`http_proxy_password` proxy configurations in the Vagrantfiles to enable
+HTTP proxy server, set the `proxy`, `proxy_user` and
+`proxy_password` proxy configurations in the Vagrantfiles to enable
 services like Docker and OpenShift to function correctly. +
 You can do so via:
  +
 -----
-config.servicemanager.http_proxy = <Proxy URL>
-config.servicemanager.http_proxy_user = <Proxy user name>
-config.servicemanager.http_proxy_password = <Proxy user password>
+config.servicemanager.proxy = <Proxy URL>
+config.servicemanager.proxy_user = <Proxy user name>
+config.servicemanager.proxy_password = <Proxy user password>
 -----
 
-When these settings are applied, they are passed through to the Docker and OpenShift services. In an unauthenticated proxy environment, the `http_proxy_user` and `http_proxy_password` configurations can be omitted.
+When these settings are applied, they are passed through to the Docker and OpenShift services. In an unauthenticated proxy environment, the `proxy_user` and `proxy_password` configurations can be omitted.
+
+NOTE: `http_proxy`, `http_proxy_user` and `http_proxy_password` have been depreacted now.
 
 === Configuring Services
 The vagrant-service-manager helps you configure the service of your choice:
