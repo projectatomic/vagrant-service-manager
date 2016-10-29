@@ -8,6 +8,7 @@ require 'fileutils'
 require 'yaml'
 require 'launchy'
 require 'date'
+require 'asciidoctor'
 
 CLOBBER.include('pkg')
 CLEAN.include('build')
@@ -41,6 +42,14 @@ namespace :features do
   task :open_report do
     Launchy.open('./build/features_report.html')
   end
+end
+
+desc 'Render Asciidoc into HTML'
+adoc_files = Rake::FileList['**/*.adoc']
+task html: adoc_files.ext('.html')
+rule '.html' => '.adoc' do |t|
+  FileUtils.mkdir_p 'build/html'
+  Asciidoctor.convert_file t.source, to_dir: 'build/html'
 end
 
 desc 'Download the required Vagrant boxes for the Cucumber tests'
