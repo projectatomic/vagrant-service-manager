@@ -12,6 +12,9 @@ group :development do
   gem 'launchy'
   gem 'rake', '10.4.2'
   gem 'rubocop', '0.44.1'
+  gem 'guard-rake'
+  gem 'guard-livereload', '~> 2.5', require: false
+  gem 'asciidoctor'
 end
 
 group :test do
