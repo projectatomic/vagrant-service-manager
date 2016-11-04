@@ -53,9 +53,8 @@ https://github.com/projectatomic/adb-atomic-developer-bundle[ADB]
 vagrant box, from the
 https://github.com/projectatomic/adb-atomic-developer-bundle/tree/master/components/centos[repository].
 For further details on the usage of custom Vagrantfiles designed for
-specific use cases, refer to the
-https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst[Usage
-Documentation].
+specific use cases, refer to the Download ADB section in the
+https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.adoc[Installing ADB] Documentation.
 
 1.  Start the ADB vagrant box using `vagrant up`. For detailed
 instructions consult the
@@ -92,16 +91,13 @@ will also re-download the certificates onto the host machine.
 
 === Available commands
 
-The following section lists the high level commands available for the plugin,
-which enable you to:
-
-- set up your environment variables and get the TLS certificates to secure the
-Docker communication channel
-- identify the routable ip address as well as the version of your VM
-- and manage the life cycle of the configured services
-
 For a detailed list of all available commands and their explanations refer
- to the link:commands.adoc[Commands Document].
+ to the link:commands.adoc[Commands Document]. +
+The following section lists the high level commands available for the plugin.
+which enable you to set up your environment variables and get the TLS
+certificates to secure the Docker communication channel; identify the
+routable ip address as well as the version of your VM and manage the life
+cycle of the configured services.
 
 - `vagrant service-manager [command] [--help | -h]` +
 Displays the possible commands, options and other relevant information
@@ -169,6 +165,29 @@ config.servicemanager.http_proxy_password = <Proxy user password>
 -----
 
 When these settings are applied, they are passed through to the Docker and OpenShift services. In an unauthenticated proxy environment, the `http_proxy_user` and `http_proxy_password` configurations can be omitted.
+
+=== Configuring Services
+The vagrant-service-manager helps you configure the service of your choice:
+
+. Enable the desired service(s) in the ADB Vagrantfile as:
++
+`config.servicemanager.services = 'openshift'`
++
+[NOTE]
+====
+- Docker is the default service for the Atomic Developer Bundle and does not require any configuration to ensure it is started whereas, the Red Hat Enterprise Linux Container Development Kit, which is based on ADB, automatically starts OpenShift. +
+- You can use a comma-separated list to enable multiple services. For instance: docker, openshift.
+====
+
+. Enable the relevant option for the services you have selected in the Vagrantfile. For example, specific versions of OpenShift can be set using the following variables:
++
+
+- `config.servicemanager.openshift_docker_registry = "docker.io"` - Specifies the registry from where the OpenShift image is pulled.
++
+- `config.servicemanager.openshift_image_name = "openshift/origin"` - Specifies the image to be used.
++
+- `config.servicemanager.openshift_image_tag = "v1.3.0"` - Specifies the version of the image to be used.
+
 
 == Development
 
