@@ -10,7 +10,9 @@ require 'mocha/mini_test'
 require 'vagrant-service-manager'
 require 'guests/redhat/cap/box_version'
 require 'guests/redhat/cap/os_variant'
-require_relative 'fake_servers'
+
+require_relative 'fake_http_proxy'
+require_relative 'fake_https_server'
 
 def fake_environment(options = { enabled: true })
   { machine: fake_machine(options), ui: FakeUI }

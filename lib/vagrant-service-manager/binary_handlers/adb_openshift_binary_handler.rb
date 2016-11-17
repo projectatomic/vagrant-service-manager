@@ -4,6 +4,8 @@ module VagrantPlugins
       OC_BINARY_BASE_URL = 'https://github.com/openshift/origin/releases'.freeze
       OC_FILE_PREFIX = 'openshift-origin-client-tools'.freeze
 
+      attr_reader :url
+
       def initialize(machine, env, options)
         super(machine, env, options)
       end
