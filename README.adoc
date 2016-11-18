@@ -12,7 +12,7 @@ provided by the ADB and is a must have for most ADB users. +
 This plugin makes it easier to use the ADB with host-based tools such as
 Eclipse and the docker and kubernetes CLI commands. Details on how to
 use ADB with this plugin can be found in the
-https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.rst[ADB
+https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/using.adoc[ADB
 Documentation].
 
 '''
@@ -36,7 +36,7 @@ $ vagrant plugin install vagrant-service-manager
 ------------------------------------------------
 
 NOTE: To resolve any issues with the plugin installation and for more information on how to install Vagrant on various systems, refer to the
-https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[ADB installation instructions].
+https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.adoc[ADB installation instructions].
 
 == Usage
 
@@ -58,7 +58,7 @@ https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/in
 
 1.  Start the ADB vagrant box using `vagrant up`. For detailed
 instructions consult the
-https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.rst[Installation
+https://github.com/projectatomic/adb-atomic-developer-bundle/blob/master/docs/installing.adoc[Installation
 Documentation].
 +
 NOTE: When the vagrant-service-manager plugin is loaded and an ADB box is
