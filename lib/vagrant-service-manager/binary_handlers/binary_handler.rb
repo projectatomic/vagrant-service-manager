@@ -39,7 +39,7 @@ module VagrantPlugins
         @args = { insecure: false }
         @type = options[:type]
         @version = options['--cli-version'] || PluginUtil.execute_once(@machine, @ui, VERSION_CMD[@type])
-        @path = options['--path'] || binary_path
+        @path = options['--path'] ? "#{options['--path']}/#{binary_name}" : binary_path
         @temp_bin_dir = "#{ServiceManager.temp_dir}/#{@type}"
       end
 

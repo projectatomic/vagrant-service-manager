@@ -65,10 +65,10 @@ Feature: Command output from various OpenShift related commands in ADB
     And the binary "oc" of service "openshift" should be installed with version "1.3.0"
     And stdout from "bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0" should be evaluable in a shell
 
-    When I evaluate and run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}/oc`
+    When I evaluate and run `bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}`
     Then the exit status should be 0
     And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/oc"
-    And stdout after evaluating and running "bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}/oc" should be evaluable in a shell
+    And stdout after evaluating and running "bundle exec vagrant service-manager install-cli openshift --cli-version 1.3.0 --path #{ENV['VAGRANT_HOME']}" should be evaluable in a shell
 
     When I successfully run `bundle exec vagrant reload`
     And I sleep for 10 seconds

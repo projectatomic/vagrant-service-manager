@@ -172,18 +172,18 @@ Feature: Command output from box command
     And the binary "docker" of service "docker" should be installed with version "1.12.1"
     And the stderr should not contain anything
 
-    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/docker`
+    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}`
     Then the exit status should be 0
     And the binary should be installed in path "#{ENV['VAGRANT_HOME']}/docker"
     And the stderr should not contain anything
 
-    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir/docker`
+    When I evaluate and run `bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir`
     Then the exit status should be 126
-    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir/docker" should match /Directory path #{ENV['VAGRANT_HOME']}/unknown_dir is invalid or doesn't exist/
+    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path #{ENV['VAGRANT_HOME']}/unknown_dir" should match /Directory path #{ENV['VAGRANT_HOME']}/unknown_dir is invalid or doesn't exist/
 
-    When I run `bundle exec vagrant service-manager install-cli docker --path /foo/bar/docker`
+    When I run `bundle exec vagrant service-manager install-cli docker --path /foo/bar`
     Then the exit status should be 126
-    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path /foo/bar/docker" should match /Permission denied @ dir_s_mkdir - /foo/
+    And stderr from evaluating and running "bundle exec vagrant service-manager install-cli docker --path /foo/bar" should match /Permission denied @ dir_s_mkdir - /foo/
 
     ####################################################################################################################
     # START/STOP/STATUS/RESTART command

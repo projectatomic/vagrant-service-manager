@@ -242,14 +242,14 @@ As per default, binaries are downloaded to
 To install client binary for Docker:
 
 ----------------------------------------------------------------------------------------------------
-$ vagrant service-manager install-cli docker --cli-version 1.9.1 --path /home/johndoe/bin/docker
+$ vagrant service-manager install-cli docker --cli-version 1.9.1 --path /home/johndoe/bin
 # Binary already available at /home/johndoe/bin/docker
 # run binary as:
 # docker <command>
 export PATH=/home/johndoe/bin:$PATH
 
 # run following command to configure your shell:
-# eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli docker | tr -d '\r')"
+# eval "$(VAGRANT_NO_COLOR=1 vagrant service-manager install-cli docker --path /home/johndoe/bin | tr -d '\r')"
 ----------------------------------------------------------------------------------------------------
 
 
