@@ -159,9 +159,9 @@ services like Docker and OpenShift to function correctly. +
 You can do so via:
  +
 -----
-config.servicemanager.proxy = <Proxy URL>
-config.servicemanager.proxy_user = <Proxy user name>
-config.servicemanager.proxy_password = <Proxy user password>
+config.servicemanager.proxy = "<Proxy URL>"
+config.servicemanager.proxy_user = "<Proxy user name>"
+config.servicemanager.proxy_password = "<Proxy user password>"
 -----
 
 When these settings are applied, they are passed through to the Docker and OpenShift services. In an unauthenticated proxy environment, the `proxy_user` and `proxy_password` configurations can be omitted.
@@ -173,7 +173,7 @@ The vagrant-service-manager helps you configure the service of your choice:
 
 . Enable the desired service(s) in the ADB Vagrantfile as:
 +
-`config.servicemanager.services = 'openshift'`
+`config.servicemanager.services = "openshift"`
 +
 [NOTE]
 ====
