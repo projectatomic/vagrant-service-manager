@@ -1,6 +1,14 @@
 = Revision History
 :toc:
 
+[[v1.5.0-jan-24-2017]]
+== 1.5.0 January 24, 2017
+* Fix #446 Support folder as path in install-cli '--path' option @budhrg
+* Fix #441 install-cli with --path give wrong export @budhrg
+* Fix #449 Update ‘oc’ version getting installed via install-cli to 1.4.0 @budhrg
+* Fix #443 Double quote is missing in the HTTP Proxy Settings doc @budhrg
+* Fix adb-atomic-developer-bundle doc url on README @trishnaguha
+
 [[v1.4.1-nov-17-2016]]
 == 1.4.1 November 17, 2016
 * Fix #346 Adding a Rake task for Asciidoctor and enabling Guard and Live Reload @hferentschik
