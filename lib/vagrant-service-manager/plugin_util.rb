@@ -111,6 +111,7 @@ module VagrantPlugins
 
       def self.execute_once(machine, ui, command)
         machine.communicate.sudo(command) do |_, data|
+          next if data.chomp.empty?
           PluginLogger.debug
           return data.chomp
         end

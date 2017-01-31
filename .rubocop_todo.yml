@@ -40,6 +40,7 @@ Metrics/AbcSize:
   Max: 20
   Exclude:
     - 'lib/vagrant-service-manager/command.rb'
+    - 'plugins/guests/redhat/cap/box_version.rb'
     - 'Rakefile'
 
 Lint/Eval:

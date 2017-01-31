@@ -15,6 +15,7 @@ module VagrantPlugins
               exit 126
             end
 
+            next if data.chomp.empty?
             return data.chomp if options[:script_readable]
             info = Hash[data.delete('"').split("\n").map { |e| e.split('=') }]
             return "#{info['VARIANT']} #{info['VARIANT_VERSION']}"
