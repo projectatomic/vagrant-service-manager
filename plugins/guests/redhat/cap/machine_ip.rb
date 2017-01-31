@@ -9,6 +9,7 @@ module VagrantPlugins
 
           PluginLogger.debug
           machine.communicate.execute(command) do |type, data|
+            next if data.chomp.empty?
             ip << data.chomp if type == :stdout
             return "IP=#{ip}" if options[:script_readable]
           end
