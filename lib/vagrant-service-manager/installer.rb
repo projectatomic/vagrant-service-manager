@@ -45,7 +45,8 @@ module VagrantPlugins
 
         # return if --path is not specified
         return unless @options.key?('--path')
-        return if File.exist?(@options['--path'])
+        dir_name = @options['--path']
+        return if File.exist? dir_name
         @env.ui.info I18n.t('servicemanager.commands.install_cli.invalid_binary_path', dir_path: dir_name)
         exit 126
       end
